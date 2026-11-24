@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Direction A — Le dossier</title>
+<meta name="color-scheme" content="light" />
+<link rel="preload" href="/fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+<style>
+/* ============================================================
+   DIRECTION A — « LE DOSSIER »
+   La page est un dossier posé sur une table : papier, tampon,
+   annotation au crayon, feuille de calque. Le mouvement imite
+   le papier qu'on manipule, jamais un effet.
+   ============================================================ */
+
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url('/fonts/instrument-serif-italic-latin.woff2') format('woff2')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+
+:root{
+  --paper:#e9e2d4;
+  --paper-2:#efe9dd;
+  --ink:#14110f;
+  --ink-2:#4b443c;
+  --verm:#c8452b;
+  --green:#2e6b5e;
+  --rule:rgba(20,17,15,.15);
+  --f-serif:'Instrument Serif',Georgia,'Times New Roman',serif;
+  --f-sans:'Inter Tight','Helvetica Neue',Arial,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--f-sans);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+h1,p,ul{margin:0}
+ul{padding:0;list-style:none}
+
+.mono{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;line-height:1.4}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip{position:fixed;left:14px;top:-70px;z-index:999;background:var(--ink);color:var(--paper);padding:.75em 1.1em;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:top .18s ease}
+.skip:focus{top:40px}
+:focus-visible{outline:2px solid var(--verm);outline-offset:3px;border-radius:2px}
+
+/* ---------- barre de prototype (commune aux trois) ---------- */
+.proto{
+  position:fixed;inset:0 0 auto 0;z-index:80;height:30px;
+  display:flex;align-items:center;gap:1.1rem;
+  padding:0 clamp(14px,3vw,28px);
+  background:rgba(233,226,212,.94);border-bottom:1px solid var(--rule);
+  color:var(--ink-2);font-family:var(--f-mono);font-size:.62rem;
+  letter-spacing:.14em;text-transform:uppercase;
+}
+.proto .tag{color:var(--verm)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(20,17,15,.25);padding-bottom:1px}
+.proto a:hover{border-bottom-color:var(--verm);color:var(--verm)}
+.proto .spacer{margin-left:auto}
+.motion{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none}
+.motion input{position:absolute;opacity:0;width:1px;height:1px}
+.motion .track{width:26px;height:12px;border:1px solid rgba(20,17,15,.4);border-radius:20px;position:relative;transition:background .2s}
+.motion .track::after{content:"";position:absolute;top:1px;left:1px;width:8px;height:8px;border-radius:50%;background:var(--ink);transition:translate .2s}
+.motion input:checked + .track{background:rgba(200,69,43,.16);border-color:var(--verm)}
+.motion input:checked + .track::after{translate:14px 0;background:var(--verm)}
+.motion input:focus-visible + .track{outline:2px solid var(--verm);outline-offset:3px}
+
+/* ---------- la feuille ---------- */
+.sheet{
+  position:relative;min-height:100svh;overflow:clip;
+  padding:calc(30px + clamp(18px,3.4vh,34px)) 0 clamp(18px,3vh,30px);
+  display:flex;flex-direction:column;
+}
+/* trame de papier millimétré, très discrète */
+.guides{
+  position:absolute;inset:-6% -2% -12% -2%;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(to right,rgba(20,17,15,.055) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(20,17,15,.04) 1px,transparent 1px);
+  background-size:calc(100% / 12) 34px,100% 34px;
+  opacity:.9;
+  will-change:auto;
+}
+.wrap{position:relative;z-index:1;width:100%;max-width:1320px;margin:0 auto;padding:0 clamp(18px,4vw,56px);display:flex;flex-direction:column;flex:1}
+
+/* ---------- ligne haute ---------- */
+.topline{display:flex;align-items:center;gap:clamp(14px,2vw,26px);padding-bottom:clamp(14px,2.4vh,24px)}
+.topline .leader{flex:1;height:1px;background:repeating-linear-gradient(to right,var(--rule) 0 4px,transparent 4px 9px)}
+.stamp{
+  display:block;rotate:-3.2deg;translate:0 0;
+  border:1px solid rgba(200,69,43,.75);outline:1px solid rgba(200,69,43,.45);outline-offset:2px;
+  color:var(--verm);padding:.42em .6em;text-align:center;
+  font-family:var(--f-mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;line-height:1.5;
+  mix-blend-mode:multiply;
+  transition:rotate .26s cubic-bezier(.2,.7,0,1);
+}
+.stamp:hover{rotate:-7.5deg}
+
+/* ---------- titre ---------- */
+.title-block{margin-top:auto}
+.h1{
+  font-family:var(--f-serif);font-style:italic;font-weight:400;
+  font-size:clamp(2.7rem,min(8.6vw,10.4vh),9.2rem);
+  line-height:.84;letter-spacing:-.012em;
+  margin:0 0 clamp(18px,3.2vh,34px);
+  max-width:15ch;
+}
+.ln{display:block;overflow:clip;padding-bottom:.06em;margin-bottom:-.06em}
+.ln > span{display:block;position:relative}
+.ln--in{padding-left:clamp(12px,4.2vw,86px)}
+.dot{color:var(--verm)}
+.pencil{position:absolute;left:-2%;bottom:-.2em;width:62%;height:.34em;overflow:visible}
+.pencil path{fill:none;stroke:var(--verm);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:620;stroke-dashoffset:620}
+
+/* ---------- feuille de calque ---------- */
+.vellum-wrap{position:absolute;right:clamp(18px,4vw,56px);top:clamp(150px,25%,250px);width:min(30rem,33vw);z-index:2}
+.vellum{
+  position:relative;rotate:1.3deg;translate:0 0;
+  background:linear-gradient(160deg,rgba(255,253,247,.9),rgba(255,253,247,.74));
+  border:1px solid rgba(20,17,15,.12);
+  box-shadow:0 22px 44px -18px rgba(20,17,15,.28),0 2px 0 rgba(255,255,255,.7) inset;
+  padding:clamp(16px,2vw,26px) clamp(16px,2vw,26px) clamp(14px,1.6vw,20px);
+  transition:rotate .3s cubic-bezier(.2,.7,0,1),translate .3s cubic-bezier(.2,.7,0,1),box-shadow .3s;
+}
+.vellum:hover{rotate:.2deg;translate:0 -8px;box-shadow:0 34px 60px -22px rgba(20,17,15,.34),0 2px 0 rgba(255,255,255,.8) inset}
+.vellum-k{color:var(--green)}
+.promise{font-size:clamp(.92rem,1.06vw,1.06rem);line-height:1.5;margin:.7rem 0 1rem;color:var(--ink);text-wrap:pretty}
+.vellum-foot{color:var(--ink-2);border-top:1px solid var(--rule);padding-top:.7rem}
+
+/* coin corné : divulgation native, clavier compris */
+.fold{position:absolute;top:0;right:0;width:34px;height:34px}
+.fold summary{
+  position:absolute;inset:0;cursor:pointer;list-style:none;
+  display:grid;place-items:center;
+  background:linear-gradient(225deg,var(--paper) 0 49%,#cfc6b4 49%,#dbd3c2 100%);
+  clip-path:polygon(0 0,100% 100%,0 100%);
+  transition:filter .2s;
+}
+.fold summary::-webkit-details-marker{display:none}
+.fold summary:hover{filter:brightness(1.06)}
+.fold summary::after{content:"";position:absolute;inset:0;clip-path:polygon(0 0,100% 100%,100% 0);background:linear-gradient(200deg,rgba(20,17,15,.10),transparent 70%)}
+.fold[open] .fold-body{
+  position:absolute;top:0;right:0;width:min(20rem,100%);z-index:3;
+  background:var(--paper-2);border:1px solid rgba(20,17,15,.16);
+  box-shadow:0 18px 36px -16px rgba(20,17,15,.32);
+  padding:1.1rem 1.1rem .9rem;animation:unfold .28s cubic-bezier(.2,.7,0,1) both;
+}
+.fold-body h2{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--verm);margin:0 0 .6rem;font-weight:500}
+.fold-body li{font-size:.82rem;line-height:1.45;padding-left:1.1rem;position:relative;color:var(--ink-2)}
+.fold-body li+li{margin-top:.45rem}
+.fold-body li::before{content:"—";position:absolute;left:0;color:var(--verm)}
+
+/* ---------- pied ---------- */
+.foot{
+  margin-top:auto;padding-top:clamp(16px,2.6vh,28px);border-top:1px solid var(--rule);
+  display:flex;align-items:flex-end;gap:clamp(16px,3vw,40px);flex-wrap:wrap;
+}
+.foot-meta{display:flex;gap:clamp(12px,2vw,28px);flex-wrap:wrap;color:var(--ink-2)}
+.actions{display:flex;gap:.7rem;margin-left:auto;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;
+  font-family:var(--f-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.85em 1.15em;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+  transition:translate .2s cubic-bezier(.2,.7,0,1),box-shadow .2s,background .2s;
+}
+.btn .arw{transition:translate .2s}
+.btn:hover{translate:0 -3px;box-shadow:0 10px 18px -10px rgba(20,17,15,.6)}
+.btn:hover .arw{translate:4px 0}
+.btn--ghost{background:transparent;color:var(--ink);border:1px dashed rgba(20,17,15,.5)}
+.btn--ghost:hover{background:rgba(20,17,15,.05);border-style:solid}
+
+/* ---------- piste neutre ---------- */
+.runway{height:80svh;border-top:1px solid var(--rule);position:relative}
+.runway::after{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:repeating-linear-gradient(to right,var(--rule) 0 6px,transparent 6px 12px)}
+
+/* ============================================================
+   ENTRÉE — une seule fois, tout est fini avant 1 s
+   ============================================================ */
+.ln > span{animation:rise .62s cubic-bezier(.2,.72,0,1) both;animation-delay:calc(var(--d,0) * 1ms + 60ms)}
+.pencil path{animation:draw .66s cubic-bezier(.4,0,.2,1) .42s both}
+.vellum-wrap{animation:fade-up .52s cubic-bezier(.2,.72,0,1) .26s both}
+.stamp{animation:slam .24s cubic-bezier(.3,1.4,.5,1) .58s both}
+.foot > *{animation:fade-up .5s cubic-bezier(.2,.72,0,1) .34s both}
+.guides{animation:fade .5s ease .1s both}
+
+@keyframes rise{from{transform:translate3d(0,104%,0)}to{transform:none}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade-up{from{opacity:0;translate:0 18px}to{opacity:1;translate:0 0}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes slam{from{transform:scale(1.45)}to{transform:scale(1)}}
+@keyframes unfold{from{opacity:0;translate:0 -8px}to{opacity:1;translate:0 0}}
+
+/* ============================================================
+   SCROLL — parallaxe différentielle, tout en transform
+   ============================================================ */
+@supports (animation-timeline:scroll()){
+  .guides{animation:drift-far linear both;animation-timeline:scroll(root block)}
+  .title-block{animation:drift-mid linear both;animation-timeline:scroll(root block)}
+  .vellum-wrap{animation:drift-near linear both;animation-timeline:scroll(root block)}
+  .topline{animation:drift-tiny linear both;animation-timeline:scroll(root block)}
+}
+@keyframes drift-far{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-5vh,0)}}
+@keyframes drift-mid{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-2.2vh,0)}}
+@keyframes drift-near{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,4.4vh,0)}}
+@keyframes drift-tiny{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-1vh,0)}}
+
+/* ============================================================
+   MOUVEMENT COUPÉ — interrupteur du prototype + préférence système
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  .ln > span,.pencil path,.vellum-wrap,.stamp,.foot > *,.guides,.title-block,.topline{animation:none !important}
+  .pencil path{stroke-dashoffset:0}
+}
+@supports selector(:has(*)){
+  body:has(.motion input:not(:checked)) .ln > span,
+  body:has(.motion input:not(:checked)) .pencil path,
+  body:has(.motion input:not(:checked)) .vellum-wrap,
+  body:has(.motion input:not(:checked)) .stamp,
+  body:has(.motion input:not(:checked)) .foot > *,
+  body:has(.motion input:not(:checked)) .guides,
+  body:has(.motion input:not(:checked)) .title-block,
+  body:has(.motion input:not(:checked)) .vellum-wrap,
+  body:has(.motion input:not(:checked)) .topline{animation:none !important}
+  body:has(.motion input:not(:checked)) .pencil path{stroke-dashoffset:0}
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1080px){
+  .vellum-wrap{position:relative;right:auto;top:auto;width:100%;max-width:34rem;margin:clamp(18px,3vh,30px) 0 0 auto}
+  .h1{max-width:none}
+}
+@media (max-width:720px){
+  .topline{gap:12px}
+  .h1{font-size:clamp(2.35rem,12vw,3.6rem);line-height:.9}
+  .pencil{display:none}
+  .ln--in{padding-left:.12em}
+  .vellum-wrap{margin-top:22px}
+  .foot{flex-direction:column;align-items:stretch;gap:18px}
+  .actions{margin-left:0}
+  .btn{justify-content:center;flex:1 1 auto}
+  .foot-meta{flex-direction:column;gap:6px}
+  .guides{background-size:calc(100% / 4) 30px,100% 30px}
+}
+@media (max-width:420px){
+  .proto{font-size:.55rem;gap:.7rem}
+  .proto .tag{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<div class="proto">
+  <span class="tag">A — Le dossier</span>
+  <a href="/da-hero.html">Comparer les trois</a>
+  <span class="spacer"></span>
+  <label class="motion" for="motion">
+    <input type="checkbox" id="motion" checked />
+    <span class="track" aria-hidden="true"></span>
+    Mouvement
+  </label>
+</div>
+
+<main id="contenu">
+  <section class="sheet" aria-labelledby="titre">
+    <div class="guides" aria-hidden="true"></div>
+
+    <div class="wrap">
+      <div class="topline">
+        <p class="mono">Ingénierie logicielle indépendante</p>
+        <span class="leader" aria-hidden="true"></span>
+        <span class="stamp">Périmètre écrit<br />04.11.2026</span>
+      </div>
+
+      <div class="title-block">
+        <h1 class="h1" id="titre">
+          <span class="ln" style="--d:0"><span>Des systèmes</span></span>
+          <span class="ln" style="--d:70"><span>qui tiennent,
+            <svg class="pencil" viewBox="0 0 620 14" preserveAspectRatio="none" aria-hidden="true"><path d="M6 10C120 3 230 11 340 6c90-4 180-1 274 2" /></svg>
+          </span></span>
+          <span class="ln ln--in" style="--d:140"><span>et qu’on peut</span></span>
+          <span class="ln ln--in" style="--d:210"><span>reprendre<span class="dot">.</span></span></span>
+        </h1>
+      </div>
+
+      <div class="vellum-wrap">
+        <aside class="vellum" aria-label="Note de cadrage">
+          <details class="fold">
+            <summary><span class="sr">Voir ce qui est exclu</span></summary>
+            <div class="fold-body">
+              <h2>Ce qui est exclu</h2>
+              <ul>
+                <li>Pas de vente de jours en régie longue.</li>
+                <li>Pas de livraison sans documentation ni passation.</li>
+                <li>Pas de disponibilité 24/7 promise pour obtenir un contrat.</li>
+              </ul>
+            </div>
+          </details>
+          <p class="mono vellum-k">Note de cadrage</p>
+          <p class="promise">Je conçois, je développe et j’accompagne la mise en production de votre système. Je livre un système documenté, testé sur le périmètre convenu, et je vous laisse les moyens de le reprendre.</p>
+          <p class="mono vellum-foot">Documenté · Testé · Reprenable</p>
+        </aside>
+      </div>
+
+      <div class="foot">
+        <div class="foot-meta">
+          <p class="mono">Neuf ans de production</p>
+          <p class="mono">Web · API · plateformes · audit</p>
+          <p class="mono">Aucun cookie, aucune mesure</p>
+        </div>
+        <div class="actions">
+          <a class="btn" href="/contact/">Demander une revue technique <span class="arw" aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href="/offres/">Voir les offres</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="runway" aria-hidden="true"></section>
+</main>
+</body>
+</html>

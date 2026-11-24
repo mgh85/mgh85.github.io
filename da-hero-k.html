@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>K — Interférence · DA Lab</title>
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+@font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/anton-latin.woff2') format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+:root{
+  --bg:#06060a;--acid:#d9ff3d;--mag:#ff3da0;--ink:#f2f4ea;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --sans:'Inter Tight',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+h1,p{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--acid);outline-offset:3px}
+
+.proto{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:12px clamp(14px,2.2vw,28px);font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(242,244,234,.55)}
+.proto .tag{color:var(--acid)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(242,244,234,.25);padding-bottom:1px}
+.proto a:hover{color:var(--acid)}
+.proto .motion{margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer}
+.proto .motion input{position:absolute;opacity:0;width:1px;height:1px}
+.proto .motion i{display:block;width:30px;height:15px;border:1px solid rgba(242,244,234,.45);border-radius:9px;position:relative}
+.proto .motion i::after{content:"";position:absolute;inset:2px auto 2px 2px;width:9px;border-radius:50%;background:var(--acid);transition:translate .18s ease}
+.proto .motion input:checked + i::after{translate:15px 0}
+
+/* ---- champ d'interférence ---- */
+.stage{position:relative;min-height:100svh;overflow:hidden;isolation:isolate;background:#06060a}
+.field{position:absolute;inset:-40%;transform:translate3d(var(--ox,0px),var(--oy,0px),0);transition:transform .6s cubic-bezier(.2,.8,.25,1)}
+.rings{position:absolute;inset:0;will-change:transform}
+.rings--a{
+  background:repeating-radial-gradient(circle at 50% 50%,transparent 0 9px,rgba(217,255,61,.55) 9px 10px);
+  animation:spinA 96s linear infinite;mix-blend-mode:screen;opacity:.85}
+.rings--b{
+  background:repeating-radial-gradient(circle at 50% 50%,transparent 0 13px,rgba(255,61,160,.42) 13px 14px);
+  animation:spinB 71s linear infinite;mix-blend-mode:screen;opacity:.8}
+@keyframes spinA{to{transform:rotate(360deg)}}
+@keyframes spinB{to{transform:rotate(-360deg)}}
+
+.stage::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(70% 60% at 50% 46%,rgba(6,6,10,.1),rgba(6,6,10,.86) 78%,#06060a 100%)}
+
+/* ---- le mot au centre ---- */
+.word{position:absolute;inset:0;z-index:3;display:grid;place-items:center;pointer-events:none}
+.word span{
+  font-family:'Anton',Impact,sans-serif;font-size:clamp(4.5rem,17vw,14rem);line-height:.8;letter-spacing:-.02em;
+  color:transparent;-webkit-text-stroke:clamp(1px,.16vw,2.4px) var(--acid);text-stroke:1px var(--acid);
+  transform:translate3d(var(--tx,0px),var(--ty,0px),0);transition:transform .5s cubic-bezier(.2,.8,.25,1);
+  animation:breathe 9s ease-in-out infinite;white-space:nowrap}
+.word span em{display:inline-block;width:.12em;height:.12em;background:var(--mag);margin-left:.06em;translate:0 -.02em;font-style:normal}
+@keyframes breathe{0%,100%{opacity:.92}50%{opacity:1;filter:drop-shadow(0 0 18px rgba(217,255,61,.25))}}
+
+/* ---- plaque de texte ---- */
+.plate{position:relative;z-index:4;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(76px,10vh,120px) clamp(18px,4vw,64px) clamp(26px,5vh,52px)}
+.plate .box{max-width:min(46ch,100%);background:rgba(6,6,10,.72);border:1px solid rgba(217,255,61,.3);
+  padding:clamp(16px,2.4vw,30px);backdrop-filter:blur(6px)}
+.plate .kick{font-family:var(--mono);font-size:.54rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acid)}
+.plate h1{margin-top:.75rem;font-size:clamp(1.4rem,3.2vw,2.5rem);line-height:1.08;letter-spacing:-.03em;font-weight:700;text-wrap:balance}
+.plate h1 em{font-style:normal;color:var(--acid)}
+.plate .lead{margin-top:.85rem;color:#c8ccbd;font-size:clamp(.82rem,.98vw,.94rem);line-height:1.55;max-width:40ch;text-wrap:pretty}
+.plate .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.2rem}
+.btn{display:inline-flex;align-items:center;gap:.8rem;text-decoration:none;font-family:var(--mono);
+  font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;padding:.82em 1.05em;
+  border:1px solid var(--acid);color:var(--acid);background:transparent;transition:background .16s,color .16s}
+.btn:hover{background:var(--acid);color:#0a0d02}
+.btn--solid{background:var(--acid);color:#0a0d02;font-weight:600}
+.btn--solid:hover{background:#e9ff85}
+.plate .base{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:clamp(16px,3vh,30px);padding-top:11px;
+  border-top:1px solid rgba(217,255,61,.22);font-family:var(--mono);font-size:.52rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(242,244,234,.5)}
+
+@media (max-width:700px){
+  .plate{padding-inline:16px}
+  .word span{font-size:clamp(3.4rem,20vw,6rem)}
+  .field{inset:-60%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+body:has(.motion input:not(:checked)) .stage *{animation-play-state:paused!important}
+</style>
+</head>
+<body>
+<a class="sr" href="#contenu">Aller au contenu</a>
+<div class="proto">
+  <span class="tag">K — Interférence</span>
+  <a href="/da-hero.html">Galerie</a>
+  <label class="motion"><input type="checkbox" checked /><i></i>Mouvement</label>
+</div>
+
+<main class="stage" id="contenu">
+  <div class="field" aria-hidden="true">
+    <div class="rings rings--a"></div>
+  </div>
+  <div class="field field--b" aria-hidden="true" style="inset:-46%">
+    <div class="rings rings--b"></div>
+  </div>
+
+  <div class="word" aria-hidden="true"><span>TENIR<em></em></span></div>
+
+  <div class="plate">
+    <div class="box">
+      <p class="kick">Ingénierie logicielle indépendante</p>
+      <h1>Des systèmes qui tiennent, <em>et qu’on peut reprendre.</em></h1>
+      <p class="lead">Deux réseaux de contraintes tournent à des vitesses différentes : c’est leur écart qui produit la figure. Un système, c’est la même chose — la structure et le rythme.</p>
+      <div class="cta">
+        <a class="btn btn--solid" href="/contact/">Demander une revue technique <span aria-hidden="true">→</span></a>
+        <a class="btn" href="/offres/">Voir les offres</a>
+      </div>
+    </div>
+    <p class="base">
+      <span>9 ans de production</span><span>Web · API · plateformes</span><span>Aucun cookie</span>
+      <span id="fps">60 i/s</span>
+    </p>
+  </div>
+</main>
+
+<script>
+(function(){
+  var stage=document.querySelector('.stage'),word=document.querySelector('.word span'),
+      ringA=document.querySelector('.rings--a'),ringB=document.querySelector('.rings--b'),
+      fpsEl=document.getElementById('fps');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce)return;
+
+  var tx=0,ty=0,cx=0,cy=0,raf=0,last=0,frames=0,acc=0;
+
+  stage.addEventListener('pointermove',function(e){
+    var r=stage.getBoundingClientRect();
+    tx=((e.clientX-r.left)/r.width-.5)*-34;
+    ty=((e.clientY-r.top)/r.height-.5)*-24;
+  },{passive:true});
+  stage.addEventListener('pointerleave',function(){tx=0;ty=0;});
+
+  function tick(t){
+    var dt=last?Math.min(40,t-last):16;last=t;
+    cx+=(tx-cx)*.06;cy+=(ty-cy)*.06;
+    word.style.setProperty('--tx',cx.toFixed(2)+'px');
+    word.style.setProperty('--ty',cy.toFixed(2)+'px');
+    ringA.style.setProperty('--ox',(cx*.6).toFixed(2)+'px');
+    frames++;acc+=dt;
+    if(acc>500){fpsEl.textContent=Math.round(frames*1000/acc)+' i/s';frames=0;acc=0;}
+    raf=requestAnimationFrame(tick);
+  }
+  function start(){if(!raf){last=0;raf=requestAnimationFrame(tick);}}
+  function stop(){if(raf){cancelAnimationFrame(raf);raf=0;}}
+  document.addEventListener('visibilitychange',function(){document.hidden?stop():start();});
+  document.querySelectorAll('.motion input').forEach(function(i){
+    i.addEventListener('change',function(){i.checked?start():stop();});
+  });
+  start();
+})();
+</script>
+</body>
+</html>

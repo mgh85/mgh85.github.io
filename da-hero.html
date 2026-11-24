@@ -1,0 +1,2004 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>DA Lab — laboratoire de directions artistiques · 33 concepts</title>
+<meta name="color-scheme" content="light" />
+<meta name="description" content="DA Lab : trente-trois directions artistiques pour un même système. Un portfolio expérimental qui démontre webdesign, UI/UX, motion design et front-end — sans dépendance, sans framework, sans tracker." />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preload" href="/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+<style>
+/* ============================================================
+   DA LAB — laboratoire de directions artistiques.
+   Trente-trois pages réelles, vivantes, dans une interface de
+   sélection : recherche, filtres, favoris, comparaison, plein
+   écran. Aucune dépendance. Une vignette n'est montée qu'à
+   l'approche de l'écran et démontée au loin ; son document est
+   libéré quand on la masque ou qu'on ferme un voile.
+   ============================================================ */
+
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+
+:root{
+  --bg:#f4f1ea;
+  --paper:#fffdf8;
+  --ink:#12100e;
+  --ink-2:#5c564c;
+  --rule:rgba(18,16,14,.16);
+  --rule-2:rgba(18,16,14,.09);
+  --verm:#c8452b;
+  --f-sans:'Inter Tight','Helvetica Neue',Arial,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+html.modal-open,html.modal-open body{overflow:hidden}
+a{color:inherit}
+h1,h2,h3,p,ul,figure{margin:0}
+ul{padding:0;list-style:none}
+.mono{font-family:var(--f-mono);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);line-height:1.5}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.sr:focus{position:fixed;left:12px;top:12px;z-index:100;width:auto;height:auto;margin:0;padding:.7em 1em;background:var(--ink);color:var(--bg);clip-path:none;font-family:var(--f-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase}
+:focus-visible{outline:2px solid var(--verm);outline-offset:3px}
+
+.wrap{max-width:1460px;margin:0 auto;padding:clamp(22px,3.4vw,52px) clamp(16px,3.2vw,44px) 90px}
+
+/* ---------------- en-tête ---------------- */
+header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(18px,3vw,48px);align-items:end}
+.top .eyebrow{color:var(--verm);display:flex;align-items:center;gap:.6rem}
+.top .eyebrow::before{content:"";width:26px;height:1px;background:var(--verm)}
+h1{
+  font-size:clamp(1.9rem,4.1vw,3.5rem);line-height:1.02;letter-spacing:-.035em;font-weight:700;
+  margin-top:.55rem;max-width:20ch;text-wrap:balance;
+}
+h1 em{font-style:normal;color:var(--verm)}
+.top p.lede{margin-top:1rem;max-width:64ch;color:var(--ink-2);font-size:clamp(.92rem,1.05vw,1.02rem);text-wrap:pretty}
+.top .count{display:flex;align-items:flex-start;gap:clamp(10px,1.4vw,20px)}
+.top .count b{font-family:var(--f-mono);font-size:clamp(2.6rem,6vw,4.6rem);line-height:.8;font-weight:400;letter-spacing:-.06em;color:var(--ink);font-variant-numeric:tabular-nums}
+.top .count span{max-width:16ch}
+.top p.hint{margin-top:clamp(18px,2.6vw,30px);padding-top:14px;border-top:1px solid var(--rule);display:flex;gap:18px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.top p.hint b{color:var(--ink);font-weight:500}
+
+/* ---------------- présentation du labo ---------------- */
+section.brief{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2.4vw,32px);margin-top:clamp(20px,3vw,32px)}
+.brief > div{border-top:2px solid var(--ink);padding-top:10px}
+.brief .n{font-family:var(--f-mono);font-size:.55rem;letter-spacing:.16em;color:var(--verm)}
+.brief h2{font-size:.98rem;letter-spacing:-.015em;font-weight:700;margin-top:.35rem}
+.brief p{margin-top:.45rem;font-size:.8rem;line-height:1.55;color:var(--ink-2);text-wrap:pretty}
+.brief p b{color:var(--ink);font-weight:600}
+
+/* ---------------- l'établi : recherche, vues, filtres ---------------- */
+.bench{
+  position:sticky;top:0;z-index:45;
+  margin:clamp(20px,3vw,34px) 0 clamp(16px,2.6vw,26px);
+  padding:10px 0 9px;
+  background:rgba(244,241,234,.96);backdrop-filter:blur(12px);
+  border-block:1px solid var(--rule);
+}
+.brow{display:flex;align-items:center;gap:8px;min-width:0}
+.brow + .brow{margin-top:8px}
+.search{position:relative;flex:1 1 auto;min-width:0;display:flex;align-items:center}
+.search input{
+  width:100%;font-family:var(--f-sans);font-size:.84rem;color:var(--ink);
+  background:var(--paper);border:1px solid var(--rule);border-radius:0;
+  padding:.55em 4.6em .55em .7em;appearance:none;-webkit-appearance:none;
+}
+.search input::placeholder{color:#8d867b}
+.search input::-webkit-search-cancel-button{display:none}
+.search kbd{
+  position:absolute;right:6px;top:50%;translate:0 -50%;
+  font-family:var(--f-mono);font-size:.54rem;color:var(--ink-2);
+  border:1px solid var(--rule);background:var(--bg);padding:1px 5px;pointer-events:none;
+}
+.search .clear{
+  position:absolute;right:2px;top:50%;translate:0 -50%;display:none;
+  border:0;background:transparent;color:var(--ink-2);font-size:1rem;line-height:1;
+  padding:4px 9px;cursor:pointer;
+}
+.search .clear:hover{color:var(--verm)}
+.search.has-q .clear{display:block}
+.search.has-q kbd{display:none}
+
+.rescount{
+  flex:0 0 auto;font-family:var(--f-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-2);border:1px solid var(--rule);padding:.48em .6em;font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.motion-all{font-family:var(--f-mono);font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--rule);color:var(--ink-2);padding:.48em .65em;
+  cursor:pointer;transition:background .16s,color .16s,border-color .16s;flex:0 0 auto}
+.motion-all:hover{border-color:var(--ink);color:var(--ink)}
+.motion-all[aria-pressed="false"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+
+.seg{display:flex;gap:2px;border:1px solid var(--rule);background:var(--paper);padding:2px;flex:0 0 auto;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{
+  border:0;background:transparent;font-family:var(--f-mono);font-size:.55rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-2);padding:.5em .62em;cursor:pointer;white-space:nowrap;
+}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg .n{margin-left:.35em;opacity:.6;font-variant-numeric:tabular-nums}
+
+.chips{display:flex;gap:4px;flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;padding-bottom:1px;
+  mask-image:linear-gradient(90deg,#000 0,#000 94%,transparent 100%);
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 94%,transparent 100%)}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  cursor:pointer;flex:0 0 auto;padding:.4em .62em;border:1px solid var(--rule);border-radius:999px;
+  font-family:var(--f-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);
+  background:transparent;transition:background .16s,color .16s,border-color .16s;
+}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip .n{margin-left:.4em;opacity:.55;font-variant-numeric:tabular-nums}
+.glbl{flex:0 0 auto;margin-right:2px}
+.vsep{width:1px;height:18px;background:var(--rule);flex:0 0 auto;margin:0 3px}
+.techsel{flex:0 0 auto;display:flex;align-items:center;gap:5px}
+.techsel select{
+  font-family:var(--f-mono);font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--rule);background:var(--paper);color:var(--ink);
+  padding:.45em 1.7em .45em .55em;appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);
+  background-position:calc(100% - 12px) 52%,calc(100% - 8px) 52%;
+  background-size:4px 4px,4px 4px;background-repeat:no-repeat;
+}
+
+.letters{display:flex;gap:1px;flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;
+  mask-image:linear-gradient(90deg,#000 0,#000 95%,transparent 100%);
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 95%,transparent 100%)}
+.letters::-webkit-scrollbar{display:none}
+.letters a{
+  font-family:var(--f-mono);font-size:.55rem;letter-spacing:.06em;color:var(--ink-2);text-decoration:none;
+  padding:.26em .42em;border:1px solid transparent;white-space:nowrap;
+}
+.letters a:hover{border-color:var(--rule);color:var(--ink)}
+.letters a.sel{color:var(--verm)}
+
+/* ---------------- la grille ---------------- */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.2vw,30px)}
+.tile{--s:.43;scroll-margin-top:calc(var(--bench,116px) + 16px);content-visibility:auto;contain-intrinsic-size:auto 600px}
+.tile[hidden]{display:none}
+.tile .shot{
+  position:relative;display:block;text-decoration:none;overflow:hidden;
+  border:1px solid var(--rule);background:var(--paper);
+  padding:clamp(8px,1vw,14px);
+  transition:border-color .2s,box-shadow .3s,transform .3s cubic-bezier(.2,.8,.25,1);
+}
+.tile .shot::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 55%,rgba(18,16,14,.10));
+  opacity:0;transition:opacity .3s;
+}
+.tile:hover .shot{border-color:rgba(18,16,14,.4);box-shadow:0 28px 44px -34px rgba(18,16,14,.5);transform:translateY(-3px)}
+.tile:hover .shot::after{opacity:1}
+.screen{
+  display:block;width:calc(1440px * var(--s));height:calc(900px * var(--s));
+  overflow:hidden;position:relative;background:var(--tint,#fff);margin:0 auto;
+  contain:layout paint;
+}
+.screen iframe{width:1440px;height:900px;border:0;display:block;transform:scale(var(--s));transform-origin:0 0;pointer-events:none}
+.screen .ph{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:clamp(2rem,7vw,4.4rem);letter-spacing:.1em;
+  color:rgba(255,255,255,.16);transition:opacity .4s ease;pointer-events:none;
+}
+.screen .ph::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.06),transparent 60%)}
+.screen.live .ph{opacity:0}
+.tile .badge{
+  position:absolute;left:14px;top:14px;z-index:3;
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.1em;
+  background:var(--paper);border:1px solid var(--rule);padding:.3em .5em;color:var(--verm);
+}
+.tile .peek{
+  position:absolute;right:14px;bottom:14px;z-index:3;
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--f-mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--ink);color:var(--bg);padding:.6em .85em;
+  opacity:0;translate:0 6px;transition:opacity .25s,translate .25s;
+}
+.tile:hover .peek,.tile .shot:focus-visible .peek{opacity:1;translate:0 0}
+
+.tile .meta{padding:14px 2px 0;display:flex;flex-direction:column;gap:8px}
+.tile .line1{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.tile h2{font-size:1.02rem;letter-spacing:-.02em;font-weight:700;line-height:1.2;display:flex;align-items:baseline;gap:.45rem}
+.tile h2 .k{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.06em;color:var(--verm);font-weight:400}
+.tile .uni{font-family:var(--f-mono);font-size:.54rem;letter-spacing:.15em;text-transform:uppercase;color:var(--verm);border:1px solid rgba(200,69,43,.32);padding:2px 5px}
+.tile .tier{font-family:var(--f-mono);font-size:.49rem;letter-spacing:.13em;text-transform:uppercase;padding:2px 5px;border:1px solid var(--rule);color:var(--ink-2)}
+.tile .tier.sel{color:var(--verm);border-color:rgba(200,69,43,.4);background:rgba(200,69,43,.06)}
+.tile .desc{font-size:.86rem;line-height:1.45;color:var(--ink-2);text-wrap:pretty;max-width:52ch}
+.tile .tech{font-family:var(--f-mono);font-size:.57rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);border-top:1px solid var(--rule-2);padding-top:9px;margin-top:2px;line-height:1.7}
+.tile .acts{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:1px}
+.act{
+  appearance:none;-webkit-appearance:none;background:transparent;border:1px solid var(--rule);color:var(--ink-2);
+  font-family:var(--f-mono);font-size:.52rem;letter-spacing:.09em;text-transform:uppercase;
+  padding:.45em .58em;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:.4em;
+  transition:background .16s,color .16s,border-color .16s;
+}
+.act:hover{border-color:var(--ink);color:var(--ink)}
+.act[aria-pressed="true"]{background:var(--verm);border-color:var(--verm);color:#fff}
+.act[data-act="cmp"][aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.act .ico{font-size:.95em;line-height:1}
+.act.ext{margin-left:auto}
+.act.ext:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.empty{border:1px dashed var(--rule);padding:clamp(24px,4vw,44px);text-align:center;color:var(--ink-2);margin-top:4px}
+.empty p{font-size:.9rem}
+.empty .reset{margin-top:14px}
+.reset{
+  font-family:var(--f-mono);font-size:.56rem;letter-spacing:.11em;text-transform:uppercase;
+  background:var(--ink);color:var(--bg);border:1px solid var(--ink);padding:.6em .9em;cursor:pointer;
+}
+
+/* ---------------- méthode ---------------- */
+section.about{margin-top:clamp(34px,5vw,64px);border-top:1px solid var(--rule);padding-top:clamp(18px,2.6vw,28px)}
+.about-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,2vw,26px);margin-top:16px}
+.about-grid > div{border-top:1px solid var(--rule);padding-top:10px}
+.about-grid .n{font-family:var(--f-mono);font-size:.55rem;letter-spacing:.16em;color:var(--verm)}
+.about-grid h3{font-size:.92rem;letter-spacing:-.015em;font-weight:700;margin-top:.3rem}
+.about-grid p{margin-top:.4rem;font-size:.79rem;line-height:1.52;color:var(--ink-2);text-wrap:pretty}
+.stack{margin-top:18px;border-top:1px solid var(--rule-2);padding-top:10px;font-size:.56rem;line-height:1.9;max-width:110ch;color:var(--ink-2)}
+.stack b{color:var(--ink);font-weight:500}
+
+/* ---------------- tableau ---------------- */
+section.measures{margin-top:clamp(34px,5vw,64px);border-top:1px solid var(--rule);padding-top:clamp(18px,2.6vw,28px)}
+h2.sec{font-size:.7rem;font-family:var(--f-mono);letter-spacing:.17em;text-transform:uppercase;font-weight:500;color:var(--verm)}
+.sec-note{margin-top:.6rem;font-size:.78rem;color:var(--ink-2);max-width:86ch;line-height:1.55}
+.tw{overflow-x:auto;margin-top:16px;border-bottom:1px solid var(--rule)}
+table{width:100%;border-collapse:collapse;font-family:var(--f-mono);font-size:.66rem;min-width:880px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--rule-2);vertical-align:top}
+th{font-weight:500;color:var(--ink-2);text-transform:uppercase;letter-spacing:.1em;font-size:.55rem;border-bottom:1px solid var(--rule)}
+td:first-child{white-space:nowrap}
+td .k{color:var(--verm);margin-right:.5em}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:hover td{background:rgba(18,16,14,.025)}
+tr.is-sel td{background:rgba(200,69,43,.035)}
+tr.is-sel:hover td{background:rgba(200,69,43,.07)}
+td .yes{color:var(--ink)}
+td .no{color:var(--ink-2)}
+.tier-dot{display:inline-block;width:1.35em;color:var(--rule);font-size:.8em}
+.tier-dot.on{color:var(--verm)}
+.legend{margin-top:14px;font-size:.72rem;color:var(--ink-2);max-width:96ch;line-height:1.6}
+
+/* ---------------- mesures de performance ---------------- */
+.perf{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(12px,2vw,24px);margin-top:18px}
+.perf div{border-top:2px solid var(--ink);padding-top:9px}
+.perf .v{font-family:var(--f-mono);font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.perf .v s{text-decoration:none;color:var(--ink-2);font-size:.52em;letter-spacing:0}
+.perf .l{font-size:.7rem;color:var(--ink-2);margin-top:3px}
+
+/* ---------------- références ---------------- */
+section.refs{margin-top:clamp(34px,5vw,64px);border-top:1px solid var(--rule);padding-top:clamp(18px,2.6vw,28px)}
+.refs ol{margin:16px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(14px,2vw,26px);counter-reset:r}
+.refs li{counter-increment:r;border-top:1px solid var(--rule);padding-top:12px}
+.refs li::before{content:"0" counter(r);display:block;font-family:var(--f-mono);font-size:.56rem;letter-spacing:.16em;color:var(--verm);margin-bottom:.5rem}
+.refs li:nth-child(n+10)::before{content:counter(r)}
+.refs h3{font-size:.92rem;letter-spacing:-.015em;font-weight:700;line-height:1.25}
+.refs a{display:inline-block;margin-top:.25rem;font-family:var(--f-mono);font-size:.58rem;letter-spacing:.04em;color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--rule);word-break:break-word}
+.refs a:hover{color:var(--verm);border-bottom-color:var(--verm)}
+.refs p{margin-top:.6rem;font-size:.8rem;line-height:1.5;color:var(--ink-2);text-wrap:pretty}
+.refs p b{color:var(--ink);font-weight:600}
+
+/* ---------------- pied ---------------- */
+footer.foot{margin-top:clamp(30px,4.4vw,58px);border-top:1px solid var(--rule);padding-top:16px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(16px,3vw,40px)}
+footer .rec{max-width:66ch;font-size:.9rem;line-height:1.6;text-wrap:pretty}
+footer .rec b{font-weight:700}
+footer .rec + .rec{margin-top:.9rem}
+footer .col-right{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+footer .cta{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+footer .cta a{
+  font-family:var(--f-mono);font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;
+  border:1px solid var(--ink);padding:.65em .9em;background:var(--ink);color:var(--bg);
+}
+footer .cta a + a{background:transparent;color:var(--ink)}
+
+/* ---------------- sélection de comparaison (barre basse) ---------------- */
+.tray{
+  position:fixed;left:50%;bottom:16px;translate:-50% 0;z-index:60;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  max-width:calc(100vw - 24px);
+  background:var(--ink);color:var(--bg);padding:7px 8px;
+  box-shadow:0 20px 44px -22px rgba(0,0,0,.65);
+}
+.tray[hidden]{display:none}
+.tray .picks{display:flex;gap:4px;flex-wrap:wrap;min-width:0}
+.pick{
+  display:inline-flex;align-items:center;gap:.45em;
+  font-family:var(--f-mono);font-size:.53rem;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid rgba(244,241,234,.28);background:transparent;color:inherit;padding:.4em .55em;cursor:pointer;
+}
+.pick:hover{border-color:var(--bg)}
+.pick .x{opacity:.55}
+.go{
+  font-family:var(--f-mono);font-size:.55rem;letter-spacing:.11em;text-transform:uppercase;
+  background:var(--verm);border:1px solid var(--verm);color:#fff;padding:.5em .75em;cursor:pointer;white-space:nowrap;
+}
+.go[disabled]{opacity:.4;cursor:not-allowed}
+.tray .clearall{background:transparent;border:1px solid rgba(244,241,234,.28);color:rgba(244,241,234,.75);
+  font-family:var(--f-mono);font-size:.53rem;letter-spacing:.1em;text-transform:uppercase;padding:.4em .55em;cursor:pointer}
+.tray .clearall:hover{color:var(--bg);border-color:var(--bg)}
+
+/* ---------------- plein écran ---------------- */
+dialog{border:0;padding:0;background:transparent;color:var(--ink)}
+dialog::backdrop{background:rgba(9,8,7,.95)}
+dialog:not([open]){display:none}
+dialog.viewer{
+  width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;inset:0;
+  background:#0b0a09;color:#f4f1ea;display:flex;flex-direction:column;
+}
+.vbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto;
+  padding:9px clamp(12px,2vw,22px);border-bottom:1px solid rgba(244,241,234,.16);background:#0b0a09}
+.vid{display:flex;align-items:center;gap:10px;min-width:0}
+.vletter{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.08em;border:1px solid rgba(244,241,234,.3);padding:.3em .45em;color:var(--verm);flex:0 0 auto}
+.vbar h2{font-size:1rem;letter-spacing:-.02em;font-weight:600;color:#f4f1ea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vbar .mono{color:rgba(244,241,234,.55);white-space:nowrap}
+.vacts{display:flex;gap:5px;align-items:center;flex:0 0 auto}
+.vbtn{
+  font-family:var(--f-mono);font-size:.53rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
+  background:transparent;border:1px solid rgba(244,241,234,.26);color:rgba(244,241,234,.85);
+  padding:.5em .65em;cursor:pointer;white-space:nowrap;
+}
+.vbtn:hover{border-color:#f4f1ea;color:#f4f1ea}
+.vbtn[aria-pressed="true"]{background:var(--verm);border-color:var(--verm);color:#fff}
+.vstage{flex:1 1 auto;position:relative;min-height:0;background:#000}
+.vstage iframe{width:100%;height:100%;border:0;display:block;background:#000}
+.vfoot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto;
+  padding:7px clamp(12px,2vw,22px);border-top:1px solid rgba(244,241,234,.16);background:#0b0a09}
+.vfoot .mono{color:rgba(244,241,234,.6)}
+
+/* ---------------- comparaison ---------------- */
+dialog.compare{
+  width:min(1600px,96vw);max-width:96vw;height:min(90vh,960px);max-height:90vh;margin:auto;
+  background:#0b0a09;color:#f4f1ea;display:flex;flex-direction:column;
+}
+.cstage{flex:1 1 auto;display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:1px;background:rgba(244,241,234,.18);min-height:0;overflow:auto}
+.pane{display:flex;flex-direction:column;background:#0b0a09;min-width:0;min-height:0}
+.pane figcaption{display:flex;align-items:center;gap:7px;flex:0 0 auto;padding:6px 9px;border-bottom:1px solid rgba(244,241,234,.16);font-size:.74rem;letter-spacing:-.01em;white-space:nowrap;overflow:hidden}
+.pane figcaption .tname{overflow:hidden;text-overflow:ellipsis}
+.pane figcaption .mono{color:rgba(244,241,234,.5)}
+.pane figcaption .vbtn{margin-left:auto;padding:.35em .5em;font-size:.47rem}
+.pane .cframe{flex:1 1 auto;min-height:0;background:#000}
+.pane iframe{width:100%;height:100%;border:0;display:block;background:#000}
+
+/* ---------------- toast ---------------- */
+.toast{
+  position:fixed;left:50%;bottom:76px;translate:-50% 0;z-index:70;
+  background:var(--ink);color:var(--bg);padding:.6em .85em;
+  font-family:var(--f-mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;
+  opacity:0;transition:opacity .18s;pointer-events:none;
+}
+.toast.show{opacity:1}
+
+/* ---------------- responsive ---------------- */
+@media (max-width:1380px){.tile{--s:.36}}
+@media (max-width:1200px){.grid{grid-template-columns:minmax(0,1fr)}.tile{--s:.60}}
+@media (max-width:1000px){
+  header.top{grid-template-columns:1fr}
+  .top .count{display:none}
+  .about-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  table{min-width:780px}
+  footer.foot{grid-template-columns:1fr}
+  section.brief{grid-template-columns:1fr}
+}
+@media (max-width:900px){
+  .bench .letters{display:none}
+  .bench .brow-rail{display:none}
+}
+@media (max-width:860px){.tile{--s:.50}}
+@media (max-width:740px){.tile{--s:.44}}
+@media (max-width:680px){.tile{--s:.40}}
+@media (max-width:700px){
+  .tile .badge{left:10px;top:10px}
+  .bench{margin-inline:-16px;padding-inline:16px}
+  .brow{flex-wrap:wrap}
+  .search{flex:1 1 100%}
+  .seg{flex:1 1 100%}
+  .brow-filters{flex-wrap:wrap;overflow:visible}
+  .brow-filters .glbl,.brow-filters .vsep{display:none}
+  .chips{flex:1 1 auto;order:2}
+  .techsel{margin-left:auto;order:3}
+  .techsel span{display:none}
+  table{font-size:.6rem;min-width:680px}
+  th,td{padding:6px 6px}
+  .top p.hint{flex-direction:column;gap:6px;align-items:flex-start}
+  .vbar .mono{display:none}
+  .vbar{flex-wrap:wrap}
+  .vacts{width:100%;justify-content:flex-end}
+  .vHint{display:none}
+  dialog.compare{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh}
+  .cstage{grid-template-columns:1fr}
+  .pane{min-height:56vh}
+}
+@media (max-width:620px){.tile{--s:.36}.about-grid{grid-template-columns:1fr}}
+@media (max-width:560px){.tile{--s:.31}}
+@media (max-width:500px){.tile{--s:.27}}
+@media (max-width:460px){.tile .peek{display:none}.tile .desc{font-size:.82rem}.act.ext{margin-left:0}}
+@media (max-width:450px){.tile{--s:.23}}
+@media (max-width:400px){.tile{--s:.21}}
+@media (max-width:340px){.tile{--s:.18}}
+@media (prefers-reduced-motion:reduce){
+  .tile .shot,.tile .peek,.act,.chip,.motion-all{transition:none}
+  .tile:hover .shot{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#grid">Aller à la grille des concepts</a>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <p class="mono eyebrow">DA Lab — laboratoire de directions artistiques</p>
+      <h1>Trente-trois façons de tenir <em>le même système.</em></h1>
+      <p class="lede">Un studio, une promesse, une contrainte : aucune dépendance, aucun framework, aucun tracker, tout en CSS, SVG, canvas 2D et un peu de JavaScript quand le geste l’exige. Ce qui change à chaque fois : la matière, la lumière, le rythme, la mécanique. Chaque vignette est la page réelle — ouvrez-la en plein écran et manipulez-la.</p>
+    </div>
+    <div class="count">
+      <b>33</b>
+      <span class="mono">directions<br />artistiques<br />1440 × 900<br />23.11.2026</span>
+    </div>
+    <p class="mono hint">
+      <span><b>13</b> sélections · <b>20</b> expérimentations · <b>16</b> univers</span>
+      <span><b id="live">0</b>/33 vignettes montées à cet instant <button class="motion-all" id="motionAll" type="button" aria-pressed="true">Mouvement : on</button></span>
+    </p>
+  </header>
+
+  <section class="brief" aria-label="Présentation du laboratoire">
+    <div>
+      <p class="n">01 — Le labo</p>
+      <h2>Un terrain d’essai, pas une collection</h2>
+      <p>DA Lab est le laboratoire d’un studio d’ingénierie logicielle. Trente-trois directions artistiques pour une seule promesse : rendre un système lisible, désirable et crédible. <b>Aucun brief commercial</b> : chaque page part d’une contrainte et la pousse jusqu’au bout.</p>
+    </div>
+    <div>
+      <p class="n">02 — La règle</p>
+      <h2>Même contenu, même budget</h2>
+      <p>Même studio, même texte, même gabarit. <b>Zéro requête tierce</b>, zéro image à charger — sauf une photographie de 104 Ko. Ce qui varie, c’est la direction artistique : matière, lumière, échelle, mouvement.</p>
+    </div>
+    <div>
+      <p class="n">03 — La lecture</p>
+      <h2>Treize sélections, vingt essais</h2>
+      <p>Les <b>sélections</b> sont les pièces que je défendrais devant un client. Les <b>expérimentations</b> sont plus risquées, parfois plus intéressantes. Le statut ne change rien à la page : il hiérarchise la lecture.</p>
+    </div>
+  </section>
+
+  <div class="bench">
+    <div class="brow">
+      <div class="search" id="searchBox">
+        <label class="sr" for="q">Rechercher un concept</label>
+        <input id="q" type="search" placeholder="Rechercher un nom, un univers, une technique…" autocomplete="off" spellcheck="false" />
+        <kbd aria-hidden="true">/</kbd>
+        <button class="clear" id="qClear" type="button" aria-label="Effacer la recherche">✕</button>
+      </div>
+      <p class="rescount" id="count" aria-live="polite">33 / 33</p>
+    </div>
+
+    <div class="brow brow-filters">
+      <div class="seg" role="group" aria-label="Vue de la galerie">
+        <button type="button" data-view="tout" aria-pressed="true">Tout<span class="n">33</span></button>
+        <button type="button" data-view="sel" aria-pressed="false">Sélection<span class="n">13</span></button>
+        <button type="button" data-view="exp" aria-pressed="false">Expérimentations<span class="n">20</span></button>
+        <button type="button" data-view="fav" aria-pressed="false">Favoris<span class="n" id="favN">0</span></button>
+      </div>
+      <span class="vsep" aria-hidden="true"></span>
+      <div class="chips" id="uChips" role="group" aria-label="Filtrer par univers">
+        <button class="chip" type="button" data-u="tout" aria-pressed="true">Tous<span class="n">33</span></button>
+        <button class="chip" type="button" data-u="papier" aria-pressed="false">Papier<span class="n">3</span></button>
+          <button class="chip" type="button" data-u="systeme" aria-pressed="false">Système<span class="n">3</span></button>
+          <button class="chip" type="button" data-u="typo" aria-pressed="false">Typographie<span class="n">4</span></button>
+          <button class="chip" type="button" data-u="matiere" aria-pressed="false">Matière<span class="n">6</span></button>
+          <button class="chip" type="button" data-u="brut" aria-pressed="false">Brut<span class="n">1</span></button>
+          <button class="chip" type="button" data-u="collage" aria-pressed="false">Collage<span class="n">1</span></button>
+          <button class="chip" type="button" data-u="espace" aria-pressed="false">Espace<span class="n">5</span></button>
+          <button class="chip" type="button" data-u="generatif" aria-pressed="false">Génératif<span class="n">4</span></button>
+          <button class="chip" type="button" data-u="cinema" aria-pressed="false">Cinéma<span class="n">4</span></button>
+          <button class="chip" type="button" data-u="objet" aria-pressed="false">Objet<span class="n">4</span></button>
+          <button class="chip" type="button" data-u="editorial" aria-pressed="false">Éditorial<span class="n">1</span></button>
+          <button class="chip" type="button" data-u="photo" aria-pressed="false">Photo<span class="n">1</span></button>
+          <button class="chip" type="button" data-u="scene" aria-pressed="false">Scène<span class="n">2</span></button>
+          <button class="chip" type="button" data-u="artisanat" aria-pressed="false">Artisanat<span class="n">3</span></button>
+          <button class="chip" type="button" data-u="son" aria-pressed="false">Son<span class="n">1</span></button>
+          <button class="chip" type="button" data-u="carte" aria-pressed="false">Carte<span class="n">1</span></button>
+      </div>
+      <span class="vsep" aria-hidden="true"></span>
+      <label class="techsel"><span class="mono">Technique</span>
+        <select id="techSel" aria-label="Filtrer par technique">
+          <option value="tout">Toutes</option>
+          <option value="css">Sans script (7)</option>
+          <option value="script">Avec script (26)</option>
+          <option value="canvas">Canvas</option>
+          <option value="svg">SVG</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="brow brow-rail">
+      <span class="glbl mono">Aller à</span>
+      <div class="letters">
+        <a href="#a" title="A — Le dossier">A</a>
+        <a href="#b" title="B — Salle des machines">B</a>
+        <a href="#c" title="C — La pile">C</a>
+        <a href="#d" title="D — Tension">D</a>
+        <a href="#e" title="E — Marée">E</a>
+        <a href="#f" title="F — Bloc">F</a>
+        <a href="#g" title="G — Archive">G</a>
+        <a href="#h" title="H — Horizon">H</a>
+        <a href="#i" title="I — Constellation">I</a>
+        <a href="#j" title="J — Prise de vue">J</a>
+        <a href="#k" title="K — Interférence">K</a>
+        <a href="#l" title="L — Tirage">L</a>
+        <a href="#m" title="M — La porte">M</a>
+        <a href="#n" title="N — Extrusion">N</a>
+        <a href="#o" title="O — L’atelier">O</a>
+        <a href="#p" title="P — Le tableau">P</a>
+        <a href="#q" title="Q — Signal">Q</a>
+        <a href="#r" title="R — Quai">R</a>
+        <a href="#s" class="sel" title="S — La une">S</a>
+        <a href="#t" class="sel" title="T — Salle blanche">T</a>
+        <a href="#u" class="sel" title="U — Chambre noire">U</a>
+        <a href="#v" class="sel" title="V — Mobile">V</a>
+        <a href="#w" class="sel" title="W — Trame">W</a>
+        <a href="#x" class="sel" title="X — Partition">X</a>
+        <a href="#y" class="sel" title="Y — Un bit">Y</a>
+        <a href="#z" class="sel" title="Z — Relief">Z</a>
+        <a href="#aa" class="sel" title="AA — Le rideau">AA</a>
+        <a href="#ab" title="AB — Néon">AB</a>
+        <a href="#ac" class="sel" title="AC — Vitrail">AC</a>
+        <a href="#ad" title="AD — Pliage">AD</a>
+        <a href="#ae" class="sel" title="AE — Herbier">AE</a>
+        <a href="#af" class="sel" title="AF — 3615">AF</a>
+        <a href="#ag" class="sel" title="AG — Grande toile">AG</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <article class="tile" id="a" data-u="papier" data-t="css svg" data-tier="exp" aria-labelledby="h-a">
+      <a class="shot" href="/da-hero-a.html" target="_blank" rel="noopener" aria-label="Voir A — Le dossier en plein écran">
+        <span class="screen" style="--tint:#e8e2d6"><span class="ph" aria-hidden="true">A</span><iframe data-src="/da-hero-a.html" title="Aperçu de A — Le dossier" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">A</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-a"><span class="k">A</span><span class="tname">Le dossier</span></h2><span class="uni">Papier</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">La page est un dossier de mission posé sur une table : papier, tampon daté, feuille de calque, annotation au crayon. Le livrable se raconte au lieu de se décrire.</p>
+        <p class="tech">Instrument Serif italique · tampon 240 ms · parallaxe 2–5 vh · 0 JS</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : A — Le dossier"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer A — Le dossier"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir A — Le dossier en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-a.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="b" data-u="systeme" data-t="css svg" data-tier="exp" aria-labelledby="h-b">
+      <a class="shot" href="/da-hero-b.html" target="_blank" rel="noopener" aria-label="Voir B — Salle des machines en plein écran">
+        <span class="screen" style="--tint:#101418"><span class="ph" aria-hidden="true">B</span><iframe data-src="/da-hero-b.html" title="Aperçu de B — Salle des machines" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">B</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-b"><span class="k">B</span><span class="tname">Salle des machines</span></h2><span class="uni">Pupitre</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Le pupitre du système qu’on construit : une coupe en quatre couches, une télémétrie dont chaque chiffre est vrai, un balayage unique à l’ouverture.</p>
+        <p class="tech">Inter Tight 800 · balayage 800 ms · nœuds SVG focusables · 0 JS</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : B — Salle des machines"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer B — Salle des machines"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir B — Salle des machines en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-b.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="c" data-u="systeme espace" data-t="css" data-tier="exp" aria-labelledby="h-c">
+      <a class="shot" href="/da-hero-c.html" target="_blank" rel="noopener" aria-label="Voir C — La pile en plein écran">
+        <span class="screen" style="--tint:#0d1420"><span class="ph" aria-hidden="true">C</span><iframe data-src="/da-hero-c.html" title="Aperçu de C — La pile" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">C</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-c"><span class="k">C</span><span class="tname">La pile</span></h2><span class="uni">Espace</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Le système est une pile de couches physiques. Le scroll avance la caméra dans la pile : les plans se recouvrent vraiment, l’épaisseur se voit.</p>
+        <p class="tech">Barlow Condensed 700 · dolly translateZ 280–430 px · sélecteur en :has() · 0 JS</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : C — La pile"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer C — La pile"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir C — La pile en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-c.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="d" data-u="typo" data-t="css" data-tier="exp" aria-labelledby="h-d">
+      <a class="shot" href="/da-hero-d.html" target="_blank" rel="noopener" aria-label="Voir D — Tension en plein écran">
+        <span class="screen" style="--tint:#151412"><span class="ph" aria-hidden="true">D</span><iframe data-src="/da-hero-d.html" title="Aperçu de D — Tension" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">D</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-d"><span class="k">D</span><span class="tname">Tension</span></h2><span class="uni">Typographie</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">La typographie seule, à 190 px, qui respire en permanence lettre par lettre. Survolez la ligne acide : le mot se creuse autour du curseur. Aucune image, aucun filtre.</p>
+        <p class="tech">Anton · respiration 4,2 s · onde de survol 3 lettres · caméra rotateX 7° au scroll · 0 JS</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : D — Tension"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer D — Tension"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir D — Tension en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-d.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="e" data-u="matiere" data-t="script svg" data-tier="exp" aria-labelledby="h-e">
+      <a class="shot" href="/da-hero-e.html" target="_blank" rel="noopener" aria-label="Voir E — Marée en plein écran">
+        <span class="screen" style="--tint:#08202a"><span class="ph" aria-hidden="true">E</span><iframe data-src="/da-hero-e.html" title="Aperçu de E — Marée" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">E</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-e"><span class="k">E</span><span class="tname">Marée</span></h2><span class="uni">Fluide</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Deux nappes de couleur dérivent, une goutte de métal suit le curseur et fusionne avec ses retardataires. Trois marées — basse, haute, houle — changent la palette et le rythme.</p>
+        <p class="tech">filtre goo (feGaussianBlur + feColorMatrix) · feTurbulence sur le mot · 0,9 Ko de JS facultatif</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : E — Marée"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer E — Marée"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir E — Marée en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-e.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="f" data-u="brut" data-t="css svg" data-tier="exp" aria-labelledby="h-f">
+      <a class="shot" href="/da-hero-f.html" target="_blank" rel="noopener" aria-label="Voir F — Bloc en plein écran">
+        <span class="screen" style="--tint:#e6e0d2"><span class="ph" aria-hidden="true">F</span><iframe data-src="/da-hero-f.html" title="Aperçu de F — Bloc" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">F</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-f"><span class="k">F</span><span class="tname">Bloc</span></h2><span class="uni">Brut</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Trois aplats, une règle de 1 px, aucune courbe. Les entrées sont en steps() : la machine s’enclenche, elle ne glisse pas. Les lignes du titre se couchent au survol.</p>
+        <p class="tech">Inter Tight 900 · steps(5, end) · tampon rotatif 34 s · fiche technique en dl · 0 JS</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : F — Bloc"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer F — Bloc"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir F — Bloc en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-f.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="g" data-u="collage" data-t="script svg" data-tier="exp" aria-labelledby="h-g">
+      <a class="shot" href="/da-hero-g.html" target="_blank" rel="noopener" aria-label="Voir G — Archive en plein écran">
+        <span class="screen" style="--tint:#ddd6c4"><span class="ph" aria-hidden="true">G</span><iframe data-src="/da-hero-g.html" title="Aperçu de G — Archive" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">G</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-g"><span class="k">G</span><span class="tname">Archive</span></h2><span class="uni">Collage</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Papier journal, trame d’imprimerie, dessin détouré, bande arrachée : trois voix typographiques se recouvrent. Un spot en multiply suit le curseur ; les pièces se redressent au survol.</p>
+        <p class="tech">Bricolage Grotesque + Instrument Serif · grain SVG · bande en clip-path · 0,3 Ko de JS facultatif</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : G — Archive"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer G — Archive"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir G — Archive en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-g.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="h" data-u="espace" data-t="script" data-tier="exp" aria-labelledby="h-h">
+      <a class="shot" href="/da-hero-h.html" target="_blank" rel="noopener" aria-label="Voir H — Horizon en plein écran">
+        <span class="screen" style="--tint:#0a1220"><span class="ph" aria-hidden="true">H</span><iframe data-src="/da-hero-h.html" title="Aperçu de H — Horizon" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">H</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-h"><span class="k">H</span><span class="tname">Horizon</span></h2><span class="uni">Espace</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Une salle, pas une page : sol en perspective, ligne d’horizon, monolithe. La caméra suit le pointeur de trois degrés — assez pour que l’espace existe, pas assez pour étourdir.</p>
+        <p class="tech">Anton · perspective 1 100 px · caméra ±3,2° · orbite 42 s · 0,8 Ko de JS facultatif</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : H — Horizon"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer H — Horizon"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir H — Horizon en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-h.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="i" data-u="generatif" data-t="script canvas" data-tier="exp" aria-labelledby="h-i">
+      <a class="shot" href="/da-hero-i.html" target="_blank" rel="noopener" aria-label="Voir I — Constellation en plein écran">
+        <span class="screen" style="--tint:#05080f"><span class="ph" aria-hidden="true">I</span><iframe data-src="/da-hero-i.html" title="Aperçu de I — Constellation" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">I</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-i"><span class="k">I</span><span class="tname">Constellation</span></h2><span class="uni">Génératif</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Un champ de nœuds se dessine tout seul : chaque lien est une dépendance assumée, chaque étoile un composant. Le pointeur devient un nœud du réseau et le readout compte les liens en direct.</p>
+        <p class="tech">Canvas 2D · 48 nœuds · DPR ≤ 2 · 3,7 Ko (rendu + pointeur) · pause hors écran</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : I — Constellation"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer I — Constellation"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir I — Constellation en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-i.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="j" data-u="cinema" data-t="script" data-tier="exp" aria-labelledby="h-j">
+      <a class="shot" href="/da-hero-j.html" target="_blank" rel="noopener" aria-label="Voir J — Prise de vue en plein écran">
+        <span class="screen" style="--tint:#1a1220"><span class="ph" aria-hidden="true">J</span><iframe data-src="/da-hero-j.html" title="Aperçu de J — Prise de vue" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">J</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-j"><span class="k">J</span><span class="tname">Prise de vue</span></h2><span class="uni">Cinéma</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Un plan large au crépuscule, cache 2.39:1 : dolly continu de 34 s, grain argentique, flare anamorphique, timecode 24 i/s. Le titre s’élève sous un cache, comme un générique.</p>
+        <p class="tech">Instrument Serif · letterbox · dolly 34 s · grain steps(4) · 1,2 Ko (timecode + flare)</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : J — Prise de vue"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer J — Prise de vue"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir J — Prise de vue en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-j.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="k" data-u="generatif" data-t="script" data-tier="exp" aria-labelledby="h-k">
+      <a class="shot" href="/da-hero-k.html" target="_blank" rel="noopener" aria-label="Voir K — Interférence en plein écran">
+        <span class="screen" style="--tint:#08080c"><span class="ph" aria-hidden="true">K</span><iframe data-src="/da-hero-k.html" title="Aperçu de K — Interférence" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">K</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-k"><span class="k">K</span><span class="tname">Interférence</span></h2><span class="uni">Optique</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Deux réseaux de cercles tournent en sens inverse : c’est leur écart qui dessine la figure. Le mot se déplace sous le pointeur, l’œil fait le reste. Aucune image, deux dégradés.</p>
+        <p class="tech">repeating-radial-gradient · mix-blend screen · 96 s / 71 s · 1,5 Ko (pointeur, compteur i/s)</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : K — Interférence"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer K — Interférence"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir K — Interférence en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-k.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="l" data-u="matiere" data-t="css" data-tier="exp" aria-labelledby="h-l">
+      <a class="shot" href="/da-hero-l.html" target="_blank" rel="noopener" aria-label="Voir L — Tirage en plein écran">
+        <span class="screen" style="--tint:#f3ead7"><span class="ph" aria-hidden="true">L</span><iframe data-src="/da-hero-l.html" title="Aperçu de L — Tirage" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">L</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-l"><span class="k">L</span><span class="tname">Tirage</span></h2><span class="uni">Risographie</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Deux encres, un seul passage : le décalage bleu/rose n’est pas un défaut, c’est la signature. Trame imprimée, repères de coupe, papier texturé, et chaque ligne porte son propre désalignement.</p>
+        <p class="tech">Space Grotesk 700 · multiply · ghosts attr(data-t) · trame 6 px · 0 JS</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : L — Tirage"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer L — Tirage"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir L — Tirage en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-l.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="m" data-u="cinema" data-t="css" data-tier="exp" aria-labelledby="h-m">
+      <a class="shot" href="/da-hero-m.html" target="_blank" rel="noopener" aria-label="Voir M — La porte en plein écran">
+        <span class="screen" style="--tint:#2a2140"><span class="ph" aria-hidden="true">M</span><iframe data-src="/da-hero-m.html" title="Aperçu de M — La porte" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">M</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-m"><span class="k">M</span><span class="tname">La porte</span></h2><span class="uni">Surréalisme</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Une porte seule dans la brume, au crépuscule. Elle s’ouvre au survol et la lumière se répand sur le sable : la boîte noire devient un passage.</p>
+        <p class="tech">perspective 900 px · rotateY −78° · brume 46 s / 66 s · ombre skew · 0 JS</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : M — La porte"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer M — La porte"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir M — La porte en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-m.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="n" data-u="typo" data-t="script" data-tier="exp" aria-labelledby="h-n">
+      <a class="shot" href="/da-hero-n.html" target="_blank" rel="noopener" aria-label="Voir N — Extrusion en plein écran">
+        <span class="screen" style="--tint:#0e0f13"><span class="ph" aria-hidden="true">N</span><iframe data-src="/da-hero-n.html" title="Aperçu de N — Extrusion" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">N</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-n"><span class="k">N</span><span class="tname">Extrusion</span></h2><span class="uni">Volume</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Seize calques de texte composés en 3D réelle : la face est chromée, l’épaisseur se voit, l’angle change. Un système n’a pas une face, il a une épaisseur.</p>
+        <p class="tech">preserve-3d · 16 calques × 6 px · sway 22 s · 1,5 Ko (construction + pointeur)</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : N — Extrusion"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer N — Extrusion"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir N — Extrusion en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-n.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="o" data-u="matiere" data-t="script svg" data-tier="exp" aria-labelledby="h-o">
+      <a class="shot" href="/da-hero-o.html" target="_blank" rel="noopener" aria-label="Voir O — L’atelier en plein écran">
+        <span class="screen" style="--tint:#08222e"><span class="ph" aria-hidden="true">O</span><iframe data-src="/da-hero-o.html" title="Aperçu de O — L’atelier" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">O</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-o"><span class="k">O</span><span class="tname">L’atelier</span></h2><span class="uni">Illustration</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Une machine dessinée au trait : volant, bielle, tapis, lampe de contrôle. Chaque pièce tourne à son rythme et le plan porte ses propres cotes. Une machine se juge à ses plans.</p>
+        <p class="tech">SVG 800 × 470 · transform-box · 6 animations · 0,6 Ko (parallaxe) · 0 image</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : O — L’atelier"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer O — L’atelier"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir O — L’atelier en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-o.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="p" data-u="objet" data-t="script" data-tier="exp" aria-labelledby="h-p">
+      <a class="shot" href="/da-hero-p.html" target="_blank" rel="noopener" aria-label="Voir P — Le tableau en plein écran">
+        <span class="screen" style="--tint:#0a0d08"><span class="ph" aria-hidden="true">P</span><iframe data-src="/da-hero-p.html" title="Aperçu de P — Le tableau" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">P</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-p"><span class="k">P</span><span class="tname">Le tableau</span></h2><span class="uni">Ludique</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Quatre-vingt-seize cases à allumer, une torche qui suit le pointeur, un compteur de périmètre. On comprend la promesse en jouant avec : le système se mesure aux cases qu’on peut éteindre.</p>
+        <p class="tech">CSS grid 12 × 7 · 1,6 Ko (état, compteur, torche) · cible tactile · 0 dépendance</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : P — Le tableau"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer P — Le tableau"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir P — Le tableau en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-p.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="q" data-u="typo" data-t="script" data-tier="exp" aria-labelledby="h-q">
+      <a class="shot" href="/da-hero-q.html" target="_blank" rel="noopener" aria-label="Voir Q — Signal en plein écran">
+        <span class="screen" style="--tint:#04120b"><span class="ph" aria-hidden="true">Q</span><iframe data-src="/da-hero-q.html" title="Aperçu de Q — Signal" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">Q</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-q"><span class="k">Q</span><span class="tname">Signal</span></h2><span class="uni">Data-art</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Le titre se stabilise depuis un bruit de glyphes en une seconde et demie, puis se remet à scintiller : le signal tient. Le verrou passe réellement de « recherche » à « stable ».</p>
+        <p class="tech">JetBrains Mono · 60 glyphes · 2,6 Ko (scramble + flicker) · un caractère à la fois</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : Q — Signal"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer Q — Signal"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir Q — Signal en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-q.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="r" data-u="objet" data-t="script" data-tier="exp" aria-labelledby="h-r">
+      <a class="shot" href="/da-hero-r.html" target="_blank" rel="noopener" aria-label="Voir R — Quai en plein écran">
+        <span class="screen" style="--tint:#16130f"><span class="ph" aria-hidden="true">R</span><iframe data-src="/da-hero-r.html" title="Aperçu de R — Quai" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">R</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-r"><span class="k">R</span><span class="tname">Quai</span></h2><span class="uni">Mécanique</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Un panneau Solari qui épelle la promesse volet par volet, se mélange toutes les cinq secondes et retombe toujours juste. Cliquez pour relancer le tableau.</p>
+        <p class="tech">52 volets · rotateX .34 s · 2,6 Ko (séquences, horloge) · relance au clic</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : R — Quai"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer R — Quai"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir R — Quai en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-r.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="s" data-u="editorial" data-t="script" data-tier="sel" aria-labelledby="h-s">
+      <a class="shot" href="/da-hero-s.html" target="_blank" rel="noopener" aria-label="Voir S — La une en plein écran">
+        <span class="screen" style="--tint:#f5f1e6"><span class="ph" aria-hidden="true">S</span><iframe data-src="/da-hero-s.html" title="Aperçu de S — La une" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">S</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-s"><span class="k">S</span><span class="tname">La une</span></h2><span class="uni">Éditorial</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Une couverture de revue : manchette au serif, grille de une, sommaire en marge et une planche rouge tramée. Le titre se souligne au survol, la lumière suit le pointeur sur la planche.</p>
+        <p class="tech">Instrument Serif + Inter Tight · grille 3 colonnes · planche tramée · pointeur</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : S — La une"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer S — La une"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir S — La une en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-s.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="t" data-u="espace" data-t="script" data-tier="sel" aria-labelledby="h-t">
+      <a class="shot" href="/da-hero-t.html" target="_blank" rel="noopener" aria-label="Voir T — Salle blanche en plein écran">
+        <span class="screen" style="--tint:#e9e7e1"><span class="ph" aria-hidden="true">T</span><iframe data-src="/da-hero-t.html" title="Aperçu de T — Salle blanche" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">T</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-t"><span class="k">T</span><span class="tname">Salle blanche</span></h2><span class="uni">Art contemporain</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Un white cube : une seule pièce d’acier peint, un cartel de musée, un spot qui suit le regard. Le vide fait partie de l’œuvre, et l’ombre prouve le contact au sol.</p>
+        <p class="tech">anneau CSS 3D · spot soft-light · cartel 12 px · caméra</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : T — Salle blanche"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer T — Salle blanche"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir T — Salle blanche en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-t.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="u" data-u="photo cinema" data-t="script" data-tier="sel" aria-labelledby="h-u">
+      <a class="shot" href="/da-hero-u.html" target="_blank" rel="noopener" aria-label="Voir U — Chambre noire en plein écran">
+        <span class="screen" style="--tint:#1a0d0b"><span class="ph" aria-hidden="true">U</span><iframe data-src="/da-hero-u.html" title="Aperçu de U — Chambre noire" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">U</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-u"><span class="k">U</span><span class="tname">Chambre noire</span></h2><span class="uni">Photographie</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Un tirage argentique se révèle dans le bac : 45 secondes, un chrono, une lumière inactinique. La photographie est un délai, pas une image.</p>
+        <p class="tech">JPEG 104 Ko · développement 5,6 s · duotone CSS · chrono</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : U — Chambre noire"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer U — Chambre noire"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir U — Chambre noire en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-u.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="v" data-u="espace objet" data-t="script svg" data-tier="sel" aria-labelledby="h-v">
+      <a class="shot" href="/da-hero-v.html" target="_blank" rel="noopener" aria-label="Voir V — Mobile en plein écran">
+        <span class="screen" style="--tint:#efe7d7"><span class="ph" aria-hidden="true">V</span><iframe data-src="/da-hero-v.html" title="Aperçu de V — Mobile" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">V</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-v"><span class="k">V</span><span class="tname">Mobile</span></h2><span class="uni">Sculpture cinétique</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Un mobile suspendu : fils de laiton, tôles laquées, chaque bras oscille à son rythme. Le pointeur incline l’ensemble avec une inertie de quelques degrés.</p>
+        <p class="tech">SVG 860 × 640 · 4 bras · oscillations 11–19 s · inertie</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : V — Mobile"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer V — Mobile"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir V — Mobile en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-v.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="w" data-u="matiere artisanat" data-t="script" data-tier="sel" aria-labelledby="h-w">
+      <a class="shot" href="/da-hero-w.html" target="_blank" rel="noopener" aria-label="Voir W — Trame en plein écran">
+        <span class="screen" style="--tint:#efe8d9"><span class="ph" aria-hidden="true">W</span><iframe data-src="/da-hero-w.html" title="Aperçu de W — Trame" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">W</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-w"><span class="k">W</span><span class="tname">Trame</span></h2><span class="uni">Textile</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Une étoffe tissée en sergé, son carton d’armure, sa lisière. Les fils se décalent sous le pointeur ; la navette traverse le métier toutes les neuf secondes.</p>
+        <p class="tech">dégradés tissés · carton 14 × 9 · navette 9,5 s</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : W — Trame"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer W — Trame"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir W — Trame en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-w.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="x" data-u="son objet" data-t="script" data-tier="sel" aria-labelledby="h-x">
+      <a class="shot" href="/da-hero-x.html" target="_blank" rel="noopener" aria-label="Voir X — Partition en plein écran">
+        <span class="screen" style="--tint:#f3eddd"><span class="ph" aria-hidden="true">X</span><iframe data-src="/da-hero-x.html" title="Aperçu de X — Partition" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">X</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-x"><span class="k">X</span><span class="tname">Partition</span></h2><span class="uni">Musique graphique</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Une partition graphique en six voix : le curseur de lecture allume les gestes, un clic en ajoute un. Le système se joue autant qu’il se lit.</p>
+        <p class="tech">48 gestes · lecture 12 s · rAF suspendu hors écran</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : X — Partition"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer X — Partition"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir X — Partition en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-x.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="y" data-u="generatif" data-t="script canvas" data-tier="sel" aria-labelledby="h-y">
+      <a class="shot" href="/da-hero-y.html" target="_blank" rel="noopener" aria-label="Voir Y — Un bit en plein écran">
+        <span class="screen" style="--tint:#050505"><span class="ph" aria-hidden="true">Y</span><iframe data-src="/da-hero-y.html" title="Aperçu de Y — Un bit" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">Y</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-y"><span class="k">Y</span><span class="tname">Un bit</span></h2><span class="uni">Pixel art</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Un paysage en un bit : tramage Bayer, lune en croissant, monolithe. Chaque clic inverse un bloc de 14 × 14 pixels, sans jamais quitter le noir et blanc.</p>
+        <p class="tech">canvas 240 × 150 · Bayer 4×4 · 0 image</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : Y — Un bit"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer Y — Un bit"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir Y — Un bit en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-y.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="z" data-u="carte espace" data-t="script svg" data-tier="sel" aria-labelledby="h-z">
+      <a class="shot" href="/da-hero-z.html" target="_blank" rel="noopener" aria-label="Voir Z — Relief en plein écran">
+        <span class="screen" style="--tint:#eee8d7"><span class="ph" aria-hidden="true">Z</span><iframe data-src="/da-hero-z.html" title="Aperçu de Z — Relief" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">Z</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-z"><span class="k">Z</span><span class="tname">Relief</span></h2><span class="uni">Cartographie</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Une carte topographique : courbes de niveau générées, itinéraire en pointillé, coupe A–A′. Le pointeur devient une sonde d’altitude et de pente.</p>
+        <p class="tech">contours générés · 2 buttes · sonde 60 fps</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : Z — Relief"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer Z — Relief"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir Z — Relief en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-z.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="aa" data-u="scene cinema" data-t="script" data-tier="sel" aria-labelledby="h-aa">
+      <a class="shot" href="/da-hero-aa.html" target="_blank" rel="noopener" aria-label="Voir AA — Le rideau en plein écran">
+        <span class="screen" style="--tint:#1a0b09"><span class="ph" aria-hidden="true">AA</span><iframe data-src="/da-hero-aa.html" title="Aperçu de AA — Le rideau" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">AA</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-aa"><span class="k">AA</span><span class="tname">Le rideau</span></h2><span class="uni">Théâtre</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Un rideau de velours s’ouvre sur la scène : le titre est un générique, la lumière un projecteur, la poussière un détail. Cliquez pour refermer.</p>
+        <p class="tech">rideau 2 × 53 % · ouverture 1,5 s · 7 poussières</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : AA — Le rideau"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer AA — Le rideau"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir AA — Le rideau en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-aa.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="ab" data-u="scene typo" data-t="script" data-tier="exp" aria-labelledby="h-ab">
+      <a class="shot" href="/da-hero-ab.html" target="_blank" rel="noopener" aria-label="Voir AB — Néon en plein écran">
+        <span class="screen" style="--tint:#05070c"><span class="ph" aria-hidden="true">AB</span><iframe data-src="/da-hero-ab.html" title="Aperçu de AB — Néon" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">AB</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-ab"><span class="k">AB</span><span class="tname">Néon</span></h2><span class="uni">Enseigne</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Une enseigne au néon sous la pluie, son reflet sur l’asphalte, une lettre qui grésille. Cliquez sur l’enseigne pour la rallumer.</p>
+        <p class="tech">text-shadow ×5 · pluie 1,1 s · reflet flouté</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : AB — Néon"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer AB — Néon"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir AB — Néon en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-ab.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="ac" data-u="matiere generatif" data-t="script svg" data-tier="sel" aria-labelledby="h-ac">
+      <a class="shot" href="/da-hero-ac.html" target="_blank" rel="noopener" aria-label="Voir AC — Vitrail en plein écran">
+        <span class="screen" style="--tint:#0b080a"><span class="ph" aria-hidden="true">AC</span><iframe data-src="/da-hero-ac.html" title="Aperçu de AC — Vitrail" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">AC</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-ac"><span class="k">AC</span><span class="tname">Vitrail</span></h2><span class="uni">Verre</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Une rosace de verre : 44 pièces taillées, du plomb, une lumière. Le pointeur déplace le soleil et trois ambiances changent la teinte du mur.</p>
+        <p class="tech">SVG 44 pièces · 3 ambiances · 0 image</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : AC — Vitrail"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer AC — Vitrail"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir AC — Vitrail en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-ac.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="ad" data-u="papier artisanat" data-t="script svg" data-tier="exp" aria-labelledby="h-ad">
+      <a class="shot" href="/da-hero-ad.html" target="_blank" rel="noopener" aria-label="Voir AD — Pliage en plein écran">
+        <span class="screen" style="--tint:#eee7d6"><span class="ph" aria-hidden="true">AD</span><iframe data-src="/da-hero-ad.html" title="Aperçu de AD — Pliage" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">AD</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-ad"><span class="k">AD</span><span class="tname">Pliage</span></h2><span class="uni">Origami</span><span class="tier exp">Expérimentation</span></div>
+        <p class="desc">Un avion de papier : une feuille, deux plis, une trajectoire. Le pointeur incline le vol, le bouton le lance à travers la pièce.</p>
+        <p class="tech">SVG 5 facettes · vol 2,4 s · ombre portée</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : AD — Pliage"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer AD — Pliage"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir AD — Pliage en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-ad.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="ae" data-u="papier artisanat" data-t="script svg" data-tier="sel" aria-labelledby="h-ae">
+      <a class="shot" href="/da-hero-ae.html" target="_blank" rel="noopener" aria-label="Voir AE — Herbier en plein écran">
+        <span class="screen" style="--tint:#cfc7b2"><span class="ph" aria-hidden="true">AE</span><iframe data-src="/da-hero-ae.html" title="Aperçu de AE — Herbier" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">AE</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-ae"><span class="k">AE</span><span class="tname">Herbier</span></h2><span class="uni">Botanique</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Une planche d’herbier : trois tiges montées à sec, un cartel latin, un tampon d’atelier. Chaque feuille porte son relevé au survol.</p>
+        <p class="tech">SVG 12 feuilles · croissance 2,6 s · 0 image</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : AE — Herbier"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer AE — Herbier"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir AE — Herbier en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-ae.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="af" data-u="systeme" data-t="script" data-tier="sel" aria-labelledby="h-af">
+      <a class="shot" href="/da-hero-af.html" target="_blank" rel="noopener" aria-label="Voir AF — 3615 en plein écran">
+        <span class="screen" style="--tint:#0e0c0a"><span class="ph" aria-hidden="true">AF</span><iframe data-src="/da-hero-af.html" title="Aperçu de AF — 3615" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">AF</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-af"><span class="k">AF</span><span class="tname">3615</span></h2><span class="uni">Télétexte</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Un Minitel : 3615 DA LAB, pages numérotées, clavier 1–4 et texte double hauteur. Aucune image, aucun pixel perdu, une esthétique de service public.</p>
+        <p class="tech">télétexte 4 pages · clavier réel · 0 dépendance</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : AF — 3615"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer AF — 3615"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir AF — 3615 en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-af.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tile" id="ag" data-u="matiere" data-t="script canvas" data-tier="sel" aria-labelledby="h-ag">
+      <a class="shot" href="/da-hero-ag.html" target="_blank" rel="noopener" aria-label="Voir AG — Grande toile en plein écran">
+        <span class="screen" style="--tint:#d8d2c4"><span class="ph" aria-hidden="true">AG</span><iframe data-src="/da-hero-ag.html" title="Aperçu de AG — Grande toile" tabindex="-1" aria-hidden="true" scrolling="no"></iframe></span>
+        <span class="badge">AG</span>
+        <span class="peek">Plein écran <span aria-hidden="true">⤢</span></span>
+      </a>
+      <div class="meta">
+        <div class="line1"><h2 id="h-ag"><span class="k">AG</span><span class="tname">Grande toile</span></h2><span class="uni">Peinture</span><span class="tier sel">Sélection</span></div>
+        <p class="desc">Une toile abstraite générée couche par couche : champs, gestes, coulures, signature. On peut y peindre avec six pigments, ou demander une autre toile.</p>
+        <p class="tech">canvas 1200 × 720 · 40 gestes · 6 pigments</p>
+        <div class="acts">
+          <button class="act" type="button" data-act="fav" aria-pressed="false" aria-label="Favori : AG — Grande toile"><span class="ico" aria-hidden="true">☆</span><span class="lbl">Favori</span></button>
+          <button class="act" type="button" data-act="cmp" aria-pressed="false" aria-label="Comparer AG — Grande toile"><span class="ico" aria-hidden="true">⇄</span><span class="lbl">Comparer</span></button>
+          <button class="act" type="button" data-act="open" aria-label="Ouvrir AG — Grande toile en plein écran"><span class="ico" aria-hidden="true">⤢</span><span class="lbl">Plein écran</span></button>
+          <a class="act ext" href="/da-hero-ag.html" target="_blank" rel="noopener">Nouvel onglet <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="empty" id="empty" hidden>
+    <p>Aucun concept ne correspond à cette combinaison.</p>
+    <button class="reset" id="resetFilters" type="button">Tout réafficher</button>
+  </div>
+
+  <section class="about" id="methode">
+    <h2 class="sec">La méthode — ce que chaque page démontre</h2>
+    <p class="sec-note">Un portfolio n’est pas une liste de captures : c’est une suite de décisions visibles. Chaque univers est construit comme un système complet, pas comme un décor posé sur un gabarit.</p>
+    <div class="about-grid">
+      <div>
+        <p class="n">01</p>
+        <h3>Direction artistique</h3>
+        <p>Une intention par page : éditorial, white cube, textile, cartographie, télétexte, peinture. Palette, typographie, échelle et lumière découlent de la même décision.</p>
+      </div>
+      <div>
+        <p class="n">02</p>
+        <h3>Typographie &amp; grille</h3>
+        <p>Manchettes au serif, grotesques condensées, mono technique, spécimens animés. La grille porte la crédibilité avant l’effet.</p>
+      </div>
+      <div>
+        <p class="n">03</p>
+        <h3>Mouvement &amp; interaction</h3>
+        <p>Entrées composées, micro-interactions au pointeur, parallaxe, canvas. Tout est suspendu hors champ, dans un onglet caché ou à la demande.</p>
+      </div>
+      <div>
+        <p class="n">04</p>
+        <h3>Code &amp; performance</h3>
+        <p>Aucune dépendance : CSS, SVG, canvas 2D, JavaScript vanilla. Le budget de script le plus lourd d’une page est de 5,2 Ko, et rien ne dépend de lui pour se composer.</p>
+      </div>
+    </div>
+    <p class="stack mono">0 dépendance · 0 framework · 0 tracker · fontes auto-hébergées · 1 photographie (104 Ko) · 33 pages autonomes · 6,3 Ko de JavaScript au total sur le lab · préférence reduced-motion respectée page par page</p>
+  </section>
+
+  <section class="measures" id="perf">
+    <h2 class="sec">Performance — ce qui a réellement changé</h2>
+    <p class="sec-note">La lenteur ne vient pas d’une page : elle vient du nombre de documents vivants. Trente-trois iframes montées ensemble, c’est 270 animations, 522 Ko et 35 requêtes pour une galerie qu’on ne regarde qu’une tuile à la fois. Les vignettes sont montées à 240 px de l’écran, démontées à 25 % au-delà, et leurs animations sont suspendues dès qu’elles quittent le champ. Le compteur en tête dit combien vivent à l’instant ; le plein écran n’ouvre qu’un document, la comparaison trois, et chacun est libéré à la fermeture. Les sauts du rail sont instantanés : un défilement animé traverserait — et chargerait — les vingt-neuf concepts intermédiaires.</p>
+    <div class="perf" id="perf-grid">
+      <div><p class="v">2<s>/ 33</s></p><p class="l">documents vivants à l’ouverture · <b>33</b> si tout est monté</p></div>
+      <div><p class="v">6</p><p class="l">documents vivants au maximum pendant le défilement · <b>33</b> en montage total</p></div>
+      <div><p class="v">−36<s> %</s></p><p class="l">de tâche CPU au défilement · <b>929 ms</b> contre <b>1 463 ms</b> tout monté</p></div>
+      <div><p class="v">−27<s> %</s></p><p class="l">de recalculs de style · <b>480</b> contre <b>654</b> tout monté</p></div>
+      <div><p class="v">8<s> / 270</s></p><p class="l">animations en cours sur les vignettes visibles · <b>270</b> si les 33 pages tournent</p></div>
+      <div><p class="v">117<s> Ko</s></p><p class="l">transférés à l’ouverture · <b>522 Ko</b> en montage total · <b>95 Ko</b> avant (18 concepts)</p></div>
+      <div><p class="v">4<s> / 35</s></p><p class="l">requêtes initiales · <b>35</b> en montage total</p></div>
+      <div><p class="v">3 824</p><p class="l">nœuds DOM vivants · <b>6 139</b> en montage total</p></div>
+    </div>
+    <p class="legend" id="perf-note">Protocole : Chrome 158 headless (<code>--disable-gpu</code>), CDP, cache désactivé, viewport 1440 × 900, même machine, même serveur local. « Livré » = montage à la demande (<code>rootMargin 240px</code> pour monter, <code>25%</code> pour démonter), animations suspendues hors champ, onglet caché, interrupteur global. « Tout monté » = les 33 iframes chargées et observateurs désactivés, le pire cas. Tâche CPU et recalculs mesurés sur un défilement scripté de 4,2 s. Au repos : <b>1 ms</b> de tâche CPU sur 3 s contre <b>645 ms</b> quand les 33 pages tournent. Le plein écran ajoute un document (3 au total), la comparaison trois (5), et redescend à 2 à la fermeture. Un saut de rail charge <b>3 pages</b> ; un défilement animé sur la même distance en charge <b>31</b> et en abandonne 27. Le compositeur logiciel gonfle les durées absolues ; les écarts mesurent le nombre de documents et d’animations. Le compteur reste la preuve la plus directe : <b>2 documents au lieu de 33</b>.</p>
+  </section>
+
+  <section class="measures">
+    <h2 class="sec">Ce que chaque proposition met en œuvre</h2>
+    <p class="sec-note">Poids = page seule, sans les fontes partagées (mises en cache une fois pour tout le lab). JS = octets de script embarqué, facultatif partout : sans lui, la page se compose exactement de la même façon, elle perd seulement le suivi du pointeur, le timecode ou le compteur.</p>
+    <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th>Concept</th><th>Famille</th><th>JS</th><th>Poids</th>
+          <th>Mouvement continu</th><th>Curseur / tactile</th><th>Mobile 390</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">A</span>Le dossier</td><td>Papier</td><td class="num">0</td><td class="num">16,0 Ko</td><td class="no">non</td><td>tampon, papier</td><td>une colonne</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">B</span>Salle des machines</td><td>Système</td><td class="num">0</td><td class="num">16,9 Ko</td><td class="no">non</td><td>nœuds SVG</td><td>une colonne</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">C</span>La pile</td><td>Système / espace</td><td class="num">0</td><td class="num">15,5 Ko</td><td class="no">non</td><td>sélecteur de couche</td><td>deux plans à plat</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">D</span>Tension</td><td>Typographie</td><td class="num">0</td><td class="num">13,8 Ko</td><td class="yes">respiration 4,2 s</td><td>onde de 3 lettres</td><td>4 lignes, 15,2 vw</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">E</span>Marée</td><td>Matière</td><td class="num">0,9 Ko</td><td class="num">18,6 Ko</td><td class="yes">nappes 24 s</td><td>goutte goo, 6 relais</td><td>nappes organiques</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">F</span>Bloc</td><td>Brut</td><td class="num">0</td><td class="num">16,7 Ko</td><td class="yes">tampon 34 s</td><td>inversion de cellule</td><td>titre entier, 11,2 vw</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">G</span>Archive</td><td>Collage</td><td class="num">0,4 Ko</td><td class="num">20,1 Ko</td><td class="yes">trame 26 s</td><td>spot multiply</td><td>collage empilé</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">H</span>Horizon</td><td>Espace</td><td class="num">0,7 Ko</td><td class="num">19,2 Ko</td><td class="yes">orbite 42 s</td><td>caméra ±3,2°</td><td>monolithe sur l’horizon</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">I</span>Constellation</td><td>Génératif</td><td class="num">3,7 Ko</td><td class="num">9,8 Ko</td><td class="yes">constellation vivante</td><td>nœud du réseau</td><td>panneau plein</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">J</span>Prise de vue</td><td>Cinéma</td><td class="num">1,2 Ko</td><td class="num">11,6 Ko</td><td class="yes">dolly 34 s + grain</td><td>flare déplacé</td><td>cache réduit</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">K</span>Interférence</td><td>Génératif</td><td class="num">1,5 Ko</td><td class="num">8,7 Ko</td><td class="yes">deux rotations 96 s / 71 s</td><td>mot déplacé</td><td>champ élargi</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">L</span>Tirage</td><td>Matière</td><td class="num">0</td><td class="num">8,3 Ko</td><td class="no">non</td><td>—</td><td>quatre lignes empilées</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">M</span>La porte</td><td>Cinéma</td><td class="num">0</td><td class="num">9,3 Ko</td><td class="yes">brume 46 s / 66 s</td><td>porte qui s’ouvre</td><td>porte centrée</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">N</span>Extrusion</td><td>Typographie</td><td class="num">1,5 Ko</td><td class="num">9,2 Ko</td><td class="yes">sway 22 s</td><td>rotation ±18°</td><td>mot réduit, panneau empilé</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">O</span>L’atelier</td><td>Matière</td><td class="num">0,6 Ko</td><td class="num">11,9 Ko</td><td class="yes">volant 16 s, tapis</td><td>parallaxe 10 px</td><td>plan recadré</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">P</span>Le tableau</td><td>Objet</td><td class="num">1,6 Ko</td><td class="num">8,6 Ko</td><td class="no">au geste</td><td>96 cases, torche</td><td>grille 7 × 10</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">Q</span>Signal</td><td>Typographie</td><td class="num">2,6 Ko</td><td class="num">10,2 Ko</td><td class="yes">scintillement 1,8–5 s</td><td>—</td><td>titre 3 lignes</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">R</span>Quai</td><td>Objet</td><td class="num">2,6 Ko</td><td class="num">10,8 Ko</td><td class="yes">mélange 5,2 s</td><td>relance au clic</td><td>volets 24 px</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">S</span>La une</td><td>Éditorial</td><td class="num">0,5 Ko</td><td class="num">13,6 Ko</td><td class="yes">non</td><td>planche tramée</td><td>une colonne, planche courte</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">T</span>Salle blanche</td><td>Art contemporain</td><td class="num">1,1 Ko</td><td class="num">10,8 Ko</td><td class="yes">spot + inertie</td><td>caméra ±5°</td><td>anneau 44 vw, cartel en haut</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">U</span>Chambre noire</td><td>Photographie</td><td class="num">1,8 Ko</td><td class="num">13,6 Ko</td><td class="yes">développement 5,6 s</td><td>bac incliné ±3°</td><td>une colonne, bac 92 vw</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">V</span>Mobile</td><td>Sculpture cinétique</td><td class="num">1,0 Ko</td><td class="num">10,6 Ko</td><td class="yes">4 oscillations</td><td>inertie ±2°</td><td>mobile 100 vw, copie dessous</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">W</span>Trame</td><td>Textile</td><td class="num">1,2 Ko</td><td class="num">12,8 Ko</td><td class="yes">navette 9,5 s</td><td>fils décalés ±8 px</td><td>étoffe 40 svh, carton masqué</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">X</span>Partition</td><td>Musique graphique</td><td class="num">3,9 Ko</td><td class="num">13,3 Ko</td><td class="yes">lecture 12 s en boucle</td><td>ajout / retrait de gestes</td><td>portée 30 vh, libellés courts</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">Y</span>Un bit</td><td>Pixel art</td><td class="num">3,0 Ko</td><td class="num">11,8 Ko</td><td class="yes">non (au clic)</td><td>blocs inversés</td><td>titre 10,6 vw, art recadré</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">Z</span>Relief</td><td>Cartographie</td><td class="num">2,0 Ko</td><td class="num">12,7 Ko</td><td class="yes">tracé 2,2 s + itinéraire</td><td>sonde altitude / pente</td><td>carte recadrée, légende masquée</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">AA</span>Le rideau</td><td>Théâtre</td><td class="num">0,9 Ko</td><td class="num">12,2 Ko</td><td class="yes">ouverture 1,5 s</td><td>rideau au clic</td><td>rideau 56 %, titre 17 vw</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">AB</span>Néon</td><td>Enseigne</td><td class="num">1,2 Ko</td><td class="num">13,5 Ko</td><td class="yes">pluie + grésillement</td><td>enseigne inclinée ±4°, rallumage</td><td>enseigne 86 vw, copie dessous</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">AC</span>Vitrail</td><td>Verre</td><td class="num">3,2 Ko</td><td class="num">13,0 Ko</td><td class="yes">scintillement 11 s</td><td>soleil déplacé, 3 ambiances</td><td>rosace 74 vw, légende masquée</td></tr>
+        <tr><td><span class="tier-dot" aria-hidden="true">○</span><span class="k">AD</span>Pliage</td><td>Origami</td><td class="num">1,3 Ko</td><td class="num">10,2 Ko</td><td class="yes">vol 2,4 s</td><td>inclinaison ±2°, lancer</td><td>avion 100 vw, recadré à droite</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">AE</span>Herbier</td><td>Botanique</td><td class="num">0,7 Ko</td><td class="num">15,9 Ko</td><td class="yes">croissance 2,6 s</td><td>relevé par feuille</td><td>planche 88 vw, cartel compact</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">AF</span>3615</td><td>Télétexte</td><td class="num">4,5 Ko</td><td class="num">13,9 Ko</td><td class="yes">non</td><td>clavier 1–4, sommaire</td><td>écran 60 svh, ASCII masqué</td></tr>
+        <tr class="is-sel"><td><span class="tier-dot on" aria-hidden="true">●</span><span class="k">AG</span>Grande toile</td><td>Peinture</td><td class="num">5,2 Ko</td><td class="num">14,6 Ko</td><td class="yes">40 gestes progressifs</td><td>peinture au doigt, palette</td><td>toile 92 vw, cartel masqué</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="legend">Trente-trois concepts, seize univers, quatre familles techniques, treize sélections. <b>Débordement horizontal : 0</b> à 320, 390, 768 et 1440 sur les trente-trois pages. <b>prefers-reduced-motion : 0 animation en cours</b> — chaque page coupe ses boucles et laisse l’état final lisible. <b>Interrupteur « mouvement » :</b> chaque prototype met ses animations en pause à la demande, et la galerie suspend les vignettes hors champ. Les scripts ne servent qu’au geste (pointeur, timecode, séquence, peinture) : aucune page ne dépend d’eux pour se composer.</p>
+  </section>
+
+
+
+  <section class="refs">
+    <h2 class="sec">Trente-quatre références regardées, et ce que j’en garde</h2>
+    <ol>
+      <li>
+        <h3>Mat Voyce — portfolio cinétique</h3>
+        <a href="https://matvoyce.tv" target="_blank" rel="noopener">matvoyce.tv</a>
+        <p>Awwwards SOTD, janvier 2025. Le hero est un mot monumental découpé en caractères, chacun sur sa propre courbe : <b>le mouvement vient de l’écart entre les lettres.</b> C’est D, transposé en CSS pur.</p>
+      </li>
+      <li>
+        <h3>Igloo Inc</h3>
+        <a href="https://www.awwwards.com/sites/igloo-inc" target="_blank" rel="noopener">awwwards.com/sites/igloo-inc</a>
+        <p>Site of the Year 2024. Le scroll traverse un monde gelé, le récit est écrit dans l’espace. <b>La profondeur raconte.</b> H en reprend l’idée sans WebGL : une perspective CSS et un sol quadrillé.</p>
+      </li>
+      <li>
+        <h3>Lusion</h3>
+        <a href="https://lusion.co" target="_blank" rel="noopener">lusion.co</a>
+        <p>La scène 3D vit dans un cadre, la typographie reste lisible au-dessus. <b>L’immersion n’exige pas de tout prendre.</b> C’est l’arbitrage de H et de N : un objet dans une chambre, pas un fond qui avale le texte.</p>
+      </li>
+      <li>
+        <h3>Exat Typeface — Studio Size &amp; RISE2</h3>
+        <a href="https://www.cssdesignawards.com/woty2025/sites/exat-typeface" target="_blank" rel="noopener">cssdesignawards.com/woty2025/sites/exat-typeface</a>
+        <p>Top 10 CSSDA WOTY 2025 (8,83), FWA of the Day. La grille de glyphes sert d’intro et la couleur suit la proximité du curseur. <b>Un spécimen peut être un hero</b> : c’est le principe de Q et du déplacement de K.</p>
+      </li>
+      <li>
+        <h3>Dropbox Brand — Daybreak Studio</h3>
+        <a href="https://www.cssdesignawards.com/woty2025/sites/dropbox-brand" target="_blank" rel="noopener">cssdesignawards.com/woty2025/sites/dropbox-brand</a>
+        <p>CSSDA WOTY 2025 (9,03). Un système de couleur tenu à la ligne près, des aplats qui ne tremblent jamais. <b>La discipline chromatique fait la crédibilité</b> : c’est la leçon de F et de L.</p>
+      </li>
+      <li>
+        <h3>The Symphony of Vines — Unseen Studio</h3>
+        <a href="https://www.cssdesignawards.com/woty2025/sites/the-symphony-of-vines" target="_blank" rel="noopener">cssdesignawards.com/woty2025/sites/the-symphony-of-vines</a>
+        <p>CSSDA WOTY 2025 (8,88). Matière organique et lumière rasante, sans effet gratuit. <b>La matière doit avoir une source de lumière</b> : M en dépend entièrement, E aussi.</p>
+      </li>
+      <li>
+        <h3>Charles Leclerc — Apart &amp; Uprising</h3>
+        <a href="https://www.cssdesignawards.com/woty2025/sites/charles-leclerc" target="_blank" rel="noopener">cssdesignawards.com/woty2025/sites/charles-leclerc</a>
+        <p>CSSDA WOTY 2025 (8,85). Un récit cadré comme un film, avec des respirations longues. <b>Le cadrage est une décision de DA</b> : les caches de J sont là pour ça.</p>
+      </li>
+      <li>
+        <h3>The Monolith Project</h3>
+        <a href="https://www.cssdesignawards.com/woty2025/sites/the-monolith-project" target="_blank" rel="noopener">cssdesignawards.com/woty2025/sites/the-monolith-project</a>
+        <p>CSSDA WOTY 2025 (8,85). Un seul objet, immense, qui porte toute la page. <b>Un objet suffit</b> : c’est la colonne vertébrale de N et de H.</p>
+      </li>
+      <li>
+        <h3>Bruno’s Portfolio — Bruno Simon</h3>
+        <a href="https://www.awwwards.com/sites/brunos-portfolio" target="_blank" rel="noopener">awwwards.com/sites/brunos-portfolio</a>
+        <p>Awwwards SOTD 21 janvier 2026, 8,11. Le portfolio est un terrain de jeu où l’on conduit. <b>Jouer fait comprendre</b> : P reprend l’idée sans 3D, avec 96 cases et un compteur honnête.</p>
+      </li>
+      <li>
+        <h3>Oryzo AI — Lusion</h3>
+        <a href="https://www.cssdesignawards.com/sites/oryzo-ai/49111" target="_blank" rel="noopener">cssdesignawards.com/sites/oryzo-ai/49111</a>
+        <p>CSSDA WOTD 9 avril 2026, 9,22. Une matière banale traitée en macro, avec une lumière de studio. <b>Le gros plan crée le luxe</b> : la brume et la porte de M travaillent à cette échelle.</p>
+      </li>
+      <li>
+        <h3>Where Worlds Take Shape — Jerome Reynet</h3>
+        <a href="https://www.cssdesignawards.com/sites/where-worlds-take-shape/48947/" target="_blank" rel="noopener">cssdesignawards.com/sites/where-worlds-take-shape/48947/</a>
+        <p>CSSDA WOTD 3 mars 2026, 8,39. Des mondes procéduraux qui se génèrent à l’usage. <b>La règle produit la forme</b> : I est exactement cela — 48 nœuds, une distance, des liens.</p>
+      </li>
+      <li>
+        <h3>The Watch — 60fps</h3>
+        <a href="https://www.awwwards.com/sites/the-watch" target="_blank" rel="noopener">awwwards.com/sites/the-watch</a>
+        <p>Awwwards SOTD 17 août 2026, 7,59. Un objet réel rendu en temps réel, palette réduite à deux valeurs. <b>Peu de couleurs, beaucoup de matière</b> : N et O suivent cette économie.</p>
+      </li>
+      <li>
+        <h3>Ingrassia Daniel — portfolio</h3>
+        <a href="https://www.cssdesignawards.com/sites/ingrassia-daniel/50347/" target="_blank" rel="noopener">cssdesignawards.com/sites/ingrassia-daniel/50347/</a>
+        <p>CSSDA WOTD 22 novembre 2026. Un portfolio de particules en métamorphose permanente. <b>Le système lui-même est l’image</b> : c’est la promesse de I, sans WebGL.</p>
+      </li>
+      <li>
+        <h3>Night Drive Racing Game — Anderson Mancini</h3>
+        <a href="https://www.awwwards.com/sites/night-drive-racing-game" target="_blank" rel="noopener">awwwards.com/sites/night-drive-racing-game</a>
+        <p>Awwwards SOTD 21 novembre 2026, Developer Award. Une scène nocturne lisible, avec un HUD qui ne mange jamais l’image. <b>Le HUD est un décor</b> : J et H en font un élément de cadrage.</p>
+      </li>
+      <li>
+        <h3>Codrops — filtres SVG animés sur du texte</h3>
+        <a href="https://tympanus.net/codrops/2024/08/22/scroll-based-svg-filter-animations-on-text/" target="_blank" rel="noopener">tympanus.net/codrops/2024/08/22/…</a>
+        <p>Des titres HTML déformés par <code>feTurbulence</code> et <code>feDisplacementMap</code>. <b>La déformation devient une matière.</b> E en reprend le principe sur un seul mot.</p>
+      </li>
+      <li>
+        <h3>Codrops — gooey cursor effect</h3>
+        <a href="https://tympanus.net/codrops/2023/06/07/gooey-cursor-effect/" target="_blank" rel="noopener">tympanus.net/codrops/2023/06/07/…</a>
+        <p><code>feGaussianBlur</code> + <code>feColorMatrix</code> pour faire fusionner des formes qui se suivent. <b>Un curseur peut avoir une physique.</b> C’est la goutte de E, réduite à six relais.</p>
+      </li>
+      <li>
+        <h3>Codrops — case study Stefan Vitasović</h3>
+        <a href="https://tympanus.net/codrops/2025/03/05/case-study-stefan-vitasovic-portfolio-2025/" target="_blank" rel="noopener">tympanus.net/codrops/2025/03/05/…</a>
+        <p>Une animation caractères-vers-mot, motif de mouvement répété dans tout le site. <b>Un motif vaut mieux que dix effets</b> : Q en fait son unique geste, R son unique mécanique.</p>
+      </li>
+      <li>
+        <h3>Ai in Design Report 2026</h3>
+        <a href="https://www.awwwards.com/sites/ai-in-design-report-2026" target="_blank" rel="noopener">www.awwwards.com/sites/ai-in-design-report-2026</a>
+        <p>Awwwards SOTD 26 août 2026 + Developer Award. Un rapport de recherche transformé en objet éditorial : sommaire, chapitres, chiffres traités comme du texte. <b>La grille fait la crédibilité</b> : c’est S, sans une seule image de données.</p>
+      </li>
+      <li>
+        <h3>Léo Parpeix — portfolio</h3>
+        <a href="https://rickcreates.com/r/2026-09-28-leo-parpeix-portfolio" target="_blank" rel="noopener">rickcreates.com/r/2026-09-28-leo-parpeix-portfolio</a>
+        <p>Awwwards SOTD + Developer Award 14.09.2026, FWA FOTD 28.09.2026. L’accueil est un atelier de sculpteur : plinthe, plâtre, fenêtres en arc. <b>Un objet sur un socle suffit à faire une entrée</b> : T en est la version dépouillée.</p>
+      </li>
+      <li>
+        <h3>Indigo Laboratory — FPTP Studio</h3>
+        <a href="https://www.awwwards.com/sites/indigo-laboratory" target="_blank" rel="noopener">www.awwwards.com/sites/indigo-laboratory</a>
+        <p>Awwwards SOTD + Developer Award 18 juin 2026. Photographie bijou, son, matière : la photo est traitée comme un matériau, pas comme une décoration. <b>Le grain et le délai font l’image</b> : U développe littéralement la sienne.</p>
+      </li>
+      <li>
+        <h3>Aurel’s Grand Theater</h3>
+        <a href="https://www.awwwards.com/sites/aurels-grand-theater" target="_blank" rel="noopener">www.awwwards.com/sites/aurels-grand-theater</a>
+        <p>Awwwards SOTD 12 mai 2025, 7,39. Transitions de page en rideau, navigation théâtrale, typographie d’affiche. <b>Le rideau est une grammaire de transition</b> : AA en fait l’unique geste de la page.</p>
+      </li>
+      <li>
+        <h3>TRĂM MẶT — Helena Dang</h3>
+        <a href="https://www.awwwards.com/sites/tram-mat" target="_blank" rel="noopener">www.awwwards.com/sites/tram-mat</a>
+        <p>Awwwards Nominee 17 novembre 2026. Opera, masques peints, playbill, « closing curtain » : un récit de scène porté par la mise en page. <b>Le générique peut être le hero</b> : AA et AD en gardent la logique d’affiche.</p>
+      </li>
+      <li>
+        <h3>Neonika — Colibrity Agency</h3>
+        <a href="https://www.awwwards.com/sites/neonika" target="_blank" rel="noopener">www.awwwards.com/sites/neonika</a>
+        <p>Awwwards Nominee 11 septembre 2026. Une exposition de néon à Los Angeles traduite en site immersif. <b>La lumière doit avoir un support</b> : AB construit son mur, sa pluie et son reflet avant d’allumer les tubes.</p>
+      </li>
+      <li>
+        <h3>The Art of Silk — Gucci / STUDIOGUSTO</h3>
+        <a href="https://www.awwwards.com/sites/the-art-of-silk" target="_blank" rel="noopener">www.awwwards.com/sites/the-art-of-silk</a>
+        <p>Awwwards SOTD 18 mai 2025. Neuf artistes, neuf foulards, une galerie 3D et un wizard de création. <b>Le textile se comprend au pli et au fil</b> : W montre la trame, la lisière et le carton.</p>
+      </li>
+      <li>
+        <h3>ETRO TEXTILE — Dentsu Creative Italy</h3>
+        <a href="https://www.awwwards.com/sites/etro-textile" target="_blank" rel="noopener">www.awwwards.com/sites/etro-textile</a>
+        <p>Awwwards Honorable Mention 31 mai 2024. Découverte de matières en 3D, interface minimale, geste de catalogue. <b>La matière peut être l’interface</b> : W et AC laissent la texture guider la lecture.</p>
+      </li>
+      <li>
+        <h3>No Art — BORING</h3>
+        <a href="https://www.awwwards.com/sites/no-art" target="_blank" rel="noopener">www.awwwards.com/sites/no-art</a>
+        <p>Awwwards SOTD 6 août 2026, 7,28. Un univers musique + art, une seule couleur, un récit interactif. <b>Une contrainte chromatique radicale tient tout le site</b> : Y ne garde qu’un bit, AB deux tubes.</p>
+      </li>
+      <li>
+        <h3>1 bit Pixel Art Dev Portfolio</h3>
+        <a href="https://www.awwwards.com/sites/1-bit-pixel-art-dev-portfolio" target="_blank" rel="noopener">www.awwwards.com/sites/1-bit-pixel-art-dev-portfolio</a>
+        <p>Awwwards Nominee 28 mai 2025. Un portfolio jouable en pixel art 1-bit, navigation terminal, audio en opt-in. <b>La basse résolution est une direction artistique</b> : Y en fait un paysage entier, sans image.</p>
+      </li>
+      <li>
+        <h3>Fluid Glass — Exo Ape</h3>
+        <a href="https://www.awwwards.com/sites/fluid-glass" target="_blank" rel="noopener">www.awwwards.com/sites/fluid-glass</a>
+        <p>Awwwards SOTD 30 mars 2026, 7,77. Verre, lumière, objets qui se déforment, détail de produit traité en macro. <b>La transparence se met en scène</b> : AC éclaire 44 pièces de verre et laisse le pointeur déplacer le soleil.</p>
+      </li>
+      <li>
+        <h3>Theatre Memory — Rytm.Digital</h3>
+        <a href="https://www.awwwards.com/sites/theatre-memory" target="_blank" rel="noopener">www.awwwards.com/sites/theatre-memory</a>
+        <p>Awwwards Honorable Mention 11 octobre 2025. Un fonds photographique de théâtre polonais, noir et blanc, chapitres. <b>L’archive peut être un récit</b> : U et AE travaillent le document, le tampon et la légende.</p>
+      </li>
+      <li>
+        <h3>San Rita — studio</h3>
+        <a href="https://sanrita.ca" target="_blank" rel="noopener">sanrita.ca</a>
+        <p>Présenté par Awwwards (29 avril 2026) et Abduzeedo : un portfolio construit comme une carte topographique 3D, projets en points de passage. <b>Naviguer un terrain, pas un menu</b> : Z en donne la version SVG, sans WebGL.</p>
+      </li>
+      <li>
+        <h3>Land Lines — Google Data Arts / Zach Lieberman</h3>
+        <a href="https://www.awwwards.com/sites/land-lines" target="_blank" rel="noopener">www.awwwards.com/sites/land-lines</a>
+        <p>Awwwards SOTD 10 janvier 2017, 7,41, créativité 8,6. Le geste dessine des lignes à partir d’images satellite. <b>La carte devient un instrument</b> : Z transforme le pointeur en sonde.</p>
+      </li>
+      <li>
+        <h3>Sergei Vinogradov — Only Digital</h3>
+        <a href="https://only.digital/en/projects/vinogradov" target="_blank" rel="noopener">only.digital/en/projects/vinogradov</a>
+        <p>CSSDA Website of the Day + Awwwards SOTD & Developer Award. Une exposition de peinture racontée sans hâte, l’œuvre au centre, la biographie en marge. <b>La peinture impose son rythme</b> : AG peint par couches et laisse la main au visiteur.</p>
+      </li>
+      <li>
+        <h3>Origami Letter — Aquaring</h3>
+        <a href="https://competition.adesignaward.com/gooddesign.php?ID=132308" target="_blank" rel="noopener">competition.adesignaward.com/gooddesign.php?ID=132308</a>
+        <p>A’ Design Award, Silver 2021–2022. Un message qui se plie et se déplie, papier réel et écran. <b>Le pli est une interaction, pas un style</b> : AD fait du vol la conséquence d’une feuille et de deux plis.</p>
+      </li>
+      <li>
+        <h3>Galaxy of Structures — Daiki Odaka</h3>
+        <a href="https://www.awwwards.com/sites/galaxy-of-structures" target="_blank" rel="noopener">www.awwwards.com/sites/galaxy-of-structures</a>
+        <p>Awwwards Nominee 13 juillet 2026. 7 000 particules en canvas vanilla, sans bibliothèque, qui explosent et se reforment. <b>Le canvas suffit</b> : Y, AG et I tiennent dans moins de 4 Ko de script chacun.</p>
+      </li>
+    </ol>
+  </section>
+
+
+
+  <footer class="foot">
+    <div>
+      <p class="rec"><b>Comment lire les trente-trois.</b> Six tiennent par un <em>système</em> documenté — le dossier (A), la coupe (B), la pile (C), le bloc (F), le signal (Q), le Minitel (AF). Six par une <em>matière</em> — l’eau (E), l’encre (L), le trait (O), l’étoffe (W), le verre (AC), la peinture (AG). Cinq par le <em>geste typographique</em> — la lettre qui respire (D), l’extrusion (N), le volet (R), la manchette (S), le néon (AB). Huit par l’<em>image et le récit</em> — l’archive (G), la salle (H), le plan (J), la porte (M), le tirage (U), la scène (AA), l’herbier (AE), le pli (AD). Huit par une <em>règle générative</em> — la constellation (I), l’interférence (K), la grille (P), le white cube (T), le mobile (V), la partition (X), le bit (Y), la carte (Z).</p>
+      <p class="rec"><b>Mon ordre, si je devais trancher pour un vrai site :</b> S et T pour la crédibilité immédiate d’une marque ; W, AE et AG pour la preuve d’un savoir-faire artisanal que personne n’attend d’un studio logiciel ; AC, AA et Z pour l’effet de salle ; Y, AF et X pour l’originalité radicale ; U et V pour la chaleur. I, K, D et E restent les plus faciles à décliner sur un site entier ; F, AD et AF les plus risqués — et c’est précisément pour ça qu’ils sont là.</p>
+      <div class="cta">
+        <a href="/contact/">Discuter d’une direction</a>
+        <a href="/offres/">Voir les offres</a>
+      </div>
+    </div>
+    <div class="col-right">
+      <p class="mono">Laboratoire expérimental — aucun engagement</p>
+      <p class="mono">13 sélections · 20 expérimentations</p>
+      <p class="mono">33 pages autonomes · 1440 × 900 · 23.11.2026</p>
+      <p class="mono">Chrome 158 · macOS</p>
+      <p class="mono">Non vérifié : Firefox, Safari, lecteurs d’écran, appareils réels</p>
+    </div>
+  </footer>
+
+</div>
+
+<div class="tray" id="tray" hidden>
+  <span class="mono" style="color:rgba(244,241,234,.6)">Comparer</span>
+  <div class="picks" id="trayPicks"></div>
+  <button class="go" id="cmpGo" type="button" disabled>Comparer 0 →</button>
+  <button class="clearall" id="cmpClear" type="button">Vider</button>
+</div>
+
+<dialog class="viewer" id="viewer" aria-labelledby="vTitle">
+  <div class="vbar">
+    <div class="vid">
+      <span class="vletter" id="vLetter">A</span>
+      <div style="min-width:0">
+        <h2 id="vTitle">Le dossier</h2>
+        <p class="mono" id="vMeta">Papier · Sélection</p>
+      </div>
+    </div>
+    <div class="vacts">
+      <button class="vbtn" id="vFav" type="button" aria-pressed="false">☆ Favori</button>
+      <button class="vbtn" id="vCmp" type="button" aria-pressed="false">⇄ Comparer</button>
+      <a class="vbtn" id="vExt" href="/da-hero-a.html" target="_blank" rel="noopener">Nouvel onglet ↗</a>
+      <button class="vbtn" id="vClose" type="button" aria-label="Fermer le plein écran">Fermer ✕</button>
+    </div>
+  </div>
+  <div class="vstage"><iframe id="vFrame" title="Aperçu du concept" scrolling="no"></iframe></div>
+  <div class="vfoot">
+    <button class="vbtn" id="vPrev" type="button">← Précédent</button>
+    <p class="mono" id="vPos"><span id="vNum">1 / 33</span> <span class="vHint">· ← → naviguer · Échap fermer</span></p>
+    <button class="vbtn" id="vNext" type="button">Suivant →</button>
+  </div>
+</dialog>
+
+<dialog class="compare" id="compare" aria-labelledby="cTitle">
+  <div class="vbar">
+    <div class="vid">
+      <span class="vletter" aria-hidden="true">⇄</span>
+      <div>
+        <h2 id="cTitle">Comparaison</h2>
+        <p class="mono" id="cMeta">2 concepts</p>
+      </div>
+    </div>
+    <div class="vacts">
+      <button class="vbtn" id="cClear" type="button">Vider</button>
+      <button class="vbtn" id="cClose" type="button" aria-label="Fermer la comparaison">Fermer ✕</button>
+    </div>
+  </div>
+  <div class="cstage" id="cStage"></div>
+</dialog>
+
+<p class="toast" id="toast" role="status" aria-live="polite"></p>
+
+<noscript><p class="mono" style="padding:0 16px 30px">Les filtres et le plein écran intégré nécessitent JavaScript. Chaque concept reste ouvrable par son lien direct.</p></noscript>
+
+<script>
+(function(){
+  'use strict';
+  var qs=function(s,c){return (c||document).querySelector(s)};
+  var qsa=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
+  var norm=function(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')};
+
+  /* ---------- stockage local : favoris, comparaison, mouvement ---------- */
+  var K={favs:'dalab.v1.favs',cmp:'dalab.v1.cmp',motion:'dalab.v1.motion'};
+  function load(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+  var favs={};
+  load(K.favs,[]).forEach(function(id){favs[id]=1});
+  var cmp=load(K.cmp,[]).slice(0,3);
+  var paused=load(K.motion,'on')==='off';
+
+  /* ---------- modèles ---------- */
+  var tiles=qsa('.tile').map(function(el){
+    var tier=el.getAttribute('data-tier');
+    var t={
+      id:el.id,
+      el:el,
+      letter:qs('.badge',el).textContent.trim(),
+      name:qs('.tname',el).textContent.trim(),
+      uni:qs('.uni',el).textContent.trim(),
+      desc:qs('.desc',el).textContent,
+      techText:qs('.tech',el).textContent,
+      tier:tier,
+      url:qs('iframe',el).getAttribute('data-src'),
+      u:(el.getAttribute('data-u')||'').split(' '),
+      tech:(el.getAttribute('data-t')||'').split(' ')
+    };
+    t.search=norm([t.letter,t.name,t.uni,t.desc,t.techText,tier==='sel'?'selection':'experimentation'].join(' '));
+    return t;
+  });
+  var byId={};
+  tiles.forEach(function(t){byId[t.id]=t});
+  cmp=cmp.filter(function(id){return !!byId[id]});
+
+  var state={view:'tout',u:'tout',tech:'tout',q:''};
+  var grid=qs('#grid'), countEl=qs('#count'), emptyEl=qs('#empty'), liveEl=qs('#live'),
+      searchBox=qs('#searchBox'), q=qs('#q'), qClear=qs('#qClear'),
+      techSel=qs('#techSel'), favN=qs('#favN'), tray=qs('#tray');
+
+  /* ---------- montage / démontage des documents ---------- */
+  var frames=qsa('.screen iframe'), near=null, far=null, seen=null;
+  function frameTile(f){return f.closest('.tile')}
+  function isLive(f){var s=f.getAttribute('src');return !!s&&s!=='about:blank'}
+  function countLive(){
+    var n=frames.filter(isLive).length;
+    if(liveEl)liveEl.textContent=n;
+  }
+  function pauseFrame(f,p){
+    try{
+      var d=f.contentDocument;
+      if(!d)return;
+      d.getAnimations({subtree:true}).forEach(function(a){
+        if(p){if(a.playState==='running')a.pause()}
+        else if(a.playState==='paused')a.play();
+      });
+    }catch(e){}
+  }
+  function mount(f){
+    if(isLive(f))return;
+    var t=frameTile(f);
+    if(t&&t.hidden)return;
+    f.setAttribute('src',f.getAttribute('data-src'));
+    f.parentNode.classList.add('live');
+    if(paused)setTimeout(function(){pauseFrame(f,true)},120);
+    countLive();
+  }
+  function unmount(f){
+    if(!isLive(f))return;
+    pauseFrame(f,true);
+    /* on garde l'attribut src="about:blank" : le retirer relancerait
+       une navigation et aborterait celle qu'on vient de créer */
+    f.setAttribute('src','about:blank');
+    f.parentNode.classList.remove('live');
+    countLive();
+  }
+  function pauseAll(p){frames.forEach(function(f){if(isLive(f))pauseFrame(f,p)})}
+  function inView(f){
+    var r=f.getBoundingClientRect();
+    return r.bottom>-40&&r.top<window.innerHeight+40;
+  }
+  function pauseOffscreen(){
+    frames.forEach(function(f){if(isLive(f)&&!inView(f))pauseFrame(f,true)});
+  }
+  if('IntersectionObserver' in window){
+    near=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)mount(e.target)})},{rootMargin:'240px 0px'});
+    far=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)unmount(e.target)})},{rootMargin:'25% 0px'});
+    seen=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        var f=e.target;
+        if(!isLive(f))return;
+        if(e.isIntersecting)f._wasIn=true;
+        pauseFrame(f,paused||(!e.isIntersecting&&!!f._wasIn));
+      });
+    },{rootMargin:'0px'});
+    frames.forEach(function(f){near.observe(f);far.observe(f);seen.observe(f)});
+  }else{
+    frames.forEach(mount);
+  }
+  countLive();
+
+  /* ---------- mouvement ---------- */
+  var mbtns=[qs('#motionAll')].filter(Boolean);
+  function syncMotion(){
+    mbtns.forEach(function(b){
+      b.textContent='Mouvement : '+(paused?'off':'on');
+      b.setAttribute('aria-pressed',paused?'false':'true');
+    });
+  }
+  mbtns.forEach(function(b){
+    b.addEventListener('click',function(){
+      paused=!paused;
+      save(K.motion,paused?'off':'on');
+      syncMotion();
+      pauseAll(paused);
+      if(!paused)pauseOffscreen();
+    });
+  });
+  syncMotion();
+
+  document.addEventListener('visibilitychange',function(){
+    pauseAll(document.hidden||paused);
+    if(!document.hidden&&!paused)pauseOffscreen();
+  });
+
+  /* ---------- filtres ---------- */
+  function matches(t){
+    if(state.view==='sel'&&t.tier!=='sel')return false;
+    if(state.view==='exp'&&t.tier!=='exp')return false;
+    if(state.view==='fav'&&!favs[t.id])return false;
+    if(state.u!=='tout'&&t.u.indexOf(state.u)<0)return false;
+    if(state.tech==='css'&&t.tech.indexOf('script')>=0)return false;
+    if(state.tech==='script'&&t.tech.indexOf('script')<0)return false;
+    if((state.tech==='canvas'||state.tech==='svg')&&t.tech.indexOf(state.tech)<0)return false;
+    if(state.q&&t.search.indexOf(state.q)<0)return false;
+    return true;
+  }
+  function apply(){
+    var n=0;
+    tiles.forEach(function(t){
+      var ok=matches(t);
+      if(ok){
+        t.el.hidden=false;
+        n++;
+      }else{
+        if(!t.el.hidden){
+          t.el.hidden=true;
+          qsa('iframe',t.el).forEach(unmount);
+        }
+      }
+    });
+    countEl.textContent=n+' / '+tiles.length;
+    emptyEl.hidden=n>0;
+    qsa('.seg [data-view]').forEach(function(b){
+      b.setAttribute('aria-pressed',b.getAttribute('data-view')===state.view?'true':'false');
+    });
+    favN.textContent=Object.keys(favs).length;
+  }
+  qsa('.chip[data-u]').forEach(function(b){
+    b.addEventListener('click',function(){
+      state.u=b.getAttribute('data-u');
+      qsa('.chip[data-u]').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+      apply();
+    });
+  });
+  qsa('.seg [data-view]').forEach(function(b){
+    b.addEventListener('click',function(){
+      state.view=b.getAttribute('data-view');
+      apply();
+    });
+  });
+  techSel.addEventListener('change',function(){state.tech=techSel.value;apply()});
+
+  var timer=null;
+  q.addEventListener('input',function(){
+    var v=q.value.trim();
+    searchBox.classList.toggle('has-q',!!v);
+    clearTimeout(timer);
+    timer=setTimeout(function(){state.q=norm(v);apply()},90);
+  });
+  q.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&q.value){q.value='';state.q='';searchBox.classList.remove('has-q');apply()}
+  });
+  qClear.addEventListener('click',function(){
+    q.value='';state.q='';searchBox.classList.remove('has-q');apply();q.focus();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='/')return;
+    var a=document.activeElement;
+    if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return;
+    if(viewer.open||compare.open)return;
+    e.preventDefault();
+    q.focus();
+  });
+
+  function resetFilters(){
+    state={view:'tout',u:'tout',tech:'tout',q:''};
+    q.value='';searchBox.classList.remove('has-q');techSel.value='tout';
+    qsa('.chip[data-u]').forEach(function(x){x.setAttribute('aria-pressed',x.getAttribute('data-u')==='tout'?'true':'false')});
+    apply();
+  }
+  qs('#resetFilters').addEventListener('click',resetFilters);
+
+  /* navigation par le rail : un concept filtré redevient visible */
+  qsa('.letters a').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=byId[a.getAttribute('href').slice(1)];
+      if(!t)return;
+      e.preventDefault();
+      if(t.el.hidden){resetFilters()}
+      setTimeout(function(){
+        /* saut direct : un défilement animé traverserait — et monterait —
+           chaque concept intermédiaire, pour rien */
+        t.el.scrollIntoView({behavior:'instant',block:'start'});
+      },0);
+    });
+  });
+
+  /* ---------- favoris ---------- */
+  function syncFav(t){
+    var b=qs('[data-act="fav"]',t.el);
+    var on=!!favs[t.id];
+    if(b){
+      b.setAttribute('aria-pressed',on?'true':'false');
+      b.querySelector('.ico').textContent=on?'★':'☆';
+      b.querySelector('.lbl').textContent='Favori';
+    }
+    if(current===t)syncViewerFav();
+  }
+  function toggleFav(t){
+    if(favs[t.id])delete favs[t.id];else favs[t.id]=1;
+    save(K.favs,Object.keys(favs));
+    syncFav(t);
+    apply();
+    toast(favs[t.id]?'Ajouté aux favoris':'Retiré des favoris');
+  }
+
+  /* ---------- comparaison ---------- */
+  var trayPicks=qs('#trayPicks'), cmpGo=qs('#cmpGo'), compare=qs('#compare'),
+      cStage=qs('#cStage'), cMeta=qs('#cMeta');
+
+  function renderCmp(){
+    tiles.forEach(function(t){
+      var b=qs('[data-act="cmp"]',t.el);
+      if(!b)return;
+      var on=cmp.indexOf(t.id)>=0;
+      b.setAttribute('aria-pressed',on?'true':'false');
+      b.querySelector('.lbl').textContent=on?'Comparer ✓':'Comparer';
+    });
+    trayPicks.innerHTML='';
+    var picks=cmp.map(function(id){return byId[id]}).filter(Boolean);
+    picks.forEach(function(t){
+      var b=document.createElement('button');
+      b.type='button';b.className='pick';
+      b.setAttribute('aria-label','Retirer '+t.letter+' — '+t.name+' de la comparaison');
+      var l=document.createElement('span');l.textContent=t.letter;
+      var n=document.createElement('span');n.textContent=t.name;
+      var x=document.createElement('span');x.className='x';x.setAttribute('aria-hidden','true');x.textContent='✕';
+      b.appendChild(l);b.appendChild(n);b.appendChild(x);
+      b.addEventListener('click',function(){toggleCmp(t)});
+      trayPicks.appendChild(b);
+    });
+    tray.hidden=picks.length===0;
+    cmpGo.disabled=picks.length<2;
+    cmpGo.textContent='Comparer '+picks.length+' →';
+    save(K.cmp,cmp);
+    syncViewerCmp();
+  }
+  function toggleCmp(t){
+    var i=cmp.indexOf(t.id);
+    if(i>=0)cmp.splice(i,1);
+    else if(cmp.length>=3){toast('Trois concepts au maximum');return}
+    else cmp.push(t.id);
+    renderCmp();
+  }
+  function blank(dlg){
+    qsa('iframe',dlg).forEach(function(f){if(isLive(f))f.setAttribute('src','about:blank')});
+  }
+  function syncModal(){
+    var on=viewer.open||compare.open;
+    document.documentElement.classList.toggle('modal-open',on);
+  }
+  function openCompare(){
+    if(cmp.length<2)return;
+    cStage.innerHTML='';
+    cStage.style.setProperty('--n',String(cmp.length));
+    cmp.forEach(function(id){
+      var t=byId[id];
+      if(!t)return;
+      var fig=document.createElement('figure');
+      fig.className='pane';
+      var cap=document.createElement('figcaption');
+      var k=document.createElement('span');k.className='vletter';k.textContent=t.letter;
+      var nm=document.createElement('span');nm.className='tname';nm.textContent=t.name;
+      var un=document.createElement('span');un.className='mono';un.textContent=t.uni;
+      var ext=document.createElement('a');ext.className='vbtn';ext.href=t.url;ext.target='_blank';
+      ext.rel='noopener';ext.textContent='Ouvrir ↗';
+      cap.appendChild(k);cap.appendChild(nm);cap.appendChild(un);cap.appendChild(ext);
+      var box=document.createElement('div');box.className='cframe';
+      var f=document.createElement('iframe');
+      f.title=t.letter+' — '+t.name;f.setAttribute('scrolling','no');
+      f.src=t.url;
+      box.appendChild(f);
+      fig.appendChild(cap);fig.appendChild(box);
+      cStage.appendChild(fig);
+    });
+    cMeta.textContent=cmp.length+' concepts · même cadre, même échelle';
+    lastFocus=document.activeElement;
+    compare.showModal();
+    syncModal();
+    qs('#cClose').focus();
+  }
+  function closeCompare(){
+    blank(compare);
+    cStage.innerHTML='';
+    compare.close();
+  }
+  cmpGo.addEventListener('click',openCompare);
+  qs('#cmpClear').addEventListener('click',function(){cmp=[];renderCmp()});
+  qs('#cClose').addEventListener('click',closeCompare);
+  qs('#cClear').addEventListener('click',function(){cmp=[];renderCmp();closeCompare()});
+  compare.addEventListener('close',function(){
+    blank(compare);cStage.innerHTML='';syncModal();
+    if(lastFocus&&document.contains(lastFocus))lastFocus.focus({preventScroll:true});
+    resumeGallery();
+  });
+
+  /* ---------- plein écran ---------- */
+  var viewer=qs('#viewer'), vFrame=qs('#vFrame'), vLetter=qs('#vLetter'), vTitle=qs('#vTitle'),
+      vMeta=qs('#vMeta'), vExt=qs('#vExt'), vPos=qs('#vPos'), vFav=qs('#vFav'), vCmp=qs('#vCmp'),
+      vPrev=qs('#vPrev'), vNext=qs('#vNext'), vClose=qs('#vClose');
+  var current=null, list=[], lastFocus=null;
+
+  function visibleList(){return tiles.filter(function(t){return !t.el.hidden})}
+  function syncViewerFav(){
+    if(!current)return;
+    var on=!!favs[current.id];
+    vFav.setAttribute('aria-pressed',on?'true':'false');
+    vFav.textContent=on?'★ Favori':'☆ Favori';
+  }
+  function syncViewerCmp(){
+    if(!current)return;
+    var on=cmp.indexOf(current.id)>=0;
+    vCmp.setAttribute('aria-pressed',on?'true':'false');
+    vCmp.textContent=on?'⇄ Comparé':'⇄ Comparer';
+  }
+  function syncPos(){
+    var i=list.indexOf(current);
+    qs('#vNum').textContent=(i<0?'?':i+1)+' / '+list.length;
+  }
+  function show(t){
+    current=t;
+    vFrame.setAttribute('src',t.url);
+    vFrame.setAttribute('title','Aperçu de '+t.letter+' — '+t.name);
+    vLetter.textContent=t.letter;
+    vTitle.textContent=t.name;
+    vMeta.textContent=t.uni+' · '+(t.tier==='sel'?'Sélection':'Expérimentation');
+    vExt.setAttribute('href',t.url);
+    syncViewerFav();syncViewerCmp();syncPos();
+  }
+  function openViewer(t,from){
+    list=visibleList();
+    if(list.indexOf(t)<0)list=tiles.slice();
+    lastFocus=from||document.activeElement;
+    show(t);
+    viewer.showModal();
+    syncModal();
+    suspendGallery();
+    vClose.focus();
+  }
+  function step(d){
+    var l=visibleList();
+    if(!l.length)l=tiles;
+    var i=l.indexOf(current);
+    if(i<0)i=0;
+    list=l;
+    show(l[(i+d+l.length)%l.length]);
+  }
+  function resumeGallery(){pauseAll(paused);if(!paused)pauseOffscreen()}
+  function suspendGallery(){pauseAll(true)}
+
+  qsa('.shot').forEach(function(a){
+    a.addEventListener('click',function(e){
+      if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0)return;
+      var t=byId[a.closest('.tile').id];
+      if(!t)return;
+      e.preventDefault();
+      openViewer(t,a);
+    });
+  });
+  grid.addEventListener('click',function(e){
+    var act=e.target.closest('[data-act]');
+    if(!act)return;
+    var t=byId[act.closest('.tile').id];
+    if(!t)return;
+    var k=act.getAttribute('data-act');
+    if(k==='fav'){e.preventDefault();toggleFav(t)}
+    else if(k==='cmp'){e.preventDefault();toggleCmp(t)}
+    else if(k==='open'){e.preventDefault();openViewer(t,act)}
+  });
+  vFav.addEventListener('click',function(){if(current)toggleFav(current)});
+  vCmp.addEventListener('click',function(){if(current){toggleCmp(current);syncViewerCmp()}});
+  vPrev.addEventListener('click',function(){step(-1)});
+  vNext.addEventListener('click',function(){step(1)});
+  vClose.addEventListener('click',function(){viewer.close()});
+  viewer.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){e.preventDefault();step(-1)}
+    else if(e.key==='ArrowRight'){e.preventDefault();step(1)}
+    else if(e.key==='f'||e.key==='F'){if(current)toggleFav(current)}
+  });
+  viewer.addEventListener('close',function(){
+    var t=current;
+    blank(viewer);
+    current=null;
+    syncModal();
+    resumeGallery();
+    if(t&&!t.el.hidden){
+      var r=t.el.getBoundingClientRect();
+      var seenTile=r.top<window.innerHeight-80&&r.bottom>140;
+      if(!seenTile)t.el.scrollIntoView({behavior:'instant',block:'center'});
+      var back=qs('.shot',t.el);
+      if(back)back.focus({preventScroll:true});
+    }else if(lastFocus&&document.contains(lastFocus)){
+      lastFocus.focus({preventScroll:true});
+    }
+  });
+
+  /* ---------- toast ---------- */
+  var toastEl=qs('#toast'), toastT=null;
+  function toast(msg){
+    toastEl.textContent=msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastT);
+    toastT=setTimeout(function(){toastEl.classList.remove('show')},1800);
+  }
+
+  /* ---------- init ---------- */
+  function setBenchVar(){
+    var b=document.querySelector('.bench');
+    if(b)document.documentElement.style.setProperty('--bench',b.offsetHeight+'px');
+  }
+  setBenchVar();
+  window.addEventListener('resize',setBenchVar);
+  if('ResizeObserver' in window)new ResizeObserver(setBenchVar).observe(qs('.bench'));
+
+  tiles.forEach(syncFav);
+  renderCmp();
+  apply();
+
+  window.addEventListener('pagehide',function(){
+    if(near)near.disconnect();
+    if(far)far.disconnect();
+    if(seen)seen.disconnect();
+  });
+})();
+</script>
+</body>
+</html>

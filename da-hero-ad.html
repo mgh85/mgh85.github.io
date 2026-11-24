@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>AD — Pliage · DA Lab</title>
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url('/fonts/space-grotesk-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+:root{
+  --paper:#eee7d6;--paper2:#e6ddc8;--ink:#22201a;--ink2:#5f5a4c;--rust:#b8341f;
+  --shadow:rgba(60,50,30,.18);--display:'Space Grotesk',system-ui,sans-serif;--sans:'Inter Tight',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+h1,p,figure{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--rust);outline-offset:3px}
+
+.proto{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:11px clamp(14px,2.4vw,30px);font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(34,32,26,.45)}
+.proto .tag{color:var(--rust)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(34,32,26,.25);padding-bottom:1px}
+.proto a:hover{color:var(--rust);border-color:var(--rust)}
+.proto .motion{margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer}
+.proto .motion input{position:absolute;opacity:0;width:1px;height:1px}
+.proto .motion i{display:block;width:30px;height:15px;border:1px solid rgba(34,32,26,.4);border-radius:9px;position:relative}
+.proto .motion i::after{content:"";position:absolute;inset:2px auto 2px 2px;width:9px;border-radius:50%;background:var(--rust);transition:translate .18s ease}
+.proto .motion input:checked + i::after{translate:15px 0}
+
+.room{position:relative;min-height:100svh;overflow:hidden;isolation:isolate;
+  background:
+    radial-gradient(70% 60% at 78% 14%,#fbf6e8,transparent 62%),
+    linear-gradient(160deg,#f2ebd9,#e8dfca 58%,#ded3ba)}
+.room::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;
+  background-image:radial-gradient(circle at 1px 1px,rgba(90,76,48,.16) .6px,transparent 1px);
+  background-size:4px 4px}
+.room::after{content:"";position:absolute;left:0;right:0;bottom:0;height:26%;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(90,76,48,.12))}
+
+.flight{position:absolute;z-index:1;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.flight path{fill:none;stroke:rgba(34,32,26,.34);stroke-width:1.2;stroke-dasharray:5 7}
+.flight .trail{stroke:var(--rust);stroke-dasharray:none;opacity:0;stroke-width:1.6}
+.plane{position:absolute;z-index:3;right:2%;top:9%;width:min(64vw,860px);
+  filter:drop-shadow(18px 26px 22px rgba(60,50,30,.18));will-change:transform;
+  animation:hover 9s ease-in-out infinite alternate}
+.plane svg{width:100%;height:auto;display:block;overflow:visible}
+.plane .fold{fill:none;stroke:rgba(34,32,26,.32);stroke-width:1.1;stroke-dasharray:4 4}
+.plane .crease{fill:none;stroke:rgba(34,32,26,.5);stroke-width:1}
+.plane.fly{animation:fly 2.4s cubic-bezier(.4,.02,.6,1)}
+@keyframes fly{
+  0%{translate:0 0;rotate:0deg}
+  35%{translate:-16vw -10vh;rotate:-8deg}
+  70%{translate:-34vw 6vh;rotate:-18deg}
+  100%{translate:-52vw 2vh;rotate:-24deg;opacity:.15}
+}
+@keyframes hover{from{translate:0 -6px;rotate:-1.2deg}to{translate:0 8px;rotate:1.4deg}}
+
+.copy{position:absolute;z-index:5;left:clamp(16px,4vw,54px);bottom:clamp(24px,5vh,48px);width:min(31rem,40vw)}
+.copy .k{font-family:var(--mono);font-size:.53rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rust);
+  display:flex;align-items:center;gap:.7rem}
+.copy .k::before{content:"";width:24px;height:1px;background:var(--rust)}
+.copy h1{margin-top:.6rem;font-family:var(--display);font-weight:700;
+  font-size:clamp(2.2rem,4.7vw,4.1rem);line-height:.92;letter-spacing:-.05em;max-width:13ch}
+.copy h1 em{font-style:normal;color:var(--rust)}
+.copy .lead{margin-top:.9rem;max-width:42ch;font-size:clamp(.82rem,1vw,.94rem);line-height:1.62;color:#514b3e;text-wrap:pretty}
+.copy .lead b{color:var(--ink);font-weight:600}
+.cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+.btn{display:inline-flex;align-items:center;gap:.8rem;text-decoration:none;font-family:var(--mono);
+  font-size:.54rem;letter-spacing:.15em;text-transform:uppercase;padding:.78em 1em;
+  border:1px solid rgba(34,32,26,.45);background:transparent;color:var(--ink);cursor:pointer;
+  transition:background .16s,color .16s,border-color .16s}
+.btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn--rust{background:var(--rust);border-color:var(--rust);color:#fff6ec}
+.btn--rust:hover{background:#93301a;border-color:#93301a}
+.btn span{transition:translate .18s}
+.btn:hover span{translate:3px 0}
+
+.craft{position:absolute;z-index:5;right:clamp(16px,3.4vw,44px);bottom:clamp(24px,5vh,48px);
+  width:min(15rem,23vw);font-family:var(--mono);font-size:.48rem;letter-spacing:.05em;line-height:1.8;
+  color:#6b6454;border-top:1px solid rgba(34,32,26,.3);padding-top:9px}
+.craft b{display:block;font-family:var(--sans);font-size:.78rem;font-weight:600;color:var(--ink);
+  letter-spacing:-.01em;margin-bottom:4px}
+.craft .creasekey{display:flex;gap:12px;margin-top:7px;flex-wrap:wrap;color:#7b7360;font-size:.44rem;
+  letter-spacing:.1em;text-transform:uppercase}
+.craft .creasekey i{display:inline-block;width:16px;height:0;border-top:1px dashed #8a8170;vertical-align:middle;margin-right:4px}
+.craft .creasekey i.valley{border-top-style:solid;border-top-color:var(--rust)}
+
+@media (max-width:980px){
+  .plane{width:min(70vw,700px);right:0;top:7%}
+  .copy{width:min(28rem,46vw)}
+  .craft{display:none}
+}
+@media (max-width:760px){
+  .plane{width:100vw;right:-8%;top:12%}
+  .copy{left:16px;right:16px;bottom:16px;width:auto}
+  .copy h1{font-size:clamp(2rem,9vw,2.8rem);max-width:none}
+  .copy .lead{font-size:.8rem;max-width:none}
+  .flight{display:none}
+}
+@media (max-width:420px){
+  .plane{top:16%;right:-14%}
+  .cta .btn{font-size:.48rem;padding:.7em .82em}
+}
+body.still *{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#contenu">Aller au contenu</a>
+<div class="proto">
+  <span class="tag">AD — Pliage</span>
+  <a href="/da-hero.html">Galerie</a>
+  <label class="motion"><input type="checkbox" checked /><i></i>Mouvement</label>
+</div>
+
+<main class="room" id="contenu" style="--a:26deg">
+  <svg class="flight" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M-40 720 C 220 690, 360 560, 520 470 S 880 320, 1080 250" />
+    <path class="trail" id="trail" d="M-40 720 C 220 690, 360 560, 520 470 S 880 320, 1080 250" />
+  </svg>
+
+  <div class="plane" id="plane" aria-hidden="true">
+    <svg viewBox="0 0 900 640">
+      <g>
+        <path d="M452 58 L108 336 L452 402 Z" fill="#faf4e4" />
+        <path d="M452 58 L792 330 L452 402 Z" fill="#e3d7bd" />
+        <path d="M452 58 L452 402 L436 486 Z" fill="#cfc0a2" />
+        <path d="M108 336 L452 402 L436 486 Z" fill="#d8cbb0" />
+        <path d="M792 330 L452 402 L436 486 Z" fill="#c6b696" />
+        <path class="crease" d="M452 58 L452 402" />
+        <path class="fold" d="M108 336 L452 402 L792 330" />
+        <path class="fold" d="M452 402 L436 486" />
+        <path class="fold" d="M196 330 L452 100" opacity=".5" />
+        <path class="fold" d="M704 324 L452 100" opacity=".5" />
+      </g>
+    </svg>
+  </div>
+
+  <section class="copy">
+    <p class="k">Pliage — pièce 17</p>
+    <h1>Une feuille. <em>Deux plis. Tout tient.</em></h1>
+    <p class="lead">Rien n’a été ajouté : pas de colle, pas d’armature. Seulement <b>une feuille et une règle de pliage</b>, répétée assez proprement pour que la forme se soutienne d’elle-même. C’est notre définition d’une architecture logicielle.</p>
+    <div class="cta">
+      <a class="btn btn--rust" href="/contact/">Demander une revue <span aria-hidden="true">→</span></a>
+      <button class="btn" id="launch" type="button">Lancer l’avion</button>
+    </div>
+  </section>
+
+  <figure class="craft">
+    <b>Pli n° 03 (vol), 2026</b>
+    Kami 80 g · 21 × 29,7 cm<br />Pliage à sec, sans découpe
+    <p class="creasekey"><span><i></i>pli vallée</span><span><i class="valley"></i>pli montagne</span></p>
+  </figure>
+</main>
+
+<script>
+(function(){
+  var plane=document.getElementById('plane'),launch=document.getElementById('launch'),
+      trail=document.getElementById('trail'),room=document.getElementById('contenu'),
+      motion=document.querySelector('.motion input'),
+      reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var raf=0,tx=0,ty=0;
+
+  function tilt(){
+    raf=0;
+    plane.style.transform='rotate('+(tx*2.2).toFixed(2)+'deg) translate('+(tx*14).toFixed(1)+'px,'+(ty*9).toFixed(1)+'px)';
+  }
+  room.addEventListener('pointermove',function(e){
+    if(reduce)return;
+    tx=(e.clientX/window.innerWidth-.5)*2;
+    ty=(e.clientY/window.innerHeight-.5)*2;
+    if(!raf)raf=requestAnimationFrame(tilt);
+  },{passive:true});
+  room.addEventListener('pointerleave',function(){plane.style.transform='none';});
+
+  launch.addEventListener('click',function(){
+    if(reduce)return;
+    plane.classList.remove('fly');
+    void plane.offsetWidth;
+    plane.classList.add('fly');
+    setTimeout(function(){plane.classList.remove('fly');},2500);
+  });
+
+  motion.addEventListener('change',function(){
+    document.body.classList.toggle('still',!motion.checked);
+    if(!motion.checked)plane.style.transform='none';
+  });
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){cancelAnimationFrame(raf);raf=0;}
+  });
+})();
+</script>
+</body>
+</html>

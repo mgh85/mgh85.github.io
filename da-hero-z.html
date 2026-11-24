@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Z — Relief · DA Lab</title>
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url('/fonts/space-grotesk-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+:root{
+  --paper:#eee8d7;--paper2:#e7e0cc;--ink:#1c2a33;--contour:#3c5871;--rust:#b8341f;
+  --rule:rgba(28,42,51,.2);--display:'Space Grotesk',system-ui,sans-serif;--sans:'Inter Tight',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+h1,p,figure{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--rust);outline-offset:3px}
+
+.proto{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:11px clamp(14px,2.4vw,30px);font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(28,42,51,.45)}
+.proto .tag{color:var(--rust)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(28,42,51,.25);padding-bottom:1px}
+.proto a:hover{color:var(--rust);border-color:var(--rust)}
+.proto .motion{margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer}
+.proto .motion input{position:absolute;opacity:0;width:1px;height:1px}
+.proto .motion i{display:block;width:30px;height:15px;border:1px solid rgba(28,42,51,.4);border-radius:9px;position:relative}
+.proto .motion i::after{content:"";position:absolute;inset:2px auto 2px 2px;width:9px;border-radius:50%;background:var(--rust);transition:translate .18s ease}
+.proto .motion input:checked + i::after{translate:15px 0}
+
+.map{position:relative;min-height:100svh;overflow:hidden;isolation:isolate;
+  background:
+    radial-gradient(90% 70% at 20% 0%,#f7f2e3,transparent 62%),
+    radial-gradient(80% 90% at 100% 100%,#e2dac4,transparent 66%),
+    var(--paper)}
+.grain{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.35;mix-blend-mode:multiply;
+  background-image:radial-gradient(circle at 1px 1px,rgba(28,42,51,.16) .5px,transparent .8px);background-size:4px 4px}
+.topo{position:absolute;inset:0;z-index:1;width:100%;height:100%}
+.topo .c{fill:none;stroke:var(--contour);stroke-width:.9;opacity:.42;stroke-linejoin:round;
+  stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.2s cubic-bezier(.3,.7,.3,1) forwards}
+.topo .c.major{stroke-width:1.3;opacity:.62}
+.topo .c.hi{stroke:var(--rust);opacity:.85;stroke-width:1.2}
+@keyframes draw{to{stroke-dashoffset:0}}
+.topo .route{fill:none;stroke:var(--rust);stroke-width:1.7;stroke-dasharray:7 6;opacity:.9;
+  animation:march 26s linear infinite}
+@keyframes march{to{stroke-dashoffset:-260}}
+.topo .wp{fill:var(--paper);stroke:var(--rust);stroke-width:1.6}
+.topo text{font-family:var(--mono);font-size:9px;letter-spacing:1.6px;fill:var(--contour);opacity:.7}
+.topo text.sec{fill:var(--rust);opacity:.9;font-size:8.5px}
+
+.head{position:relative;z-index:5;display:flex;justify-content:space-between;align-items:flex-start;gap:18px;
+  padding:clamp(48px,6.6vh,68px) clamp(16px,3.8vw,50px) 0}
+.k{font-family:var(--mono);font-size:.53rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rust);
+  display:flex;align-items:center;gap:.7rem}
+.k::before{content:"";width:24px;height:1px;background:var(--rust)}
+.head h1{margin-top:.55rem;font-family:var(--display);font-weight:700;
+  font-size:clamp(2.2rem,5vw,4.2rem);line-height:.92;letter-spacing:-.05em;max-width:13ch}
+.head h1 em{font-style:normal;color:var(--rust)}
+.head .coords{text-align:right;font-family:var(--mono);font-size:.49rem;letter-spacing:.13em;
+  text-transform:uppercase;color:#5f6d75;line-height:1.9;white-space:nowrap}
+.head .coords b{display:block;color:var(--ink);font-weight:400}
+
+.copy{position:absolute;z-index:6;left:clamp(16px,3.8vw,50px);bottom:clamp(20px,4.4vh,44px);
+  width:min(31rem,42vw);background:rgba(238,232,215,.9);backdrop-filter:blur(4px);
+  border:1px solid var(--rule);padding:14px 16px 15px}
+.copy .lead{font-size:clamp(.82rem,1vw,.94rem);line-height:1.6;color:#3f4f58;text-wrap:pretty}
+.copy .lead b{color:var(--ink);font-weight:600}
+.cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:.95rem}
+.btn{display:inline-flex;align-items:center;gap:.75rem;text-decoration:none;font-family:var(--mono);
+  font-size:.53rem;letter-spacing:.15em;text-transform:uppercase;padding:.76em 1em;
+  border:1px solid rgba(28,42,51,.45);transition:background .16s,color .16s,border-color .16s}
+.btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn--rust{background:var(--rust);border-color:var(--rust);color:#fff5ec}
+.btn--rust:hover{background:#93301a;border-color:#93301a}
+.btn span{transition:translate .18s}
+.btn:hover span{translate:3px 0}
+
+.legend{position:absolute;z-index:6;right:clamp(16px,3.4vw,44px);bottom:clamp(20px,4.4vh,44px);
+  width:min(15rem,24vw);font-family:var(--mono);font-size:.46rem;letter-spacing:.12em;text-transform:uppercase;
+  color:#5f6d75;border-top:1px solid rgba(28,42,51,.35);padding-top:9px}
+.legend .row{display:flex;justify-content:space-between;gap:10px;margin-top:5px}
+.legend b{color:var(--ink);font-weight:400}
+.scale{position:relative;height:9px;margin-top:8px;border-left:1px solid var(--ink);border-right:1px solid var(--ink);
+  border-bottom:1px solid var(--ink);width:76%}
+.scale::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--ink)}
+.legend .profile{margin-top:10px;height:42px}
+.legend .profile svg{width:100%;height:100%;display:block;overflow:visible}
+
+.probe{position:absolute;z-index:7;left:0;top:0;pointer-events:none;opacity:0;transition:opacity .18s}
+.probe.on{opacity:1}
+.probe .v,.probe .h{position:absolute;background:rgba(184,52,31,.5)}
+.probe .v{width:1px;height:100vh;left:0;top:-50vh}
+.probe .h{height:1px;width:100vw;top:0;left:-50vw}
+.probe .tag{position:absolute;left:12px;top:12px;background:var(--paper);border:1px solid var(--rust);
+  padding:5px 7px;font-family:var(--mono);font-size:.46rem;letter-spacing:.1em;color:var(--ink);white-space:nowrap;
+  box-shadow:0 6px 14px -8px rgba(28,42,51,.5)}
+.probe .tag b{color:var(--rust);font-weight:400}
+
+@media (max-width:900px){
+  .legend{display:none}
+  .copy{width:min(30rem,54vw)}
+  .head h1{max-width:16ch}
+}
+@media (max-width:700px){
+  .map{min-height:100svh;display:flex;flex-direction:column}
+  .head{padding-top:54px}
+  .head h1{font-size:clamp(2rem,9.4vw,2.9rem);max-width:none}
+  .head .coords{display:none}
+  .copy{position:relative;left:auto;bottom:auto;width:auto;margin:auto 12px 14px;
+    background:rgba(238,232,215,.94);padding:12px 13px}
+  .copy .lead{font-size:.8rem}
+  .topo{height:100%;opacity:.9}
+  .probe .tag{display:none}
+}
+body.still *{animation:none!important;transition:none!important}
+body.still .topo .c{stroke-dashoffset:0}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .topo .c{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#contenu">Aller au contenu</a>
+<div class="proto">
+  <span class="tag">Z — Relief</span>
+  <a href="/da-hero.html">Galerie</a>
+  <label class="motion"><input type="checkbox" checked /><i></i>Mouvement</label>
+</div>
+
+<main class="map" id="contenu">
+  <svg class="topo" id="topo" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g id="contours"></g>
+    <g id="routeLayer">
+      <path class="route" d="M120 690 C 260 640, 300 520, 430 470 S 620 430, 690 330 S 850 250, 1010 190" />
+      <circle class="wp" cx="120" cy="690" r="4.5" />
+      <circle class="wp" cx="430" cy="470" r="4.5" />
+      <circle class="wp" cx="690" cy="330" r="4.5" />
+      <circle class="wp" cx="1010" cy="190" r="4.5" />
+      <text class="sec" x="134" y="706">DÉPART · ÉCRIRE</text>
+      <text class="sec" x="444" y="486">MESURER</text>
+      <text class="sec" x="704" y="346">LIVRER</text>
+      <text class="sec" x="820" y="176">PASSER</text>
+    </g>
+    <text x="330" y="300" transform="rotate(-14 330 300)">412</text>
+    <text x="330" y="344" transform="rotate(-14 330 344)">368</text>
+    <text x="768" y="560" transform="rotate(9 768 560)">318</text>
+    <text x="768" y="604" transform="rotate(9 768 604)">274</text>
+  </svg>
+  <span class="grain" aria-hidden="true"></span>
+
+  <header class="head">
+    <div>
+      <p class="k">Carte topographique — pièce 14</p>
+      <h1>Le relief, <em>c’est ce qui reste.</em></h1>
+    </div>
+    <p class="coords">Feuille 1 / 1 · échelle 1:2 000<b>48°51′12″ N — 2°21′08″ E</b>Courbes 40 m · équidistance 8 m</p>
+  </header>
+
+  <section class="copy">
+    <p class="lead">Sous le décor, il y a des courbes. <b>Chaque ligne est une altitude tenue</b>, chaque col une décision de passage. Nous cartographions le terrain avant d’y poser un seul service : c’est ce qui rend la livraison praticable par quelqu’un d’autre.</p>
+    <div class="cta">
+      <a class="btn btn--rust" href="/contact/">Demander une revue <span aria-hidden="true">→</span></a>
+      <a class="btn" href="/offres/">Voir les offres</a>
+    </div>
+  </section>
+
+  <figure class="legend">
+    <p>Coupe A–A′ · 1,8 km</p>
+    <div class="profile">
+      <svg viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 40 L18 33 L34 35 L52 24 L70 27 L88 15 L104 19 L120 9 L138 14 L154 22 L172 18 L200 30 L200 44 L0 44 Z"
+          fill="rgba(60,88,113,.16)" stroke="none" />
+        <path d="M0 40 L18 33 L34 35 L52 24 L70 27 L88 15 L104 19 L120 9 L138 14 L154 22 L172 18 L200 30"
+          fill="none" stroke="#3c5871" stroke-width="1" />
+        <circle cx="120" cy="9" r="2" fill="#b8341f" />
+      </svg>
+    </div>
+    <div class="row"><span>Point haut</span><b>412 m</b></div>
+    <div class="row"><span>Point bas</span><b>186 m</b></div>
+    <div class="scale" aria-hidden="true"></div>
+    <div class="row"><span>0</span><span>500 m</span><span>1 km</span></div>
+  </figure>
+
+  <div class="probe" id="probe" aria-hidden="true">
+    <span class="v"></span><span class="h"></span>
+    <span class="tag">ALT. <b id="alt">000</b> m · PENTE <b id="slope">0</b> %</span>
+  </div>
+</main>
+
+<script>
+(function(){
+  var SVG='http://www.w3.org/2000/svg',g=document.getElementById('contours'),
+      map=document.getElementById('contenu'),probe=document.getElementById('probe'),
+      alt=document.getElementById('alt'),slope=document.getElementById('slope'),
+      motion=document.querySelector('.motion input'),
+      reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hills=[{x:430,y:330,r:300,s:1.1},{x:900,y:560,r:230,s:2.4}];
+  var idx=0;
+  hills.forEach(function(h){
+    for(var r=70;r<=h.r;r+=38){
+      var pts=[];
+      for(var a=0;a<=360;a+=6){
+        var rad=a*Math.PI/180;
+        var rr=r*(1+.15*Math.sin(rad*3+h.s)+.07*Math.cos(rad*5-h.s));
+        pts.push((h.x+Math.cos(rad)*rr).toFixed(1)+','+(h.y+Math.sin(rad)*rr*.84).toFixed(1));
+      }
+      var p=document.createElementNS(SVG,'path');
+      p.setAttribute('d','M'+pts.join(' L')+' Z');
+      p.setAttribute('class','c'+(r%114<38?' major':'')+(h===hills[1]&&r>150?' hi':''));
+      p.style.animationDelay=(idx*0.045).toFixed(2)+'s';
+      if(!reduce)p.style.strokeDasharray='1400';
+      g.appendChild(p);idx++;
+    }
+  });
+
+  function altitude(px,py){
+    var best=9999,top=0;
+    hills.forEach(function(h){
+      var d=Math.hypot(px-h.x,py-h.y);
+      if(d<best)best=d;
+      top=Math.max(top,412*(1-Math.min(1,d/h.r)));
+    });
+    return Math.round(150+top+18*Math.sin(px*.01)*Math.cos(py*.013));
+  }
+  map.addEventListener('pointermove',function(e){
+    var r=map.getBoundingClientRect();
+    var x=(e.clientX-r.left)/r.width*1200, y=(e.clientY-r.top)/r.height*800;
+    probe.style.transform='translate('+(e.clientX-r.left)+'px,'+(e.clientY-r.top)+'px)';
+    probe.classList.add('on');
+    var a=altitude(x,y);
+    alt.textContent=a;
+    slope.textContent=Math.round(6+Math.abs(Math.sin(x*.008)*34));
+  },{passive:true});
+  map.addEventListener('pointerleave',function(){probe.classList.remove('on');});
+  motion.addEventListener('change',function(){
+    document.body.classList.toggle('still',!motion.checked);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Direction F — Bloc</title>
+<meta name="color-scheme" content="light" />
+<meta name="theme-color" content="#ece7dc" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preload" href="/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+<style>
+/* ============================================================
+   DIRECTION F — « BLOC »
+   Brutalisme expérimental : aucune courbe, aucun dégradé,
+   aucune ombre douce. Trois aplats, une règle de 1 px, des
+   entrées en steps() — la machine s'enclenche, elle ne glisse
+   pas. Les cellules s'inversent au survol.
+   ============================================================ */
+
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+
+:root{
+  --bone:#ece7dc;
+  --ink:#0d0d0d;
+  --blue:#1a1af0;
+  --orange:#ff4b00;
+  --f-sans:'Inter Tight','Helvetica Neue',Arial,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+h1,p{margin:0}
+.mono{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;line-height:1.4}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.skip{position:fixed;left:14px;top:-70px;z-index:999;background:var(--ink);color:var(--bone);padding:.75em 1.1em;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:top .18s}
+.skip:focus{top:40px}
+
+/* ---------- barre de prototype ---------- */
+.proto{
+  position:fixed;inset:0 0 auto 0;z-index:100;height:30px;
+  display:flex;align-items:center;gap:1.1rem;padding:0 clamp(14px,3vw,28px);
+  background:var(--bone);border-bottom:1px solid var(--ink);
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+}
+.proto .tag{color:var(--blue);font-weight:500}
+.proto a{text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:1px}
+.proto a:hover{background:var(--ink);color:var(--bone);border-bottom-color:var(--ink)}
+.proto .spacer{margin-left:auto}
+.motion{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none}
+.motion input{position:absolute;opacity:0;width:1px;height:1px}
+.motion .track{width:26px;height:12px;border:1px solid var(--ink);position:relative;transition:background .2s}
+.motion .track::after{content:"";position:absolute;top:1px;left:1px;width:8px;height:8px;background:var(--ink);transition:translate .2s}
+.motion input:checked + .track{background:var(--blue)}
+.motion input:checked + .track::after{translate:14px 0;background:var(--bone)}
+.motion input:focus-visible + .track{outline:2px solid var(--blue);outline-offset:3px}
+
+/* ============================================================
+   LA PAGE
+   ============================================================ */
+.bloc{position:relative;min-height:100svh;overflow:clip;padding-top:30px;display:flex;flex-direction:column}
+
+/* trame : six colonnes visibles, une règle tous les 1/6 */
+.rules{position:absolute;inset:30px 0 0 0;z-index:0;pointer-events:none;opacity:.55;
+  background-image:repeating-linear-gradient(to right,var(--ink) 0 1px,transparent 1px calc(100% / 6))}
+@media (max-width:760px){.rules{background-image:none}}
+
+/* l'aplat orange en biais : il ne vit que derrière le titre,
+   borné par la colonne — il ne passe jamais sous la fiche technique */
+.slab{
+  position:absolute;z-index:0;left:36%;top:-13%;right:-1%;bottom:7%;
+  background:var(--orange);transform:rotate(-6.5deg);transform-origin:0 100%;opacity:.92;
+  clip-path:polygon(0 12%,100% 0,100% 100%,5% 94%);
+  mix-blend-mode:multiply;pointer-events:none;
+}
+
+.hdr{
+  position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:clamp(10px,1.8vh,18px) clamp(14px,3vw,34px);
+  border-bottom:1px solid var(--ink);
+}
+.hdr .dotmark{width:12px;height:12px;background:var(--blue);flex:none}
+
+.board{
+  position:relative;z-index:2;flex:1;
+  display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
+  border-bottom:1px solid var(--ink);
+}
+
+.kicker{
+  grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--ink);
+}
+.kicker p{padding:.85em clamp(12px,2vw,22px);border-right:1px solid var(--ink);flex:1 1 auto}
+.kicker p:last-child{border-right:0}
+.kicker p span{color:var(--blue)}
+
+/* ---------- le titre ---------- */
+.masthead{
+  grid-column:1 / 8;position:relative;padding:clamp(14px,2.4vh,26px) 0 clamp(10px,1.6vh,18px) clamp(14px,3vw,34px);
+  border-right:1px solid var(--ink);display:flex;flex-direction:column;justify-content:center;
+}
+.h1{margin:0;position:relative;z-index:1}
+.l{
+  display:block;position:relative;
+  font-weight:900;text-transform:uppercase;
+  font-size:clamp(2.1rem,min(7.2vw,10.2vh),8.6rem);
+  line-height:.82;letter-spacing:-.055em;white-space:nowrap;
+  transform-origin:0 50%;
+  transition:transform .14s steps(2,end),color .14s steps(2,end),background .14s steps(2,end);
+}
+.l + .l{margin-top:.02em}
+.l--inv{
+  background:var(--blue);color:var(--bone);
+  margin-inline:-.06em -.12em;padding-inline:.06em .12em;width:fit-content;
+}
+.l--sub{
+  font-weight:400;letter-spacing:-.035em;font-size:.74em;line-height:1;color:var(--blue);
+  margin-top:.2em;padding-top:.14em;border-top:3px solid var(--blue);width:fit-content;padding-right:.25em;
+}
+.l:hover{transform:skewX(-5deg) translateX(4px)}
+
+/* ---------- colonne technique ---------- */
+.spec{grid-column:8 / 13;display:flex;flex-direction:column;padding:clamp(12px,2vh,20px) clamp(12px,2vw,22px)}
+.spec h2{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;margin:0 0 .9rem;font-weight:500;color:var(--blue)}
+.spec dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:0}
+.spec dt,.spec dd{margin:0;padding:.55em 0;border-bottom:1px dotted rgba(13,13,13,.5);font-family:var(--f-mono);font-size:.65rem;letter-spacing:.05em}
+.spec dd{font-variant-numeric:tabular-nums;text-align:right}
+.spec dt:last-of-type,.spec dd:last-of-type{border-bottom:1px solid var(--ink)}
+.spec .barcode{height:38px;margin-top:auto;border:0;
+  background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 9px,var(--ink) 9px 12px,transparent 12px 14px,var(--ink) 14px 15px,transparent 15px 19px)}
+.spec .barcodelabel{margin-top:.45rem;display:flex;justify-content:space-between;gap:10px}
+
+/* ---------- bas de page ---------- */
+.promise{grid-column:1 / 8;position:relative;border-top:1px solid var(--ink);border-right:1px solid var(--ink);padding:clamp(14px,2.2vh,22px) clamp(100px,11vw,150px) clamp(14px,2.2vh,22px) clamp(14px,3vw,34px)}
+.promise p{max-width:44ch;font-size:clamp(.86rem,1vw,.98rem);line-height:1.5;text-wrap:pretty}
+.promise p b{font-weight:600}
+.cta{grid-column:8 / 13;border-top:1px solid var(--ink);padding:clamp(14px,2.2vh,22px) clamp(12px,2vw,22px);display:flex;flex-direction:column;gap:.55rem;justify-content:center}
+.btn{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;text-decoration:none;
+  font-family:var(--f-mono);font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;
+  padding:.95em 1.1em;border:1px solid var(--ink);background:var(--bone);color:var(--ink);
+  box-shadow:4px 4px 0 0 var(--ink);
+  transition:translate .12s steps(2,end),box-shadow .12s steps(2,end),background .12s steps(2,end),color .12s steps(2,end);
+}
+.btn .arw{transition:translate .12s steps(2,end)}
+.btn:hover,.btn:focus-visible{translate:3px 3px;box-shadow:0 0 0 0 var(--ink);background:var(--blue);color:var(--bone);border-color:var(--blue)}
+.btn:hover .arw{translate:4px 0}
+.btn--light{background:var(--blue);color:var(--bone);border-color:var(--blue);box-shadow:4px 4px 0 0 var(--ink)}
+.btn--light:hover{background:var(--ink);border-color:var(--ink);color:var(--bone)}
+
+/* ---------- tampon tournant, dans la case de promesse ---------- */
+.stamp{
+  position:absolute;z-index:3;right:clamp(6px,1.4vw,20px);top:50%;translate:0 -50%;
+  width:clamp(66px,7.4vw,102px);height:auto;color:var(--ink);opacity:.75;
+  animation:spin 34s linear infinite;
+}
+.stamp text{font-family:var(--f-mono);font-size:11.4px;letter-spacing:.16em;fill:currentColor}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.runway{height:70svh;background:var(--bone);position:relative}
+.runway::after{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(to right,var(--ink) 0 1px,transparent 1px calc(100% / 6));opacity:.25}
+
+/* ============================================================
+   ENTRÉE — steps(), la mécanique s'enclenche
+   ============================================================ */
+.l{animation:stamp-in .5s steps(5,end) both;animation-delay:calc(var(--d,0) * 1ms + 60ms)}
+@keyframes stamp-in{from{translate:-16px 0;opacity:0}to{translate:0 0;opacity:1}}
+.masthead,.spec,.promise,.cta,.kicker,.hdr{animation:cut-in .42s steps(4,end) both}
+.masthead{animation-delay:.1s}.spec{animation-delay:.16s}.promise{animation-delay:.3s}.cta{animation-delay:.34s}.kicker{animation-delay:.04s}.hdr{animation-delay:0s}
+@keyframes cut-in{from{opacity:0;clip-path:inset(0 0 100% 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.slab{animation:slab-in .55s steps(6,end) .08s both}
+@keyframes slab-in{from{transform:rotate(-6.5deg) translate3d(0,-44px,0);opacity:0}to{transform:rotate(-6.5deg);opacity:.92}}
+.stamp{animation:spin 34s linear infinite,pop .4s steps(3,end) .5s both}
+@keyframes pop{from{scale:.4;opacity:0}to{scale:1;opacity:1}}
+
+/* ============================================================
+   SCROLL
+   ============================================================ */
+@supports (animation-timeline:scroll()){
+  .masthead{animation:cut-in .42s steps(4,end) .1s both,shift-x linear both;animation-timeline:auto,scroll(root block)}
+  .spec{animation:cut-in .42s steps(4,end) .16s both,shift-x-r linear both;animation-timeline:auto,scroll(root block)}
+  .slab{animation:slab-in .55s steps(6,end) .08s both,slab-drift linear both;animation-timeline:auto,scroll(root block)}
+  .promise{animation:cut-in .42s steps(4,end) .3s both,shift-x linear both;animation-timeline:auto,scroll(root block)}
+}
+@keyframes shift-x{from{translate:0 0}to{translate:-2.2vw 0}}
+@keyframes shift-x-r{from{translate:0 0}to{translate:2.2vw 0}}
+@keyframes slab-drift{from{translate:0 0}to{translate:-7vw -6vh}}
+
+/* ============================================================
+   MOUVEMENT COUPÉ
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  .l,.masthead,.spec,.promise,.cta,.kicker,.hdr,.slab,.stamp{animation:none !important}
+  .l{transform:none;opacity:1}
+}
+@supports selector(:has(*)){
+  body:has(.motion input:not(:checked)) .l,
+  body:has(.motion input:not(:checked)) .masthead,
+  body:has(.motion input:not(:checked)) .spec,
+  body:has(.motion input:not(:checked)) .promise,
+  body:has(.motion input:not(:checked)) .cta,
+  body:has(.motion input:not(:checked)) .kicker,
+  body:has(.motion input:not(:checked)) .hdr,
+  body:has(.motion input:not(:checked)) .slab,
+  body:has(.motion input:not(:checked)) .stamp{animation:none !important}
+  body:has(.motion input:not(:checked)) .l{transform:none;opacity:1;clip-path:none}
+  body:has(.motion input:not(:checked)) .slab{transform:rotate(-6.5deg);opacity:.92}
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+/* la colonne du titre est plus étroite que la fenêtre : sous 1200 px
+   la mise en page passe à 8/12 et l'échelle suit la colonne */
+@media (max-width:1200px){
+  .masthead{grid-column:1 / 9}
+  .spec{grid-column:9 / 13}
+  .promise{grid-column:1 / 9}
+  .cta{grid-column:9 / 13}
+  .l{font-size:clamp(2rem,8vw,5.6rem)}
+}
+/* sous 900 px la colonne d'appel ne tient plus le libellé du bouton :
+   promesse et appels passent pleine largeur, sans trou dans la grille */
+@media (max-width:900px){
+  .promise{grid-column:1 / -1;border-right:0}
+  .cta{grid-column:1 / -1;border-top:0;padding-top:0}
+}
+@media (max-width:760px){
+  .hdr{flex-wrap:wrap;gap:4px 10px;padding:10px 14px}
+  .hdr .dotmark{display:none}
+  .hdr p:last-child{white-space:nowrap;font-size:.55rem}
+  .board{grid-template-columns:1fr}
+  .masthead,.spec,.promise,.cta{grid-column:1 / -1;border-right:0}
+  .spec{border-top:1px solid var(--ink);padding-bottom:20px}
+  .promise{border-top:1px solid var(--ink)}
+  .cta{border-top:0;padding-top:0}
+  /* le titre doit tenir dans la colonne : 13,2vw coupait le S final
+     et faisait sortir la barre bleue par la droite */
+  .l{font-size:11.2vw;line-height:.9;letter-spacing:-.055em}
+  .l--inv{margin-inline:0;padding-inline:.05em}
+  .slab{left:30%;right:-4%;top:-6%;bottom:6%}
+  .stamp{width:56px;right:10px}
+  .kicker p{flex:1 1 50%;border-bottom:1px solid var(--ink)}
+  .kicker p:nth-child(2){border-right:0}
+  .kicker p:last-child{border-bottom:0;flex-basis:100%}
+  .runway{height:45svh}
+}
+@media (max-width:420px){
+  .proto{font-size:.55rem;gap:.7rem}
+  .proto .tag{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<div class="proto">
+  <span class="tag">F — Bloc</span>
+  <a href="/da-hero.html">Galerie</a>
+  <span class="spacer"></span>
+  <label class="motion" for="motion6">
+    <input type="checkbox" id="motion6" checked />
+    <span class="track" aria-hidden="true"></span>
+    Mouvement
+  </label>
+</div>
+
+<main id="contenu">
+  <section class="bloc" aria-labelledby="titre">
+    <div class="rules" aria-hidden="true"></div>
+
+    <header class="hdr">
+      <p class="mono">Studio · ingénierie logicielle indépendante</p>
+      <span class="dotmark" aria-hidden="true"></span>
+      <p class="mono">F / 08 — 23.11.2026</p>
+    </header>
+
+    <div class="board">
+      <div class="kicker">
+        <p class="mono">Web · API · plateformes</p>
+        <p class="mono">Neuf ans de production</p>
+        <p class="mono"><span>Aucun</span> cookie · <span>aucune</span> mesure</p>
+      </div>
+
+      <div class="masthead">
+        <div class="slab" aria-hidden="true"></div>
+        <h1 class="h1" id="titre">
+          <span class="l" style="--d:0">Des systèmes</span>
+          <span class="l l--inv" style="--d:90">qui tiennent,</span>
+          <span class="l" style="--d:180">et qu’on peut</span>
+          <span class="l l--sub" style="--d:260">reprendre.</span>
+        </h1>
+      </div>
+
+      <div class="spec">
+        <h2>Fiche technique</h2>
+        <dl>
+          <dt>Périmètre</dt><dd>écrit</dd>
+          <dt>Documentation</dt><dd>livrée</dd>
+          <dt>Tests</dt><dd>sur le périmètre</dd>
+          <dt>Passation</dt><dd>incluse</dd>
+          <dt>Régie longue</dt><dd>non</dd>
+        </dl>
+        <div class="barcode" aria-hidden="true"></div>
+        <p class="mono barcodelabel"><span>réf. 08-F</span><span>neuf ans</span></p>
+      </div>
+
+      <div class="promise">
+        <p><b>Je conçois, je développe et j’accompagne la mise en production de votre système.</b> Je livre un système documenté, testé sur le périmètre convenu, et je vous laisse les moyens de le reprendre.</p>
+        <svg class="stamp" viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <path id="stampPath" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
+          </defs>
+          <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-width="1" />
+          <circle cx="100" cy="100" r="56" fill="none" stroke="currentColor" stroke-width="1" opacity=".35" />
+          <text><textPath href="#stampPath" startOffset="0">revue technique · périmètre écrit · documentation livrée · </textPath></text>
+          <path d="M100 66v68M66 100h68" stroke="currentColor" stroke-width="1" opacity=".45" />
+        </svg>
+      </div>
+
+      <div class="cta">
+        <a class="btn btn--light" href="/contact/">Demander une revue technique <span class="arw" aria-hidden="true">→</span></a>
+        <a class="btn" href="/offres/">Voir les offres <span class="arw" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="runway" aria-hidden="true"></section>
+</main>
+</body>
+</html>

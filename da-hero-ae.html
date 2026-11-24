@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>AE — Herbier · DA Lab</title>
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url('/fonts/instrument-serif-italic-latin.woff2') format('woff2')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+:root{
+  --cloth:#cfc7b2;--cloth2:#bbb29b;--sheet:#f6f0df;--sheet2:#efe7d2;--ink:#2a2a20;
+  --olive:#68704a;--sepia:#5d4c33;--red:#a8341f;--rule:rgba(42,42,32,.2);
+  --sans:'Inter Tight',system-ui,sans-serif;--serif:'Instrument Serif',Georgia,serif;--mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cloth);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+h1,p,figure,dl,dd{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+
+.proto{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:11px clamp(14px,2.4vw,30px);font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(42,42,32,.42)}
+.proto .tag{color:var(--red)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(42,42,32,.25);padding-bottom:1px}
+.proto a:hover{color:var(--red);border-color:var(--red)}
+.proto .motion{margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer}
+.proto .motion input{position:absolute;opacity:0;width:1px;height:1px}
+.proto .motion i{display:block;width:30px;height:15px;border:1px solid rgba(42,42,32,.4);border-radius:9px;position:relative}
+.proto .motion i::after{content:"";position:absolute;inset:2px auto 2px 2px;width:9px;border-radius:50%;background:var(--red);transition:translate .18s ease}
+.proto .motion input:checked + i::after{translate:15px 0}
+
+.table{position:relative;min-height:100svh;overflow:hidden;isolation:isolate;
+  display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);align-items:center;
+  background:
+    radial-gradient(70% 60% at 24% 12%,rgba(255,252,240,.4),transparent 62%),
+    radial-gradient(90% 90% at 88% 88%,rgba(50,45,30,.18),transparent 66%),
+    repeating-linear-gradient(94deg,rgba(90,80,56,.05) 0 1px,transparent 1px 6px),
+    linear-gradient(150deg,var(--cloth),var(--cloth2))}
+.table::after{content:"";position:absolute;inset:0;z-index:9;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 40%,transparent 52%,rgba(40,36,25,.28))}
+
+.sheet{position:relative;z-index:3;justify-self:center;width:min(46vw,660px);aspect-ratio:1/1.3;
+  background:
+    radial-gradient(circle at 8% 12%,rgba(150,120,60,.13) 0 3px,transparent 4px),
+    radial-gradient(circle at 88% 78%,rgba(150,120,60,.1) 0 4px,transparent 5px),
+    radial-gradient(circle at 70% 22%,rgba(150,120,60,.08) 0 2px,transparent 3px),
+    linear-gradient(176deg,var(--sheet),var(--sheet2));
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 40px 70px -40px rgba(40,34,20,.8),0 4px 10px rgba(40,34,20,.14);
+  rotate:-.7deg;padding:clamp(16px,2.2vw,28px);display:flex;flex-direction:column;
+  animation:laid 1.2s cubic-bezier(.2,.8,.25,1) both}
+@keyframes laid{from{opacity:0;rotate:-3deg;translate:0 24px}}
+.tape{position:absolute;width:clamp(52px,6vw,78px);height:22px;background:rgba(232,220,190,.7);
+  border-left:1px dashed rgba(120,105,70,.3);border-right:1px dashed rgba(120,105,70,.3);
+  box-shadow:0 2px 5px rgba(60,50,30,.12);opacity:.9}
+.tape.tl{left:-16px;top:22px;rotate:-38deg}
+.tape.tr{right:-16px;top:18px;rotate:36deg}
+.tape.bl{left:-14px;bottom:26px;rotate:34deg}
+.tape.br{right:-14px;bottom:22px;rotate:-32deg}
+.sheet .head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+  border-bottom:1px solid var(--rule);padding-bottom:6px;font-family:var(--mono);font-size:.46rem;
+  letter-spacing:.16em;text-transform:uppercase;color:#7a6c52}
+.sheet .head b{color:var(--ink);font-weight:400;letter-spacing:.1em}
+
+.specimen{position:relative;flex:1;min-height:0;margin:4px 0 0}
+.specimen svg{width:100%;height:100%;display:block;overflow:visible}
+.stem{fill:none;stroke:#575c3c;stroke-width:2.1;stroke-linecap:round;
+  stroke-dasharray:620;stroke-dashoffset:620;animation:grow 2.6s cubic-bezier(.3,.7,.3,1) forwards}
+.stem.s2{animation-delay:.14s}
+.stem.s3{animation-delay:.28s}
+@keyframes grow{to{stroke-dashoffset:0}}
+.leaf{fill:#78805a;stroke:#4d5236;stroke-width:.8;opacity:0;animation:unfurl 1.1s ease forwards}
+.leaf:nth-of-type(odd){fill:#6d7550}
+.leaf .rib{fill:none;stroke:#4a4f33;stroke-width:.7;opacity:.7}
+.leaf{transition:fill .2s}
+.leaf:hover{fill:#9aa26c}
+.leaf text{display:none}
+@keyframes unfurl{from{opacity:0;scale:.6}to{opacity:1;scale:1}}
+.leaf{transform-box:fill-box;transform-origin:0% 50%}
+.seedhead{fill:none;stroke:#575c3c;stroke-width:1.5;opacity:0;animation:unfurl 1s 1.5s ease forwards}
+
+.stamp{position:absolute;right:clamp(12px,1.8vw,22px);top:38%;width:clamp(76px,8vw,104px);
+  border:2px solid rgba(168,52,31,.55);color:rgba(168,52,31,.62);padding:5px 6px;rotate:-8deg;
+  font-family:var(--mono);font-size:.4rem;letter-spacing:.1em;line-height:1.5;text-transform:uppercase;
+  text-align:center;opacity:0;animation:fadein .7s 2.1s forwards}
+.stamp::before{content:"";position:absolute;inset:3px;border:1px solid rgba(168,52,31,.4)}
+@keyframes fadein{to{opacity:1}}
+
+.label{position:relative;border-top:1px solid var(--rule);padding-top:8px;margin-top:auto}
+.label .latin{font-family:var(--serif);font-style:italic;font-size:clamp(1.05rem,1.7vw,1.5rem);line-height:1;color:#2e2f22}
+.label .fam{font-family:var(--mono);font-size:.43rem;letter-spacing:.13em;text-transform:uppercase;color:#7c6e54;margin-top:3px}
+.label dl{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;margin-top:7px;
+  font-family:var(--mono);font-size:.4rem;letter-spacing:.06em;line-height:1.55;color:#6d6047}
+.label dt{text-transform:uppercase;letter-spacing:.1em;color:#8b7c60}
+.label dd{color:#4a4534}
+.hand{position:absolute;left:clamp(12px,1.8vw,22px);bottom:36%;font-family:var(--serif);font-style:italic;
+  font-size:clamp(.72rem,1vw,.92rem);color:rgba(70,60,40,.62);rotate:-4deg;max-width:11ch;line-height:1.25}
+
+.copy{position:relative;z-index:6;padding:clamp(54px,7.4vh,78px) clamp(16px,3.4vw,44px) clamp(24px,4.6vh,44px);
+  max-width:32rem;justify-self:start}
+.k{font-family:var(--mono);font-size:.53rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+  display:flex;align-items:center;gap:.7rem}
+.k::before{content:"";width:24px;height:1px;background:var(--red)}
+.copy h1{margin-top:.6rem;font-size:clamp(2.2rem,4.6vw,4rem);line-height:.94;letter-spacing:-.045em;font-weight:700}
+.copy h1 em{display:block;font-family:var(--serif);font-style:italic;font-weight:400;color:var(--olive);letter-spacing:-.01em}
+.copy .lead{margin-top:.95rem;max-width:40ch;font-size:clamp(.83rem,1vw,.95rem);line-height:1.62;color:#4f4938;text-wrap:pretty}
+.copy .lead b{color:var(--ink);font-weight:600}
+.cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.1rem}
+.btn{display:inline-flex;align-items:center;gap:.8rem;text-decoration:none;font-family:var(--mono);
+  font-size:.54rem;letter-spacing:.15em;text-transform:uppercase;padding:.78em 1em;
+  border:1px solid rgba(42,42,32,.45);transition:background .16s,color .16s,border-color .16s}
+.btn:hover{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.btn--red{background:var(--red);border-color:var(--red);color:#fff5ec}
+.btn--red:hover{background:#852714;border-color:#852714}
+.btn span{transition:translate .18s}
+.btn:hover span{translate:3px 0}
+.hoverlab{margin-top:1.05rem;font-family:var(--mono);font-size:.46rem;letter-spacing:.12em;text-transform:uppercase;
+  color:#7c7259;min-height:2.4em}
+.hoverlab b{color:var(--ink);font-weight:400}
+
+@media (max-width:980px){
+  .table{grid-template-columns:1fr;grid-template-rows:auto auto;align-items:start}
+  .copy{order:2;max-width:none;padding-top:20px}
+  .sheet{order:1;width:min(78vw,520px);aspect-ratio:1/1.26;margin-top:clamp(52px,7vh,66px);justify-self:center}
+  .copy h1{font-size:clamp(2rem,7.4vw,2.9rem)}
+  .copy .lead{max-width:56ch}
+}
+@media (max-width:560px){
+  .sheet{width:88vw;padding:14px}
+  .label dl{font-size:.36rem}
+  .hand{display:none}
+  .stamp{top:30%}
+  .copy h1{font-size:clamp(1.9rem,9vw,2.5rem)}
+  .copy .lead{font-size:.8rem}
+}
+body.still *{animation:none!important;transition:none!important}
+body.still .leaf,body.still .seedhead,body.still .stamp{opacity:1}
+body.still .stem{stroke-dashoffset:0}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .leaf,.seedhead,.stamp{opacity:1}
+  .stem{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#contenu">Aller au contenu</a>
+<div class="proto">
+  <span class="tag">AE — Herbier</span>
+  <a href="/da-hero.html">Galerie</a>
+  <label class="motion"><input type="checkbox" checked /><i></i>Mouvement</label>
+</div>
+
+<main class="table" id="contenu">
+  <section class="copy">
+    <p class="k">Planche botanique — pièce 18</p>
+    <h1>Rien ne pousse <em>en un jour.</em></h1>
+    <p class="lead">On ne juge pas une plante à sa fleur, mais à ce qui la tient sous terre. Un système, c’est pareil : <b>la partie visible est la plus petite</b>. Le reste — racines, documentation, passation — est ce qui permet de la reprendre après nous.</p>
+    <div class="cta">
+      <a class="btn btn--red" href="/contact/">Demander une revue <span aria-hidden="true">→</span></a>
+      <a class="btn" href="/offres/">Voir les offres</a>
+    </div>
+    <p class="hoverlab" id="hoverlab">Survolez une feuille pour lire son relevé.</p>
+  </section>
+
+  <figure class="sheet">
+    <span class="tape tl" aria-hidden="true"></span><span class="tape tr" aria-hidden="true"></span>
+    <span class="tape bl" aria-hidden="true"></span><span class="tape br" aria-hidden="true"></span>
+    <div class="head"><span>Herbarium <b>DA Lab</b></span><span>Feuille 017 · 23.11.2026</span></div>
+
+    <div class="specimen">
+      <svg viewBox="0 0 420 560" role="img" aria-label="Spécimen pressé : trois tiges, feuilles et épi">
+        <g stroke-linecap="round">
+          <path class="stem" d="M210 540 C 202 470, 214 392, 206 300 C 200 236, 214 190, 208 132" />
+          <path class="stem s2" d="M210 540 C 238 480, 250 420, 264 356 C 274 312, 268 286, 276 258" />
+          <path class="stem s3" d="M210 540 C 184 486, 172 440, 158 392 C 146 352, 152 324, 146 296" />
+        </g>
+
+        <g class="leaf" style="animation-delay:.5s" transform="translate(206 486) rotate(-32)" tabindex="0" aria-label="Feuille basale, pétiole court">
+          <path d="M0 0 C 16 -13 38 -11 54 1 C 38 13 16 14 0 0 Z" />
+          <path class="rib" d="M2 1 L50 1" />
+        </g>
+        <g class="leaf" style="animation-delay:.62s" transform="translate(212 486) rotate(24)" tabindex="0" aria-label="Feuille basale opposée">
+          <path d="M0 0 C 15 -12 36 -10 50 1 C 36 12 15 13 0 0 Z" />
+          <path class="rib" d="M2 1 L46 1" />
+        </g>
+        <g class="leaf" style="animation-delay:.74s" transform="translate(209 430) rotate(-40)" tabindex="0" aria-label="Feuille caulinaire, nervure pennée">
+          <path d="M0 0 C 17 -14 40 -12 58 1 C 40 14 17 15 0 0 Z" />
+          <path class="rib" d="M2 1 L54 1" />
+        </g>
+        <g class="leaf" style="animation-delay:.86s" transform="translate(211 402) rotate(30)" tabindex="0" aria-label="Feuille caulinaire, limbe étroit">
+          <path d="M0 0 C 14 -11 33 -9 47 1 C 33 11 14 12 0 0 Z" />
+          <path class="rib" d="M2 1 L43 1" />
+        </g>
+        <g class="leaf" style="animation-delay:.98s" transform="translate(207 350) rotate(-46)" tabindex="0" aria-label="Feuille médiane, marge entière">
+          <path d="M0 0 C 15 -12 35 -10 51 1 C 35 12 15 13 0 0 Z" />
+          <path class="rib" d="M2 1 L47 1" />
+        </g>
+        <g class="leaf" style="animation-delay:1.1s" transform="translate(210 318) rotate(28)" tabindex="0" aria-label="Feuille médiane, pétiole allongé">
+          <path d="M0 0 C 16 -13 37 -11 54 1 C 37 13 16 14 0 0 Z" />
+          <path class="rib" d="M2 1 L50 1" />
+        </g>
+        <g class="leaf" style="animation-delay:1.22s" transform="translate(207 262) rotate(-52)" tabindex="0" aria-label="Feuille supérieure, limbe réduit">
+          <path d="M0 0 C 12 -10 29 -8 42 1 C 29 10 12 11 0 0 Z" />
+          <path class="rib" d="M2 1 L38 1" />
+        </g>
+        <g class="leaf" style="animation-delay:1.34s" transform="translate(210 228) rotate(34)" tabindex="0" aria-label="Feuille supérieure, bractée">
+          <path d="M0 0 C 11 -9 26 -8 38 1 C 26 9 11 10 0 0 Z" />
+          <path class="rib" d="M2 1 L34 1" />
+        </g>
+
+        <g class="leaf" style="animation-delay:1.0s" transform="translate(258 384) rotate(18)" tabindex="0" aria-label="Rameau latéral, feuille alterne">
+          <path d="M0 0 C 15 -12 36 -10 51 1 C 36 12 15 13 0 0 Z" />
+          <path class="rib" d="M2 1 L47 1" />
+        </g>
+        <g class="leaf" style="animation-delay:1.14s" transform="translate(266 340) rotate(-38)" tabindex="0" aria-label="Rameau latéral, feuille terminale">
+          <path d="M0 0 C 13 -10 31 -9 44 1 C 31 10 13 11 0 0 Z" />
+          <path class="rib" d="M2 1 L40 1" />
+        </g>
+        <g class="leaf" style="animation-delay:1.08s" transform="translate(160 424) rotate(42)" tabindex="0" aria-label="Rameau gauche, feuille alterne">
+          <path d="M0 0 C 13 -10 31 -9 44 1 C 31 10 13 11 0 0 Z" />
+          <path class="rib" d="M2 1 L40 1" />
+        </g>
+        <g class="leaf" style="animation-delay:1.2s" transform="translate(150 360) rotate(-28)" tabindex="0" aria-label="Rameau gauche, feuille supérieure">
+          <path d="M0 0 C 12 -10 28 -8 41 1 C 28 10 12 11 0 0 Z" />
+          <path class="rib" d="M2 1 L37 1" />
+        </g>
+
+        <g class="seedhead">
+          <path d="M208 132 C 206 112, 204 96, 202 80" />
+          <path d="M202 80 l-9 -13 M202 80 l2 -16 M202 80 l11 -12 M202 80 l-14 -4 M202 80 l14 2" />
+          <circle cx="202" cy="78" r="3.4" fill="#5d6340" stroke="none" />
+          <circle cx="193" cy="67" r="2.1" fill="#6d7550" stroke="none" />
+          <circle cx="204" cy="64" r="2.1" fill="#6d7550" stroke="none" />
+          <circle cx="213" cy="68" r="2.1" fill="#6d7550" stroke="none" />
+        </g>
+      </svg>
+
+      <p class="hand">récolte du 04.10<br />bord de route, humide</p>
+      <p class="stamp">Herbarium<br />DA Lab<br />N° 017<br />2026</p>
+    </div>
+
+    <figcaption class="label">
+      <p class="latin">Systema persistens</p>
+      <p class="fam">Famille des architectures documentées</p>
+      <dl>
+        <dt>Récolte</dt><dd>Paris, 04.10.2026, alt. 62 m</dd>
+        <dt>Récolteur</dt><dd>DA Lab — atelier d’ingénierie</dd>
+        <dt>Détermination</dt><dd>Périmètre écrit, passation incluse</dd>
+      </dl>
+    </figcaption>
+  </figure>
+</main>
+
+<script>
+(function(){
+  var lab=document.getElementById('hoverlab'),motion=document.querySelector('.motion input');
+  var DEFAULT='Survolez une feuille pour lire son relevé.';
+  document.querySelectorAll('.leaf').forEach(function(l){
+    var name=l.getAttribute('aria-label');
+    function on(){lab.innerHTML='<b>'+name+'</b> · nervure pennée · marge entière';}
+    function off(){lab.textContent=DEFAULT;}
+    l.addEventListener('pointerenter',on);
+    l.addEventListener('focus',on);
+    l.addEventListener('pointerleave',off);
+    l.addEventListener('blur',off);
+  });
+  motion.addEventListener('change',function(){
+    document.body.classList.toggle('still',!motion.checked);
+  });
+})();
+</script>
+</body>
+</html>

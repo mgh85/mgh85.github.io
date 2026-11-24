@@ -1,0 +1,766 @@
+<!DOCTYPE html><html lang="fr" data-direction="bold"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Bold Creative — Showroom</title><meta name="description" content="Bold Creative — Le système est un geste. Cinq directions artistiques pour le site du studio, un contenu identique. Travail en cours, identité non validée."><meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#0B0B0B"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('sr-motion');
+          if (
+            stored === 'off' ||
+            (!stored && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+          ) {
+            document.documentElement.dataset.motion = 'off';
+          }
+        } catch (error) {
+          /* stockage indisponible : le CSS prefers-reduced-motion prend le relais */
+        }
+        document.documentElement.classList.add('js');
+        if (window.location.search.indexOf('compare=1') !== -1) {
+          document.documentElement.dataset.compare = 'true';
+        }
+      })();
+    </script><link rel="preload" href="/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin><style>html[data-direction='bold'] {
+  --bg: #0b0b0b;
+  --ink: #f6f1e6;
+  --muted: #b8b2a4;
+  --accent: #e8ff3a;
+  --accent-2: #2c46ff;
+  --accent-3: #ff4d2e;
+  --line: rgba(246, 241, 230, 0.2);
+  --f-display: 'Anton', 'Arial Narrow', Impact, sans-serif;
+  --f-text: 'Inter Tight', system-ui, sans-serif;
+  --f-sub: 'Bricolage Grotesque', 'Inter Tight', sans-serif;
+  --wrap: 1560px;
+  --gutter: clamp(1rem, 3.2vw, 3.2rem);
+}
+
+html[data-direction='bold'] .c-head {
+  border-bottom: 3px solid var(--ink);
+}
+
+html[data-direction='bold'] .c-brand-name {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: 1.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+html[data-direction='bold'] .c-brand-sub {
+  color: var(--accent);
+}
+
+html[data-direction='bold'] .c-nav a {
+  font-weight: 700;
+}
+
+html[data-direction='bold'] .c-head-cta {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0b0b0b;
+  font-weight: 700;
+}
+
+html[data-direction='bold'] .c-head-cta:hover {
+  background: var(--accent-3);
+  border-color: var(--accent-3);
+  color: #0b0b0b;
+}
+
+/* ---------- Hero ---------- */
+
+html[data-direction='bold'] .c-hero--bold {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100svh;
+  border-bottom: 3px solid var(--ink);
+  background:
+    radial-gradient(circle at 78% 18%, rgba(44, 70, 255, 0.22), transparent 42%),
+    #0b0b0b;
+}
+
+html[data-direction='bold'] .c-hero--bold::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(
+    260px circle at var(--cx, 50%) var(--cy, 40%),
+    rgba(232, 255, 58, 0.13),
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s linear;
+}
+
+html[data-direction='bold'] .c-hero--bold:hover::after {
+  opacity: 1;
+}
+
+.bh-shapes {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.bh-shape {
+  position: absolute;
+  display: block;
+}
+
+.bh-shape--disc {
+  top: 24vh;
+  right: 7vw;
+  width: clamp(90px, 12vw, 190px);
+  aspect-ratio: 1;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  transform: translate3d(0, calc(var(--sy, 0) * 0.05px), 0);
+}
+
+.bh-shape--block {
+  right: -4vw;
+  bottom: 6vh;
+  width: min(32vw, 480px);
+  height: min(24vh, 220px);
+  background: var(--accent-2);
+  transform: rotate(-4deg) translate3d(0, calc(var(--sy, 0) * -0.02px), 0);
+}
+
+.bh-shape--stripe {
+  top: 12vh;
+  left: 38vw;
+  width: 42vw;
+  height: 12px;
+  background: var(--accent-3);
+  transform: rotate(-7deg) translate3d(0, calc(var(--sy, 0) * 0.04px), 0);
+}
+
+.bh-inner {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: clamp(1.5rem, 5vh, 4rem);
+  padding-bottom: clamp(2rem, 6vh, 4.5rem);
+}
+
+.bh-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: clamp(1.2rem, 4vh, 2.6rem);
+}
+
+.bh-folio {
+  margin: 0;
+  font: 500 9px/1.4 var(--f-mono);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+html[data-direction='bold'] .c-hero-title {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(3.4rem, 12.2vw, 12.5rem);
+  line-height: 0.82;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+.bh-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.02em;
+}
+
+.bh-line > span {
+  display: block;
+  transform: translateY(108%);
+  animation: bh-line 0.95s var(--ease) forwards;
+  animation-delay: calc(0.08s + var(--i) * 0.08s);
+}
+
+.bh-line:nth-child(2) > span {
+  color: var(--accent);
+}
+
+.bh-line:nth-child(3) > span {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--ink);
+}
+
+.bh-line:nth-child(4) > span {
+  color: var(--accent-3);
+}
+
+.bh-bottom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
+  align-items: end;
+  margin-top: clamp(1.5rem, 4vh, 3rem);
+}
+
+.bh-bottom .c-hero-lede {
+  max-width: 46ch;
+  color: var(--ink);
+  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
+}
+
+.bh-bottom .c-actions {
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 220px;
+}
+
+html[data-direction='bold'] .c-btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0b0b0b;
+  font-weight: 700;
+}
+
+html[data-direction='bold'] .c-btn:hover {
+  background: var(--accent-3);
+  border-color: var(--accent-3);
+}
+
+html[data-direction='bold'] .c-btn--ghost {
+  background: transparent;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+html[data-direction='bold'] .c-btn--ghost:hover {
+  background: var(--ink);
+  color: #0b0b0b;
+}
+
+.bh-inner .c-hero-meta {
+  margin-top: clamp(1.5rem, 4vh, 2.4rem);
+  color: var(--ink);
+}
+
+.bh-ticker {
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+  padding: 0.5rem 0;
+  border-top: 2px solid #0b0b0b;
+  background: var(--accent);
+  color: #0b0b0b;
+  transform: rotate(-0.7deg) scale(1.02);
+}
+
+.bh-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: bh-ticker 26s linear infinite;
+}
+
+.bh-ticker-track span {
+  font-family: var(--f-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding-right: 0.8rem;
+}
+
+.bh-ticker i {
+  font-style: normal;
+  padding: 0 0.5rem;
+}
+
+@keyframes bh-line {
+  to {
+    transform: none;
+  }
+}
+
+@keyframes bh-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- Repères ---------- */
+
+html[data-direction='bold'] .c-proof {
+  background: var(--accent);
+  color: #0b0b0b;
+  border-bottom: 3px solid #0b0b0b;
+}
+
+html[data-direction='bold'] .c-proof-grid {
+  border-left: 2px solid #0b0b0b;
+}
+
+html[data-direction='bold'] .c-proof-item {
+  border-right: 2px solid #0b0b0b;
+}
+
+html[data-direction='bold'] .c-proof-num {
+  font-family: var(--f-display);
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-weight: 400;
+  color: #0b0b0b;
+}
+
+html[data-direction='bold'] .c-proof-label {
+  color: #0b0b0b;
+  font: 500 8px/1.5 var(--f-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---------- Sections ---------- */
+
+html[data-direction='bold'] .c-section {
+  padding: clamp(4.5rem, 8vw, 8rem) 0;
+  border-top: 3px solid var(--ink);
+}
+
+html[data-direction='bold'] .c-sec-title {
+  font-family: var(--f-display);
+  font-size: clamp(2.6rem, 5.8vw, 5.6rem);
+  font-weight: 400;
+  line-height: 0.86;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+html[data-direction='bold'] .c-sec-title em {
+  display: inline;
+  padding: 0 0.06em;
+  background: var(--accent);
+  color: var(--bg);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+html[data-direction='bold'] .c-eyebrow {
+  font-weight: 700;
+}
+
+html[data-direction='bold'] .c-sec-lede {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+html[data-direction='bold'] #portes {
+  --bg: #f6f1e6;
+  --ink: #0b0b0b;
+  --muted: #514c42;
+  --accent: #2c46ff;
+  --accent-3: #ff4d2e;
+  --line: rgba(11, 11, 11, 0.22);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+html[data-direction='bold'] #travaux {
+  --bg: #2c46ff;
+  --ink: #f6f1e6;
+  --muted: #eef0ff;
+  --line: rgba(246, 241, 230, 0.3);
+  background: var(--bg);
+  color: var(--ink);
+}
+
+html[data-direction='bold'] #laboratoire {
+  --accent: #ff4d2e;
+}
+
+html[data-direction='bold'] #methode {
+  --bg: #f6f1e6;
+  --ink: #0b0b0b;
+  --muted: #514c42;
+  --line: rgba(11, 11, 11, 0.22);
+  --accent: #2c46ff;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+html[data-direction='bold'] #offres {
+  --bg: #e8ff3a;
+  --ink: #0b0b0b;
+  --muted: #2c2c11;
+  --line: rgba(11, 11, 11, 0.32);
+  --accent: #0b0b0b;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+html[data-direction='bold'] #offres .c-sec-title em {
+  background: #0b0b0b;
+  color: #e8ff3a;
+}
+
+/* ---------- Portes ---------- */
+
+html[data-direction='bold'] .c-doors {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  background: var(--line);
+}
+
+html[data-direction='bold'] .c-door {
+  border: 0;
+  background: var(--bg);
+}
+
+html[data-direction='bold'] .c-door-link {
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  padding: 1.2rem;
+  color: var(--ink);
+}
+
+html[data-direction='bold'] .c-door-num {
+  margin-bottom: 1.4rem;
+  padding: 0;
+  font-family: var(--f-display);
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 0.8;
+  color: var(--accent);
+}
+
+html[data-direction='bold'] .c-door-title {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+html[data-direction='bold'] .c-door-text {
+  font-size: 0.95rem;
+}
+
+html[data-direction='bold'] .c-door-list {
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: auto;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  font-size: 8px;
+}
+
+html[data-direction='bold'] .c-door-go {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  padding: 0;
+  font-size: 2rem;
+  color: var(--accent);
+}
+
+html[data-direction='bold'] .c-door-link {
+  position: relative;
+}
+
+html[data-direction='bold'] .c-door-link:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+html[data-direction='bold'] .c-door-link:hover .c-door-text,
+html[data-direction='bold'] .c-door-link:hover .c-door-list {
+  color: var(--bg);
+}
+
+html[data-direction='bold'] .c-door-link:hover .c-door-list {
+  border-color: var(--bg);
+}
+
+/* ---------- Expertises ---------- */
+
+html[data-direction='bold'] .c-exp-list {
+  border-top: 2px solid var(--ink);
+}
+
+html[data-direction='bold'] .c-exp-item {
+  align-items: start;
+  border-bottom: 2px solid var(--line);
+}
+
+html[data-direction='bold'] .c-exp-num {
+  font-family: var(--f-display);
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+html[data-direction='bold'] .c-exp-item h3 {
+  font-family: var(--f-display);
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+html[data-direction='bold'] .c-chips li {
+  border-color: var(--line);
+  font-weight: 600;
+}
+
+html[data-direction='bold'] .c-stack {
+  padding: 1.4rem;
+  background: #e8ff3a;
+  color: #0b0b0b;
+  --muted: #1b1b1b;
+  --line: rgba(11, 11, 11, 0.3);
+  --accent: #0b0b0b;
+}
+
+/* ---------- Travaux ---------- */
+
+html[data-direction='bold'] .c-work-grid,
+html[data-direction='bold'] .c-format-list {
+  gap: 2px;
+  border: 2px solid var(--ink);
+  background: var(--line);
+}
+
+html[data-direction='bold'] #travaux .c-work {
+  background: #0b0b0b;
+  color: #f6f1e6;
+  --muted: #b8b2a4;
+  --line: rgba(246, 241, 230, 0.22);
+  --accent: #e8ff3a;
+}
+
+html[data-direction='bold'] .c-work-title {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height: 0.94;
+  text-transform: uppercase;
+}
+
+html[data-direction='bold'] .c-work-link {
+  font-weight: 700;
+}
+
+/* ---------- Laboratoire ---------- */
+
+html[data-direction='bold'] .c-lab-axes {
+  border-top: 2px solid var(--ink);
+}
+
+html[data-direction='bold'] .c-lab-axis {
+  border-bottom: 2px solid var(--line);
+}
+
+html[data-direction='bold'] .c-lab-axis-num {
+  font-family: var(--f-display);
+  font-size: 1.4rem;
+}
+
+html[data-direction='bold'] .c-lab-rules {
+  background: #141414;
+  border: 1px solid var(--accent);
+}
+
+html[data-direction='bold'] .c-lab-rules strong {
+  font-family: var(--f-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+html[data-direction='bold'] .c-lab-experiments a span:first-child {
+  font-family: var(--f-display);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+/* ---------- Méthode ---------- */
+
+html[data-direction='bold'] .c-steps {
+  gap: 2px;
+  border-top: 2px solid var(--ink);
+  background: var(--line);
+}
+
+html[data-direction='bold'] .c-step {
+  padding: 1.2rem;
+  border: 0;
+  background: var(--bg);
+}
+
+html[data-direction='bold'] .c-step-title {
+  font-family: var(--f-display);
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+html[data-direction='bold'] .c-quote {
+  max-width: 46ch;
+  border-top: 2px solid var(--ink);
+  font-family: var(--f-display);
+  font-size: clamp(1.8rem, 3.4vw, 3rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+/* ---------- Offres ---------- */
+
+html[data-direction='bold'] .c-offers {
+  gap: 2px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+}
+
+html[data-direction='bold'] .c-offer {
+  background: var(--bg);
+}
+
+html[data-direction='bold'] .c-offer-name {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(1.4rem, 2.3vw, 2rem);
+  text-transform: uppercase;
+}
+
+html[data-direction='bold'] .c-offer-price {
+  font-family: var(--f-display);
+  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+  font-weight: 400;
+}
+
+html[data-direction='bold'] .c-offer-target {
+  border-color: var(--ink);
+}
+
+html[data-direction='bold'] #offres .c-btn {
+  background: #0b0b0b;
+  border-color: #0b0b0b;
+  color: #e8ff3a;
+}
+
+/* ---------- Contact ---------- */
+
+html[data-direction='bold'] .c-questions {
+  border-top: 2px solid var(--ink);
+}
+
+html[data-direction='bold'] .c-questions li {
+  border-bottom: 2px solid var(--line);
+}
+
+html[data-direction='bold'] .c-q-num {
+  font-family: var(--f-display);
+  font-size: 1.3rem;
+}
+
+html[data-direction='bold'] #contact .c-contact-card {
+  --bg: #ff4d2e;
+  --ink: #0b0b0b;
+  --muted: #3a120c;
+  --line: rgba(11, 11, 11, 0.3);
+  --accent: #0b0b0b;
+  background: #ff4d2e;
+  color: #0b0b0b;
+  border: 2px solid #0b0b0b;
+}
+
+html[data-direction='bold'] #contact .c-contact-card .c-btn {
+  background: #0b0b0b;
+  border-color: #0b0b0b;
+  color: #ff4d2e;
+}
+
+/* ---------- Footer ---------- */
+
+html[data-direction='bold'] .c-foot-name {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+html[data-direction='bold'] .sr-cursor {
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 50%;
+  background: var(--accent);
+  mix-blend-mode: normal;
+}
+
+html[data-direction='bold'] .sr-cursor.is-link {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+}
+
+@media (max-width: 1080px) {
+  html[data-direction='bold'] .c-doors {
+    grid-template-columns: 1fr;
+  }
+
+  html[data-direction='bold'] .c-door-link {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 700px) {
+  .bh-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .bh-bottom .c-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .bh-shape--block {
+    width: 55vw;
+    height: 16vh;
+    bottom: 10vh;
+  }
+
+  .bh-shape--disc {
+    top: 18vh;
+    width: 88px;
+  }
+
+  .bh-line:nth-child(3) > span {
+    -webkit-text-stroke-width: 1px;
+  }
+
+  html[data-direction='bold'] .c-proof-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  html[data-direction='bold'] .c-doors {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bh-line > span,
+  .bh-ticker-track {
+    animation: none;
+    transform: none;
+  }
+}
+</style><link rel="stylesheet" href="/_astro/_direction_.BDoha_xS.css"></head> <body data-page="concept" data-slug="bold-creative"> <a class="sr-skip" href="#contenu">Aller au contenu</a>  <header class="c-head" data-head> <a class="c-brand" href="/showroom/" aria-label="Studio d’ingénierie — retour au showroom"> <span class="c-brand-name">Studio d&#39;ingénierie</span> <span class="c-brand-sub">Showroom · identité non validée</span> </a> <nav class="c-nav" id="c-nav" aria-label="Sections de la page"> <a href="#portes">Portes</a><a href="#expertises">Expertises</a><a href="#travaux">Travaux</a><a href="#laboratoire">Laboratoire</a><a href="#methode">Méthode</a><a href="#offres">Offres</a><a href="#contact">Contact</a> </nav> <a class="c-head-cta" href="/contact/">Décrire un projet</a> <button class="c-menu" type="button" aria-expanded="false" aria-controls="c-nav" data-menu> <span class="c-menu-label">Menu</span> <span class="c-menu-icon" aria-hidden="true"><i></i><i></i></span> </button> </header> <main id="contenu"> <section class="c-hero c-hero--bold" id="hero" aria-labelledby="hero-title"> <div class="bh-shapes" aria-hidden="true"> <span class="bh-shape bh-shape--disc"></span> <span class="bh-shape bh-shape--block"></span> <span class="bh-shape bh-shape--stripe"></span> </div> <div class="c-wrap bh-inner"> <div class="bh-top"> <p class="c-kicker" data-copy>Ingénierie logicielle indépendante</p> <p class="bh-folio" aria-hidden="true">01 / 05 — BOLD CREATIVE</p> </div> <h1 class="c-hero-title" id="hero-title" aria-label="Des systèmes qui tiennent, et qu’on peut reprendre."> <span class="bh-line" style="--i:0"> <span data-copy>Des systèmes</span> </span><span class="bh-line" style="--i:1"> <span data-copy>qui tiennent,</span> </span><span class="bh-line" style="--i:2"> <span data-copy>et qu’on peut</span> </span><span class="bh-line" style="--i:3"> <span data-copy>reprendre.</span> </span> </h1> <div class="bh-bottom"> <p class="c-hero-lede" data-copy>Je conçois, je développe et j’accompagne la mise en production de votre système : plateforme ou site, application métier, backend et API. Je livre un système documenté, testé sur le périmètre convenu, et je vous laisse les moyens de le reprendre. Les technologies avancées et la R&amp;D s’activent sur un cas d’usage, jamais en vitrine.</p> <div class="c-actions"> <a class="c-btn" href="/contact/"> <span data-copy>Décrire un projet</span> <span aria-hidden="true">→</span> </a> <a class="c-btn c-btn--ghost" href="/offres/" data-copy>Voir les offres</a> </div> </div> <ul class="c-hero-meta"> <li data-copy>9 ans de production</li><li data-copy>1 interlocuteur</li><li data-copy>0 cookie</li> </ul> </div> <div class="bh-ticker" aria-hidden="true"> <div class="bh-ticker-track"> <span>Construire <i>✳</i> Consolider <i>✳</i> Augmenter <i>✳</i> </span><span>Construire <i>✳</i> Consolider <i>✳</i> Augmenter <i>✳</i> </span> </div> </div> </section>     <section class="c-proof" aria-label="Repères"> <div class="c-wrap"> <div class="c-proof-grid"> <div class="c-proof-item" data-reveal style="--i:0"> <span class="c-proof-num">9</span> <span class="c-proof-label" data-copy>années de développement et de mise en production</span> </div><div class="c-proof-item" data-reveal style="--i:1"> <span class="c-proof-num">1</span> <span class="c-proof-label" data-copy>interlocuteur, du schéma d’architecture à la production</span> </div><div class="c-proof-item" data-reveal style="--i:2"> <span class="c-proof-num">4</span> <span class="c-proof-label" data-copy>étapes écrites, du cadrage à la passation</span> </div><div class="c-proof-item" data-reveal style="--i:3"> <span class="c-proof-num">0</span> <span class="c-proof-label" data-copy>cookie, mesure d’audience ou script tiers</span> </div><div class="c-proof-item" data-reveal style="--i:4"> <span class="c-proof-num">30</span> <span class="c-proof-label" data-copy>jours de correction des défauts bloquants après livraison</span> </div> </div> </div> </section> <section id="portes" class="c-section" data-section="portes"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">01</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">01</span> <span class="c-sec-label">Les trois portes</span> </p> <h2 class="c-sec-title" data-copy>Trois façons d’entrer, <em>selon l’état de votre système.</em></h2> <p class="c-sec-lede" data-copy>Un catalogue lisible, pas un inventaire de technologies. Les autres expertises existent et se vendent sur demande.</p> </header> <div class="c-sec-body">  <ol class="c-doors"> <li class="c-door" data-reveal style="--i:0"> <a class="c-door-link" href="/construire/"> <span class="c-door-num" aria-hidden="true">01</span> <span class="c-door-body"> <span class="c-door-title" data-copy>Construire</span> <span class="c-door-text" data-copy>Plateformes, sites et applications métier, backend, API et intégrations. Du schéma d’architecture à la mise en production.</span> <span class="c-door-list"> <span data-copy>Plateforme, site ou application métier</span><span data-copy>Module livré au forfait</span><span data-copy>API et intégration tierce</span> </span> </span> <span class="c-door-go" aria-hidden="true">→</span> </a> </li><li class="c-door" data-reveal style="--i:1"> <a class="c-door-link" href="/consolider/"> <span class="c-door-num" aria-hidden="true">02</span> <span class="c-door-body"> <span class="c-door-title" data-copy>Consolider</span> <span class="c-door-text" data-copy>Revue, diagnostic, reprise. Le livrable est un avis écrit, pas une refonte vendue d’avance.</span> <span class="c-door-list"> <span data-copy>Revue technique ciblée — 1 jour</span><span data-copy>Diagnostic technique — 2 jours</span><span data-copy>Reprise d’un projet bloqué — après diagnostic</span> </span> </span> <span class="c-door-go" aria-hidden="true">→</span> </a> </li><li class="c-door" data-reveal style="--i:2"> <a class="c-door-link" href="/augmenter/"> <span class="c-door-num" aria-hidden="true">03</span> <span class="c-door-body"> <span class="c-door-title" data-copy>Augmenter</span> <span class="c-door-text" data-copy>Automatisation et IA bornées : un cas d’usage, des garde-fous, une mesure, un critère d’arrêt.</span> <span class="c-door-list"> <span data-copy>Faisabilité d’un cas d’usage</span><span data-copy>Automatisation d’un processus</span><span data-copy>Système en production, sous conditions</span> </span> </span> <span class="c-door-go" aria-hidden="true">→</span> </a> </li> </ol>  </div> </div> </section> <section id="expertises" class="c-section" data-section="expertises"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">02</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">02</span> <span class="c-sec-label">Expertises</span> </p> <h2 class="c-sec-title" data-copy>Cinq familles, <em>une même exigence de preuve.</em></h2> <p class="c-sec-lede" data-copy>Ce que je sais construire, et ce que je ne promets pas. Les technologies avancées ne sont pas un catalogue : elles s’activent sur un cas d’usage.</p> </header> <div class="c-sec-body">  <div class="c-exp"> <ul class="c-exp-list"> <li class="c-exp-item" data-reveal style="--i:0"> <span class="c-exp-num" aria-hidden="true">01</span> <div> <h3 data-copy>Plateformes, sites et applications métier</h3> <p data-copy>Sites publics, plateformes, applications métier et modules. Du schéma d’architecture à la mise en production, passation comprise.</p> <ul class="c-chips"> <li data-copy>Site ou interface</li><li data-copy>Application métier</li><li data-copy>Plateforme ou module</li> </ul> </div> </li><li class="c-exp-item" data-reveal style="--i:1"> <span class="c-exp-num" aria-hidden="true">02</span> <div> <h3 data-copy>Backend, API, intégration</h3> <p data-copy>Un connecteur qui fonctionne, documenté et testé : ERP, CRM, paiement, SSO.</p> <ul class="c-chips"> <li data-copy>API</li><li data-copy>Intégration tierce</li><li data-copy>Découplage</li> </ul> </div> </li><li class="c-exp-item" data-reveal style="--i:2"> <span class="c-exp-num" aria-hidden="true">03</span> <div> <h3 data-copy>Architecture et conseil</h3> <p data-copy>Revue, diagnostic, trajectoire. Le livrable est un avis écrit, pas une refonte vendue d’avance.</p> <ul class="c-chips"> <li data-copy>Revue ciblée</li><li data-copy>Diagnostic</li><li data-copy>Architecture cible</li> </ul> </div> </li><li class="c-exp-item" data-reveal style="--i:3"> <span class="c-exp-num" aria-hidden="true">04</span> <div> <h3 data-copy>IA et automatisation</h3> <p data-copy>Un cas d’usage identifié, des garde-fous, une mesure de qualité et une possibilité d’arrêt.</p> <ul class="c-chips"> <li data-copy>Faisabilité</li><li data-copy>Automatisation bornée</li><li data-copy>Système en production</li> </ul> </div> </li><li class="c-exp-item" data-reveal style="--i:4"> <span class="c-exp-num" aria-hidden="true">05</span> <div> <h3 data-copy>Technologies avancées et R&amp;D</h3> <p data-copy>Web3, IoT et robotique, VR/AR. Veille et prototypes internes ; missions bornées sur demande, jamais en vitrine.</p> <ul class="c-chips"> <li data-copy>Web3</li><li data-copy>IoT / robotique</li><li data-copy>VR / AR</li><li data-copy>R&amp;D interne</li> </ul> </div> </li> </ul> <aside class="c-stack"> <p class="c-eyebrow" data-copy>Technologies</p> <ul class="c-chips c-chips--stack"> <li data-copy>Web</li><li data-copy>API</li><li data-copy>Plateformes</li><li data-copy>Cloud — conteneurs, CI/CD, observabilité</li><li data-copy>Systèmes distribués</li><li data-copy>IA</li><li data-copy>Web3</li><li data-copy>IoT / robotique</li><li data-copy>VR / AR</li> </ul> <p class="c-note" data-copy>Expertises, pas certifications. Aucun partenariat ni label n’est affiché.</p> </aside> </div>  </div> </div> </section> <section id="travaux" class="c-section" data-section="travaux"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">03</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">03</span> <span class="c-sec-label">Travaux et démonstrateurs</span> </p> <h2 class="c-sec-title" data-copy>Des pièces réelles, <em>aucune référence inventée.</em></h2> <p class="c-sec-lede" data-copy>Trois travaux internes et trois formats de mission. Aucun logo client, aucun chiffre de résultat : ce qui n’existe pas n’est pas montré.</p> </header> <div class="c-sec-body">  <ul class="c-work-grid"> <li class="c-work" data-reveal style="--i:0"> <div class="c-work-top"> <span class="c-tag" data-copy>Interne — démonstrateur</span> <span class="c-work-meta" data-copy>33 pages · CSS, SVG, canvas</span> </div> <h3 class="c-work-title" data-copy>DA Lab, 33 directions</h3> <p class="c-work-text" data-copy>Trente-trois prototypes de hero, un même contenu, aucune dépendance. Une archive de recherche visuelle et technique.</p> <a class="c-work-link" href="/da-hero.html"> <span data-copy>Ouvrir le DA Lab</span> <span aria-hidden="true">→</span> </a> </li><li class="c-work" data-reveal style="--i:1"> <div class="c-work-top"> <span class="c-tag" data-copy>Interne — outil</span> <span class="c-work-meta" data-copy>Sélection · comparaison</span> </div> <h3 class="c-work-title" data-copy>Galerie de sélection</h3> <p class="c-work-text" data-copy>Recherche, favoris, comparaison et montage à la demande : deux documents vivants au lieu de trente-trois captures.</p> <a class="c-work-link" href="/da-hero.html"> <span data-copy>Voir la galerie</span> <span aria-hidden="true">→</span> </a> </li><li class="c-work" data-reveal style="--i:2"> <div class="c-work-top"> <span class="c-tag" data-copy>Interne — showroom</span> <span class="c-work-meta" data-copy>5 directions · 1 modèle</span> </div> <h3 class="c-work-title" data-copy>Cinq identités, un contenu</h3> <p class="c-work-text" data-copy>Cinq mini-sites navigables sur une seule base de contenu et de composants. Le prototype que vous parcourez.</p> <a class="c-work-link" href="/showroom/"> <span data-copy>Parcourir</span> <span aria-hidden="true">→</span> </a> </li> </ul> <div class="c-formats"> <p class="c-eyebrow" data-copy>Formats de mission</p> <ul class="c-format-list"> <li class="c-work c-work--format" data-reveal style="--i:0"> <div class="c-work-top"> <span class="c-tag" data-copy>Format de mission — non client</span> <span class="c-work-meta" data-copy>1 jour · 900 €</span> </div> <h3 class="c-work-title" data-copy>Revue technique ciblée</h3> <p class="c-work-text" data-copy>Un jour, trois pages : constat, trois risques, trois décisions. Restitution de 45 minutes.</p> <a class="c-work-link" href="/offres/"> <span data-copy>Voir l’offre</span> <span aria-hidden="true">→</span> </a> </li><li class="c-work c-work--format" data-reveal style="--i:1"> <div class="c-work-top"> <span class="c-tag" data-copy>Format de mission — non client</span> <span class="c-work-meta" data-copy>2 jours · 1 900 €</span> </div> <h3 class="c-work-title" data-copy>Diagnostic technique</h3> <p class="c-work-text" data-copy>Deux jours, six à dix pages : état des lieux, risques, décisions, chiffrage des suites.</p> <a class="c-work-link" href="/offres/"> <span data-copy>Voir l’offre</span> <span aria-hidden="true">→</span> </a> </li><li class="c-work c-work--format" data-reveal style="--i:2"> <div class="c-work-top"> <span class="c-tag" data-copy>Format de mission — non client</span> <span class="c-work-meta" data-copy>Après diagnostic · sur devis</span> </div> <h3 class="c-work-title" data-copy>Reprise d’un projet bloqué</h3> <p class="c-work-text" data-copy>Après un diagnostic : trois risques, trois décisions, un ordre de marche. Aucun forfait de reprise n’est annoncé avant d’avoir lu le code.</p> <a class="c-work-link" href="/consolider/"> <span data-copy>Voir la porte Consolider</span> <span aria-hidden="true">→</span> </a> </li> </ul> <p class="c-note c-note--price" data-copy>Prix indicatifs, hypothèses de travail de novembre 2026. Aucun prix affiché n’est un engagement : le devis signé fait foi.</p> </div> <p class="c-note" data-copy>Aucune référence client n’est disponible à ce stade. Les travaux internes sont montrés pour ce qu’ils sont : des démonstrateurs.</p>  </div> </div> </section> <section id="laboratoire" class="c-section" data-section="laboratoire"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">04</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">04</span> <span class="c-sec-label">Laboratoire</span> </p> <h2 class="c-sec-title" data-copy>Explorer <em>sans promettre un produit.</em></h2> <p class="c-sec-lede" data-copy>Un temps borné, une note de clôture, des limites écrites. Le laboratoire nourrit la pratique ; il ne vend pas un prototype qui ne passerait jamais en production.</p> </header> <div class="c-sec-body">  <div class="c-lab"> <ul class="c-lab-axes"> <li class="c-lab-axis" data-reveal style="--i:0"> <span class="c-lab-axis-num" aria-hidden="true">01</span> <div class="c-lab-axis-body"> <div class="c-lab-axis-head"> <h3 data-copy>Web3 et systèmes décentralisés</h3> <span class="c-status" data-copy>veille</span> </div> <p data-copy>Veille et cadrage technique : modèles de confiance, signature, stockage.</p> </div> </li><li class="c-lab-axis" data-reveal style="--i:1"> <span class="c-lab-axis-num" aria-hidden="true">02</span> <div class="c-lab-axis-body"> <div class="c-lab-axis-head"> <h3 data-copy>IoT, robotique, domotique</h3> <span class="c-status" data-copy>sur demande</span> </div> <p data-copy>Protocoles, capteurs, contraintes matérielles. Sur demande, avec un matériel identifié.</p> </div> </li><li class="c-lab-axis" data-reveal style="--i:2"> <span class="c-lab-axis-num" aria-hidden="true">03</span> <div class="c-lab-axis-body"> <div class="c-lab-axis-head"> <h3 data-copy>VR / AR</h3> <span class="c-status" data-copy>veille</span> </div> <p data-copy>Interfaces immersives et contraintes de performance. Aucun démonstrateur public à ce jour.</p> </div> </li><li class="c-lab-axis" data-reveal style="--i:3"> <span class="c-lab-axis-num" aria-hidden="true">04</span> <div class="c-lab-axis-body"> <div class="c-lab-axis-head"> <h3 data-copy>IA appliquée</h3> <span class="c-status" data-copy>exploration</span> </div> <p data-copy>LLM, automatisation, évaluation : un cas d’usage, des garde-fous, une mesure.</p> </div> </li> </ul> <aside class="c-lab-rules"> <p class="c-eyebrow" data-copy>Règles</p> <ol> <li> <strong data-copy>Temps borné</strong> <span data-copy>Une exploration a une date de fin écrite avant de commencer.</span> </li><li> <strong data-copy>Note de clôture</strong> <span data-copy>Ce qui a marché, ce qui n’a pas marché, ce qui reste ouvert.</span> </li><li> <strong data-copy>Limites écrites</strong> <span data-copy>Aucune promesse de production. Le passage en projet est une décision séparée.</span> </li> </ol> </aside> </div> <div class="c-lab-now"> <div> <p class="c-eyebrow" data-copy>Expériences en cours</p> <ul class="c-lab-experiments"> <li> <a href="/da-hero.html"> <span data-copy>DA Lab</span> <span class="c-status" data-copy>interne · archive</span> </a> <p data-copy>33 directions artistiques, un contenu, aucune dépendance.</p> </li><li> <a href="/da-hero.html"> <span data-copy>Galerie de sélection</span> <span class="c-status" data-copy>interne · outil</span> </a> <p data-copy>Recherche, favoris, comparaison, montage à la demande.</p> </li><li> <a href="/showroom/"> <span data-copy>Ce showroom</span> <span class="c-status" data-copy>interne · en cours</span> </a> <p data-copy>Cinq identités sur un modèle de contenu unique.</p> </li> </ul> </div> <div class="c-lab-side"> <p class="c-note" data-copy>Aucune publication de recherche ni aucun partenariat à ce jour.</p> <a class="c-btn c-btn--ghost" href="/da-hero.html">
+Ouvrir le DA Lab <span aria-hidden="true">→</span> </a> </div> </div>  </div> </div> </section> <section id="methode" class="c-section" data-section="methode"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">05</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">05</span> <span class="c-sec-label">La méthode</span> </p> <h2 class="c-sec-title" data-copy>Quatre étapes, <em>aucune zone d’ombre</em> sur le périmètre.</h2> <p class="c-sec-lede" data-copy>La cause la plus fréquente de conflit sur un projet technique n’est pas la technique : c’est un périmètre flou. Il se règle avant la première ligne de code.</p> </header> <div class="c-sec-body">  <ol class="c-steps"> <li class="c-step" data-reveal style="--i:0"> <span class="c-step-num" aria-hidden="true">
+Étape 01 </span> <h3 class="c-step-title" data-copy>Qualification</h3> <p class="c-step-text" data-copy>Vingt minutes, six questions. Le problème, son coût, le décideur, le budget, l’échéance, ce qui a déjà été tenté.</p> </li><li class="c-step" data-reveal style="--i:1"> <span class="c-step-num" aria-hidden="true">
+Étape 02 </span> <h3 class="c-step-title" data-copy>Périmètre écrit</h3> <p class="c-step-text" data-copy>Ce qui est inclus, ce qui ne l’est pas, deux à quatre critères de succès mesurables, le tarif de tout ajout.</p> </li><li class="c-step" data-reveal style="--i:2"> <span class="c-step-num" aria-hidden="true">
+Étape 03 </span> <h3 class="c-step-title" data-copy>Jalons vérifiables</h3> <p class="c-step-text" data-copy>Chaque étape se démontre. Un ajout passe par un avenant, jamais par un glissement silencieux.</p> </li><li class="c-step" data-reveal style="--i:3"> <span class="c-step-num" aria-hidden="true">
+Étape 04 </span> <h3 class="c-step-title" data-copy>Passation</h3> <p class="c-step-text" data-copy>Code, documentation, accès et deux heures de transfert. Le système doit pouvoir vivre sans moi.</p> </li> </ol> <p class="c-quote" data-copy>Chaque étape a un artefact. Une étape sans artefact n’est pas franchie.</p> <div class="c-refus"> <p class="c-eyebrow" data-copy>Ce que je ne promets pas</p> <ul class="c-refus-list"> <li data-copy>Pas de vente de jours en régie longue.</li><li data-copy>Pas de prototype qui ne passe jamais en production.</li><li data-copy>Pas de « transformation IA » sans cas d’usage identifié.</li><li data-copy>Pas de livraison sans documentation ni passation.</li><li data-copy>Pas de disponibilité 24/7 ni de maintenance illimitée promises pour obtenir un contrat.</li> </ul> </div>  </div> </div> </section> <section id="offres" class="c-section" data-section="offres"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">06</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">06</span> <span class="c-sec-label">Les offres prioritaires</span> </p> <h2 class="c-sec-title" data-copy>Ce qui se vend <em>avant d’avoir une référence.</em></h2> <p class="c-sec-lede" data-copy>Périmètre borné, livrable écrit, prix connu à l’avance. Ces trois formats servent aussi de porte d’entrée aux missions plus longues.</p> </header> <div class="c-sec-body">  <div class="c-offers"> <article class="c-offer" data-reveal style="--i:0"> <p class="c-offer-num" data-copy>Offre 01</p> <p class="c-offer-door" data-copy>Porte 02 — Consolider</p> <h3 class="c-offer-name" data-copy>Revue technique ciblée</h3> <p class="c-offer-price" data-copy>900 €</p> <p class="c-offer-duration" data-copy>1 jour</p> <p class="c-offer-deliverable" data-copy>3 pages : constat, 3 risques, 3 décisions ; restitution de 45 minutes.</p> <p class="c-offer-limits" data-copy>Pas d’audit complet, ni de sécurité offensive, ni d’avis judiciaire dans ce format.</p> <p class="c-offer-target" data-copy>Un problème circonscrit, une décision à prendre</p> <a class="c-offer-link" href="/contact/"> <span data-copy>Demander une revue</span> <span aria-hidden="true">→</span> </a> </article><article class="c-offer" data-reveal style="--i:1"> <p class="c-offer-num" data-copy>Offre 02</p> <p class="c-offer-door" data-copy>Porte 02 — Consolider</p> <h3 class="c-offer-name" data-copy>Diagnostic technique</h3> <p class="c-offer-price" data-copy>1 900 €</p> <p class="c-offer-duration" data-copy>2 jours</p> <p class="c-offer-deliverable" data-copy>6 à 10 pages : état des lieux, 3 risques, 3 décisions, chiffrage des suites ; restitution de 90 minutes.</p> <p class="c-offer-limits" data-copy>Aucune refonte n’est décidée avant d’avoir lu le code.</p> <p class="c-offer-target" data-copy>Un problème plus large, ou un budget à construire</p> <a class="c-offer-link" href="/contact/"> <span data-copy>Demander un diagnostic</span> <span aria-hidden="true">→</span> </a> </article><article class="c-offer" data-reveal style="--i:2"> <p class="c-offer-num" data-copy>Offre 03</p> <p class="c-offer-door" data-copy>Capacité — hors des trois portes</p> <h3 class="c-offer-name" data-copy>Renfort encadré</h3> <p class="c-offer-price" data-copy>520–600 €/j</p> <p class="c-offer-duration" data-copy>3 à 10 jours par mois</p> <p class="c-offer-deliverable" data-copy>Objectif écrit, compte rendu hebdomadaire, documentation de ce qui est livré.</p> <p class="c-offer-limits" data-copy>Pas une régie : 3 jours minimum, 10 jours par mois et par client, sortie proposée après trois mois consécutifs.</p> <p class="c-offer-target" data-copy>Agence ou studio qui sous-traite une partie technique</p> <a class="c-offer-link" href="/contact/"> <span data-copy>Demander un renfort</span> <span aria-hidden="true">→</span> </a> </article> </div> <p class="c-note c-note--price" data-copy>Prix indicatifs, hypothèses de travail de novembre 2026. Aucun prix affiché n’est un engagement : le devis signé fait foi.</p><p class="c-note"> <span data-copy>Construire et Augmenter ne passent pas par une offre affichée : plateforme, site, module ou API d’un côté ; faisabilité et automatisation de l’autre se chiffrent après qualification.</span>  <a class="c-inline-link" href="/offres/" data-copy>Voir le catalogue complet</a> </p>  </div> </div> </section> <section id="contact" class="c-section" data-section="contact"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">07</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">07</span> <span class="c-sec-label">Le contact</span> </p> <h2 class="c-sec-title" data-copy>Un message utile tient <em>en six réponses.</em></h2> <p class="c-sec-lede" data-copy>Pas de formulaire, pas de séquence automatique, pas de documentation à télécharger. Un message, et un appel de vingt minutes si le sujet le mérite.</p> </header> <div class="c-sec-body">  <div class="c-contact"> <ol class="c-questions"> <li data-reveal style="--i:0"> <span class="c-q-num" aria-hidden="true">01</span> <p data-copy>Quel est le problème, en une phrase, et depuis quand ?</p> </li><li data-reveal style="--i:1"> <span class="c-q-num" aria-hidden="true">02</span> <p data-copy>Qu’est-ce que cela coûte aujourd’hui — heures, incidents, ventes perdues ?</p> </li><li data-reveal style="--i:2"> <span class="c-q-num" aria-hidden="true">03</span> <p data-copy>Qui décide, et qui signe ?</p> </li><li data-reveal style="--i:3"> <span class="c-q-num" aria-hidden="true">04</span> <p data-copy>Quel budget est déjà prévu, même approximativement ?</p> </li><li data-reveal style="--i:4"> <span class="c-q-num" aria-hidden="true">05</span> <p data-copy>Quelle est la date butoir réelle ?</p> </li><li data-reveal style="--i:5"> <span class="c-q-num" aria-hidden="true">06</span> <p data-copy>Qu’avez-vous déjà essayé, et pourquoi cela n’a pas marché ?</p> </li> </ol> <aside class="c-contact-card" data-reveal> <p class="c-eyebrow" data-copy>Écrire</p> <p class="c-contact-text" data-copy>Un message, six réponses, un appel de vingt minutes si le sujet le mérite.</p> <a class="c-btn" href="/contact/"> <span data-copy>Ouvrir la page contact</span> <span aria-hidden="true">→</span> </a> <p class="c-note" data-copy>Aucun devis n’est envoyé sans cet échange.</p> </aside> </div>  </div> </div> </section> </main> <footer class="c-foot"> <div class="c-wrap c-foot-grid"> <div class="c-foot-identity"> <p class="c-foot-name">Studio d&#39;ingénierie</p> <p class="c-foot-formulation">Ingénieur indépendant — un seul interlocuteur, du schéma d&#39;architecture à la mise en production.</p> <p class="c-foot-note">Direction artistique — proposition non validée. Aucun nom de marque n’est arrêté.</p> </div> <nav class="c-foot-nav" aria-label="Liens du studio"> <a href="/showroom/">Les cinq directions</a> <a href="/contact/">Écrire</a> <a href="/mentions-legales/">Mentions légales</a> </nav> <div class="c-foot-bottom"> <p class="c-foot-small">Aucun cookie, aucune mesure d’audience, aucun script tiers.</p> <a class="c-top" href="#hero">Haut de page <span aria-hidden="true">↑</span></a> </div> </div> </footer>  <aside class="sr-bar" aria-label="Navigation du showroom"> <a class="sr-bar-home" href="/showroom/">Showroom</a>  <span class="sr-bar-name"> <span class="sr-bar-num">01</span> <span class="sr-bar-title">BOLD CREATIVE</span> </span> <span class="sr-bar-sep" aria-hidden="true"></span> <span class="sr-bar-arrow sr-bar-arrow--off" aria-hidden="true">←</span><a class="sr-bar-arrow" href="/showroom/architectural-precision/" aria-label="Direction suivante : Architectural Precision">
+→
+</a><nav class="sr-bar-dirs" aria-label="Choisir une direction"> <a href="/showroom/bold-creative/" aria-current="page" aria-label="01 — Bold Creative" title="01 — Bold Creative"> 01 </a><a href="/showroom/architectural-precision/" aria-label="02 — Architectural Precision" title="02 — Architectural Precision"> 02 </a><a href="/showroom/digital-frontier/" aria-label="03 — Digital Frontier" title="03 — Digital Frontier"> 03 </a><a href="/showroom/editorial-culture/" aria-label="04 — Editorial Culture" title="04 — Editorial Culture"> 04 </a><a href="/showroom/future-systems/" aria-label="05 — Future Systems" title="05 — Future Systems"> 05 </a> </nav> <a class="sr-bar-link" href="/showroom/" title="Grille (G)">Grille</a> <a class="sr-bar-link" href="/showroom/?pick=bold-creative#comparer" title="Comparer (C)">Comparer</a>  <span class="sr-bar-spacer"></span> <button type="button" class="sr-bar-motion" data-motion-toggle aria-pressed="true" title="Mouvement (M)">
+Mouvement
+</button> <a class="sr-bar-link" href="/" title="Retour au site">Site</a> </aside> <div class="sr-cursor" aria-hidden="true"> <span class="sr-cursor__label"></span> </div> <script type="application/json" id="sr-data">{"directions":[{"slug":"bold-creative","id":"bold","num":"01","name":"BOLD CREATIVE","title":"Bold Creative","thesis":"Le système est un geste.","signature":"Affiche vivante, typographie cinétique, couleur qui claque.","engine":"DOM + CSS","risk":"La lisibilité peut payer le spectacle.","palette":["#0B0B0B","#E8FF3A","#2C46FF","#FF4D2E","#F6F1E6"]},{"slug":"architectural-precision","id":"architectural","num":"02","name":"ARCHITECTURAL PRECISION","title":"Architectural Precision","thesis":"La précision se voit.","signature":"Un plan, des mesures, du silence. Le luxe de ce qui est juste.","engine":"SVG + CSS","risk":"Trop de silence peut sembler distant.","palette":["#F4F1EA","#16181A","#8A6A45","#D8D2C6"]},{"slug":"digital-frontier","id":"frontier","num":"03","name":"DIGITAL FRONTIER","title":"Digital Frontier","thesis":"Le code comme paysage.","signature":"Un champ de données qui répond au geste et à la profondeur.","engine":"Canvas 2D","risk":"Le canvas coûte du CPU : il doit savoir s’arrêter.","palette":["#05070C","#6C5CE7","#34E7E4","#FF2E88","#C9D1D9"]},{"slug":"editorial-culture","id":"editorial","num":"04","name":"EDITORIAL CULTURE","title":"Editorial Culture","thesis":"Une revue, pas un site.","signature":"Des chapitres, des marges, une voix. La technique se raconte.","engine":"Typographie + CSS","risk":"La densité peut ralentir la lecture mobile.","palette":["#F1EBDD","#14110D","#C8452B","#C9A227"]},{"slug":"future-systems","id":"future","num":"05","name":"FUTURE SYSTEMS","title":"Future Systems","thesis":"Le système en salle de contrôle.","signature":"Une infrastructure qui se regarde comme un film.","engine":"SVG + CSS","risk":"Le décor peut écraser le message.","palette":["#0A0C10","#FFB020","#D7E3EA","#6EF2B0"]}],"current":"bold-creative","direction":"bold"}</script> <script type="module" src="/_astro/ShowroomLayout.astro_astro_type_script_index_0_lang.Brp1UyHu.js"></script> </body> </html>

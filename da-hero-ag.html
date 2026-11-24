@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>AG — Grande toile · DA Lab</title>
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url('/fonts/instrument-serif-italic-latin.woff2') format('woff2')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+:root{
+  --wall:#d8d2c4;--wall2:#c6bfae;--ink:#1d1b16;--ink2:#5d574a;--rust:#a8492b;
+  --serif:'Instrument Serif',Georgia,serif;--sans:'Inter Tight',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--wall);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+h1,p,figure{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--rust);outline-offset:3px}
+
+.proto{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:11px clamp(14px,2.4vw,30px);font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(29,27,22,.45)}
+.proto .tag{color:var(--rust)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(29,27,22,.25);padding-bottom:1px}
+.proto a:hover{color:var(--rust);border-color:var(--rust)}
+.proto .motion{margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer}
+.proto .motion input{position:absolute;opacity:0;width:1px;height:1px}
+.proto .motion i{display:block;width:30px;height:15px;border:1px solid rgba(29,27,22,.4);border-radius:9px;position:relative}
+.proto .motion i::after{content:"";position:absolute;inset:2px auto 2px 2px;width:9px;border-radius:50%;background:var(--rust);transition:translate .18s ease}
+.proto .motion input:checked + i::after{translate:15px 0}
+
+.gallerywall{position:relative;min-height:100svh;overflow:hidden;isolation:isolate;
+  background:
+    radial-gradient(60% 50% at 38% 6%,#efeade,transparent 62%),
+    radial-gradient(90% 80% at 90% 100%,rgba(90,80,60,.2),transparent 66%),
+    linear-gradient(168deg,#ddd7ca,#c9c2b1)}
+.gallerywall::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.4;
+  background-image:radial-gradient(circle at 1px 1px,rgba(90,80,60,.18) .6px,transparent 1px);background-size:4px 4px}
+.gallerywall::after{content:"";position:absolute;left:0;right:0;bottom:0;height:18%;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(70,60,42,.16))}
+
+.painting{position:absolute;z-index:3;left:5%;top:9.5%;width:min(64vw,960px);aspect-ratio:5/3;
+  background:#e7dcc4;box-shadow:0 2px 0 rgba(255,255,255,.5) inset,0 34px 50px -30px rgba(40,32,18,.75),0 8px 18px rgba(40,32,18,.16);
+  animation:hang 1.2s cubic-bezier(.2,.8,.25,1) both;cursor:crosshair}
+@keyframes hang{from{opacity:0;translate:0 -16px}}
+.painting::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background:
+    repeating-linear-gradient(0deg,rgba(120,100,70,.1) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(90deg,rgba(120,100,70,.08) 0 1px,transparent 1px 3px)}
+.painting canvas{display:block;width:100%;height:100%}
+.wet{position:absolute;inset:0;pointer-events:none;opacity:.28;mix-blend-mode:screen;
+  background:linear-gradient(118deg,rgba(255,255,255,.4),transparent 34%,transparent 72%,rgba(255,255,255,.18))}
+
+.cartel{position:absolute;z-index:4;right:clamp(16px,3.4vw,44px);top:11%;width:min(15rem,21vw);
+  font-family:var(--mono);font-size:.48rem;line-height:1.8;letter-spacing:.05em;color:#5a5344}
+.cartel b{display:block;font-family:var(--sans);font-size:.82rem;font-weight:600;color:var(--ink);
+  letter-spacing:-.01em;line-height:1.3;margin-bottom:4px}
+.cartel .it{font-family:var(--serif);font-style:italic;font-size:.88rem;color:#3d382c;display:block;margin-bottom:5px}
+.cartel .num{display:flex;justify-content:space-between;margin-top:8px;padding-top:6px;
+  border-top:1px solid rgba(29,27,22,.22);color:#7c7360;font-size:.43rem;letter-spacing:.14em;text-transform:uppercase}
+.bench{position:absolute;z-index:2;left:0;right:0;bottom:12%;height:2px;background:rgba(60,50,32,.18)}
+
+.copy{position:absolute;z-index:6;left:5%;bottom:clamp(16px,3.4vh,30px);width:min(34rem,44vw)}
+.k{font-family:var(--mono);font-size:.53rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rust);
+  display:flex;align-items:center;gap:.7rem}
+.k::before{content:"";width:24px;height:1px;background:var(--rust)}
+.copy h1{margin-top:.55rem;font-size:clamp(1.9rem,3.9vw,3.4rem);line-height:.95;letter-spacing:-.045em;font-weight:700}
+.copy h1 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--rust);letter-spacing:-.02em}
+.copy .lead{margin-top:.7rem;max-width:44ch;font-size:clamp(.8rem,.96vw,.9rem);line-height:1.55;color:#4f493b;text-wrap:pretty}
+.copy .lead b{color:var(--ink);font-weight:600}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:.85rem}
+.swatches{display:flex;gap:4px}
+.swatches button{width:20px;height:20px;border:1px solid rgba(29,27,22,.3);padding:0;cursor:pointer;
+  border-radius:50%;transition:scale .15s,box-shadow .15s}
+.swatches button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--wall),0 0 0 3px var(--ink);scale:1.08}
+.btn{display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;font-family:var(--mono);
+  font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;padding:.7em .85em;
+  border:1px solid rgba(29,27,22,.4);background:transparent;color:var(--ink);cursor:pointer;
+  transition:background .16s,color .16s}
+.btn:hover{background:var(--ink);color:var(--wall)}
+.btn--rust{background:var(--rust);border-color:var(--rust);color:#fff4ea}
+.btn--rust:hover{background:#8a3a21;border-color:#8a3a21}
+.btn span{transition:translate .16s}
+.btn:hover span{translate:3px 0}
+
+@media (max-width:980px){
+  .painting{width:72vw;left:4%;top:8%}
+  .cartel{width:17vw;font-size:.44rem}
+  .copy{width:52vw}
+}
+@media (max-width:760px){
+  .painting{position:relative;left:auto;top:auto;width:92vw;margin:clamp(56px,8vh,70px) auto 0}
+  .cartel{position:relative;right:auto;top:auto;width:92vw;margin:10px auto 0;display:flex;gap:16px;
+    align-items:baseline;flex-wrap:wrap;border-top:1px solid rgba(29,27,22,.22);padding-top:6px}
+  .cartel b,.cartel .it{margin:0}
+  .cartel .num{display:none}
+  .copy{position:relative;left:auto;bottom:auto;width:auto;margin:16px 16px 24px}
+  .copy h1{font-size:clamp(1.8rem,8vw,2.4rem)}
+  .copy .lead{max-width:none;font-size:.78rem}
+  .bench{display:none}
+}
+@media (max-width:420px){
+  .cartel{display:none}
+  .copy h1{font-size:1.7rem}
+  .copy .lead{font-size:.75rem}
+}
+body.still *{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#contenu">Aller au contenu</a>
+<div class="proto">
+  <span class="tag">AG — Grande toile</span>
+  <a href="/da-hero.html">Galerie</a>
+  <label class="motion"><input type="checkbox" checked /><i></i>Mouvement</label>
+</div>
+
+<main class="gallerywall" id="contenu">
+  <div class="painting" id="wrap">
+    <canvas id="paint" width="1200" height="720" aria-label="Peinture abstraite générative : champs de couleur, gestes et coulures"></canvas>
+    <span class="wet" aria-hidden="true"></span>
+  </div>
+  <span class="bench" aria-hidden="true"></span>
+
+  <figure class="cartel">
+    <span class="it">Sans titre (couche 12)</span>
+    <b>Acrylique et pigment sur toile</b>
+    180 × 108 cm · 2026<br />Atelier DA Lab, Paris
+    <p class="num"><span>Salle 3</span><span>N° 012</span></p>
+  </figure>
+
+  <section class="copy">
+    <p class="k">Peinture — pièce 19</p>
+    <h1>Une seule couche <em>ne suffit jamais.</em></h1>
+    <p class="lead">Ce qu’on voit est la couche du dessus. Ce qui tient, c’est <b>l’ordre dans lequel les couches ont séché</b>. Un système se juge pareil : à ce qu’on peut retirer sans que l’ensemble tombe.</p>
+    <div class="tools">
+      <div class="swatches" role="group" aria-label="Couleur du pinceau">
+        <button type="button" data-c="#a8492b" style="background:#a8492b" aria-pressed="true" aria-label="Rouille"></button>
+        <button type="button" data-c="#24384f" style="background:#24384f" aria-pressed="false" aria-label="Indigo"></button>
+        <button type="button" data-c="#c08a3c" style="background:#c08a3c" aria-pressed="false" aria-label="Ocre"></button>
+        <button type="button" data-c="#26251f" style="background:#26251f" aria-pressed="false" aria-label="Noir"></button>
+        <button type="button" data-c="#7d8468" style="background:#7d8468" aria-pressed="false" aria-label="Sauge"></button>
+      </div>
+      <button class="btn" id="newcanvas" type="button">Autre toile</button>
+      <a class="btn btn--rust" href="/contact/">Demander une revue <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var cv=document.getElementById('paint'),ctx=cv.getContext('2d'),
+      wrap=document.getElementById('wrap'),fresh=document.getElementById('newcanvas'),
+      motion=document.querySelector('.motion input'),
+      reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W=cv.width,H=cv.height;
+  var COLORS=['#e7dcc4','#c08a3c','#24384f','#a8492b','#26251f','#7d8468'];
+  var seed=20261123, color='#a8492b', queue=[], qi=0, raf=0, drawing=false, last=null;
+
+  function rnd(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
+  function pick(a){return a[(rnd()*a.length)|0];}
+
+  function field(x,y,w,h,rot,c,a){
+    ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.globalAlpha=a;ctx.fillStyle=c;
+    ctx.fillRect(-w/2,-h/2,w,h);ctx.restore();
+  }
+  function brush(x1,y1,x2,y2,cx,cy,lw,c,a){
+    ctx.save();ctx.globalAlpha=a;ctx.strokeStyle=c;ctx.lineWidth=lw;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(cx,cy,x2,y2);ctx.stroke();
+    ctx.globalAlpha=a*.35;ctx.strokeStyle='#fff';ctx.lineWidth=lw*.18;
+    ctx.beginPath();ctx.moveTo(x1-lw*.18,y1-lw*.2);ctx.quadraticCurveTo(cx-lw*.1,cy-lw*.2,x2-lw*.16,y2-lw*.2);ctx.stroke();
+    ctx.restore();
+  }
+  function drip(x,y,len,c){
+    ctx.save();ctx.globalAlpha=.5;ctx.strokeStyle=c;ctx.lineWidth=2+rnd()*3;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(x,y);ctx.bezierCurveTo(x+2,y+len*.4,x-3,y+len*.7,x+1,y+len);ctx.stroke();ctx.restore();
+  }
+  function scratch(x1,y1,x2,y2,c){
+    ctx.save();ctx.globalAlpha=.38;ctx.strokeStyle=c;ctx.lineWidth=1.1;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();
+  }
+
+  function compose(){
+    queue=[];qi=0;
+    seed=20261123+((Math.random()*9999)|0);
+    queue.push(function(){ctx.fillStyle='#e7dcc4';ctx.fillRect(0,0,W,H);});
+    /* champs larges */
+    queue.push(function(){field(W*.68,H*.42,W*.5,H*.62,-.08,'#24384f',.94);});
+    queue.push(function(){field(W*.26,H*.30,W*.42,H*.36,.06,'#c08a3c',.85);});
+    queue.push(function(){field(W*.55,H*.80,W*.7,H*.26,-.03,'#a8492b',.72);});
+    queue.push(function(){field(W*.24,H*.68,W*.3,H*.42,.1,'#7d8468',.5);});
+    queue.push(function(){field(W*.86,H*.16,W*.26,H*.24,-.14,'#26251f',.55);});
+    /* gestes */
+    for(var i=0;i<12;i++){
+      (function(){
+        var x1=rnd()*W,y1=rnd()*H,x2=rnd()*W,y2=rnd()*H;
+        var cx=(x1+x2)/2+(rnd()-.5)*260, cy=(y1+y2)/2+(rnd()-.5)*220;
+        var lw=10+rnd()*34, c=pick(COLORS), a=.45+rnd()*.45;
+        queue.push(function(){brush(x1,y1,x2,y2,cx,cy,lw,c,a);});
+      })();
+    }
+    /* coulures */
+    for(var j=0;j<9;j++){
+      (function(){
+        var x=rnd()*W,y=H*(.18+rnd()*.5),len=40+rnd()*190,c=pick(['#24384f','#a8492b','#26251f']);
+        queue.push(function(){drip(x,y,len,c);});
+      })();
+    }
+    /* griffures */
+    for(var k=0;k<10;k++){
+      (function(){
+        var x=rnd()*W,y=rnd()*H;
+        queue.push(function(){scratch(x,y,x+(rnd()-.5)*220,y+(rnd()-.5)*160,pick(['#26251f','#e7dcc4']));});
+      })();
+    }
+    /* signature */
+    queue.push(function(){
+      ctx.save();ctx.globalAlpha=.75;ctx.fillStyle='#26251f';ctx.font='italic 22px Georgia,serif';
+      ctx.fillText('DA Lab',W-150,H-42);ctx.font='12px monospace';ctx.globalAlpha=.5;
+      ctx.fillText('couche 12 · 2026',W-150,H-24);ctx.restore();
+    });
+  }
+
+  function step(){
+    raf=0;
+    if(qi>=queue.length){drawing=false;return;}
+    queue[qi++]();
+    raf=requestAnimationFrame(step);
+  }
+  function start(animate){
+    if(raf)cancelAnimationFrame(raf);
+    drawing=animate&&!reduce;
+    if(!drawing){while(qi<queue.length)queue[qi++]();return;}
+    raf=requestAnimationFrame(step);
+  }
+  compose();start(true);
+
+  fresh.addEventListener('click',function(){compose();start(true);});
+
+  document.querySelectorAll('.swatches button').forEach(function(b){
+    b.addEventListener('click',function(){
+      color=b.dataset.c;
+      document.querySelectorAll('.swatches button').forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false');});
+    });
+  });
+
+  function pos(e){
+    var r=cv.getBoundingClientRect();
+    return {x:(e.clientX-r.left)/r.width*W,y:(e.clientY-r.top)/r.height*H};
+  }
+  wrap.addEventListener('pointerdown',function(e){
+    if(e.target.closest('button,a'))return;
+    drawing=true;last=pos(e);
+    ctx.save();ctx.globalAlpha=.9;ctx.fillStyle=color;
+    ctx.beginPath();ctx.arc(last.x,last.y,7,0,Math.PI*2);ctx.fill();ctx.restore();
+    wrap.setPointerCapture&&wrap.setPointerCapture(e.pointerId);
+  });
+  wrap.addEventListener('pointermove',function(e){
+    if(!drawing||!last)return;
+    var p=pos(e);
+    brush(last.x,last.y,p.x,p.y,(last.x+p.x)/2+8,(last.y+p.y)/2-6,12+rnd()*8,color,.85);
+    last=p;
+  });
+  window.addEventListener('pointerup',function(){last=null;});
+  wrap.addEventListener('pointerleave',function(){last=null;});
+
+  motion.addEventListener('change',function(){
+    document.body.classList.toggle('still',!motion.checked);
+    if(!motion.checked){if(raf)cancelAnimationFrame(raf);raf=0;while(qi<queue.length)queue[qi++]();}
+    else if(drawing)raf=requestAnimationFrame(step);
+  });
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden&&raf){cancelAnimationFrame(raf);raf=0;}
+    else if(!document.hidden&&drawing&&qi<queue.length)raf=requestAnimationFrame(step);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Direction E — Marée</title>
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#04121a" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+<style>
+/* ============================================================
+   DIRECTION E — « MARÉE »
+   La matière est liquide : deux nappes floues dérivent, une
+   goutte de métal suit le curseur en fusion (filtre goo),
+   la marée change la palette. Le texte reste net : c'est la
+   rencontre d'un serif italique et d'une eau en mouvement.
+   ============================================================ */
+
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url('/fonts/space-grotesk-latin.woff2') format('woff2')}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url('/fonts/instrument-serif-italic-latin.woff2') format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+
+:root{
+  --deep:#04121a;
+  --deep-2:#06202b;
+  --chalk:#f1efe6;
+  --dim:rgba(241,239,230,.56);
+  --rule:rgba(241,239,230,.18);
+  --a:#8ff3d2;
+  --b:#ffa6c9;
+  --c:#9a8cff;
+  --f-sans:'Space Grotesk','Helvetica Neue',Arial,sans-serif;
+  --f-serif:'Instrument Serif',Georgia,serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--deep);color:var(--chalk);font-family:var(--f-sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit}
+h1,p{margin:0}
+.mono{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;line-height:1.4;color:var(--dim)}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--a);outline-offset:3px}
+.skip{position:fixed;left:14px;top:-70px;z-index:999;background:var(--a);color:var(--deep);padding:.75em 1.1em;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:top .18s}
+.skip:focus{top:40px}
+
+/* ---------- barre de prototype ---------- */
+.proto{
+  position:fixed;inset:0 0 auto 0;z-index:100;height:30px;
+  display:flex;align-items:center;gap:1.1rem;padding:0 clamp(14px,3vw,28px);
+  background:rgba(4,18,26,.82);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+}
+.proto .tag{color:var(--a)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(241,239,230,.3);padding-bottom:1px}
+.proto a:hover{border-bottom-color:var(--a);color:var(--a)}
+.proto .spacer{margin-left:auto}
+.motion{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none}
+.motion input{position:absolute;opacity:0;width:1px;height:1px}
+.motion .track{width:26px;height:12px;border:1px solid rgba(241,239,230,.4);border-radius:20px;position:relative;transition:background .2s}
+.motion .track::after{content:"";position:absolute;top:1px;left:1px;width:8px;height:8px;border-radius:50%;background:var(--chalk);transition:translate .2s}
+.motion input:checked + .track{background:rgba(143,243,210,.2);border-color:var(--a)}
+.motion input:checked + .track::after{translate:14px 0;background:var(--a)}
+.motion input:focus-visible + .track{outline:2px solid var(--a);outline-offset:3px}
+
+/* ============================================================
+   LA MER
+   ============================================================ */
+.sea{position:relative;min-height:100svh;overflow:clip;display:flex;flex-direction:column;padding-top:30px;isolation:isolate}
+
+.sky{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(110% 80% at 16% 8%,rgba(20,86,96,.75),transparent 62%),
+    radial-gradient(95% 75% at 92% 84%,rgba(52,20,74,.8),transparent 64%),
+    linear-gradient(180deg,#04121a 0%,#031018 100%);
+}
+.aura{
+  position:absolute;border-radius:50%;pointer-events:none;z-index:0;
+  filter:blur(70px);opacity:.5;mix-blend-mode:screen;
+  will-change:transform;
+}
+.aura--1{width:62vw;aspect-ratio:1;left:-14vw;top:-8vh;background:radial-gradient(circle,var(--a),transparent 68%);animation:swell 24s cubic-bezier(.4,0,.6,1) infinite alternate}
+.aura--2{width:52vw;aspect-ratio:1;right:-10vw;bottom:-14vh;background:radial-gradient(circle,var(--b),transparent 68%);animation:swell 31s cubic-bezier(.4,0,.6,1) infinite alternate-reverse}
+.aura--3{width:38vw;aspect-ratio:1;left:44%;top:38%;background:radial-gradient(circle,var(--c),transparent 70%);opacity:.28;animation:swell 19s cubic-bezier(.4,0,.6,1) infinite alternate}
+@keyframes swell{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(6vw,-4vh,0) scale(1.22)}
+}
+
+/* le mot liquide, déformé par feTurbulence + feDisplacementMap */
+.tideword{
+  position:absolute;right:-3%;top:44%;z-index:0;pointer-events:none;
+  font-family:var(--f-serif);font-style:italic;white-space:nowrap;
+  font-size:clamp(9rem,26vw,26rem);line-height:.7;color:rgba(143,243,210,.13);
+  filter:url(#warp);
+}
+/* sur mobile, pas de mot distordu : à cette échelle la déformation
+   se lit comme un accident. La matière passe par les nappes, qui
+   prennent une forme organique et restent en mouvement. */
+@media (max-width:900px){
+  .tideword{display:none}
+  .aura{border-radius:46% 54% 38% 62% / 55% 45% 58% 42%}
+  .aura--1{background:radial-gradient(circle,var(--a) 0%,var(--a) 40%,transparent 84%)}
+  .aura--2{background:radial-gradient(circle,var(--b) 0%,var(--b) 40%,transparent 84%);
+    border-radius:58% 42% 61% 39% / 44% 56% 44% 56%}
+}
+
+/* la goutte de métal qui suit le curseur */
+.trail{
+  position:fixed;left:0;top:0;width:300px;height:300px;z-index:3;
+  pointer-events:none;filter:url(#goo);mix-blend-mode:screen;opacity:0;
+  transition:opacity .6s ease;
+}
+.trail.is-live{opacity:.85}
+.drop{position:absolute;left:50%;top:50%;width:88px;height:88px;margin:-44px 0 0 -44px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#e8fff7,var(--a) 42%,rgba(143,243,210,.1) 70%);
+  will-change:translate}
+.drop:nth-child(2){width:66px;height:66px;margin:-33px 0 0 -33px;opacity:.9}
+.drop:nth-child(3){width:52px;height:52px;margin:-26px 0 0 -26px;opacity:.8}
+.drop:nth-child(4){width:40px;height:40px;margin:-20px 0 0 -20px;opacity:.7}
+.drop:nth-child(5){width:30px;height:30px;margin:-15px 0 0 -15px;opacity:.6}
+.drop:nth-child(6){width:22px;height:22px;margin:-11px 0 0 -11px;opacity:.5}
+@media (hover:none),(max-width:760px){.trail{display:none}}
+
+/* ---------- contenu ---------- */
+.inner{position:relative;z-index:2;display:flex;flex-direction:column;flex:1;width:100%;max-width:1280px;margin:0 auto;padding:clamp(14px,2.4vh,26px) clamp(18px,4.4vw,58px) clamp(18px,3vh,34px)}
+
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:18px;flex-wrap:wrap;padding-bottom:clamp(10px,2vh,20px)}
+.top .eyebrow{display:inline-flex;align-items:center;gap:.6rem}
+.top .eyebrow::before{content:"";width:24px;height:1px;background:var(--a)}
+
+.h1{
+  margin:auto 0;
+  font-family:var(--f-sans);font-weight:400;
+  font-size:clamp(2.1rem,min(6.1vw,7.4vh),4.7rem);
+  line-height:.98;letter-spacing:-.035em;
+}
+.h1 .w{display:block;overflow:clip;padding-bottom:.06em}
+.h1 .w > span{display:block}
+.h1 em{
+  font-family:var(--f-serif);font-style:italic;font-weight:400;
+  font-size:1.22em;line-height:.9;letter-spacing:-.01em;
+  background:linear-gradient(96deg,var(--a) 0%,var(--b) 52%,var(--c) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  padding-right:.06em;
+}
+.lead{margin-top:clamp(14px,2.4vh,26px);max-width:46ch;font-size:clamp(.86rem,1vw,.97rem);line-height:1.55;color:rgba(241,239,230,.8);text-wrap:pretty}
+
+/* ---------- sélecteur de marée ---------- */
+.marees{
+  position:relative;z-index:2;display:flex;align-items:center;gap:2px;
+  margin:clamp(16px,2.6vh,28px) 0 0;padding:4px;border:1px solid var(--rule);border-radius:999px;
+  width:fit-content;backdrop-filter:blur(6px);background:rgba(6,32,43,.5);
+}
+.marees legend{float:left;margin-right:.9em;align-self:center}
+.marees input{position:absolute;opacity:0;width:1px;height:1px}
+.marees label{
+  padding:.55em 1.1em;border-radius:999px;cursor:pointer;
+  font-family:var(--f-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+  transition:background .2s,color .2s;
+}
+.marees label:hover{color:var(--chalk)}
+.marees input:checked + label{background:rgba(143,243,210,.14);color:var(--a);box-shadow:inset 0 0 0 1px rgba(143,243,210,.4)}
+.marees input:focus-visible + label{outline:2px solid var(--a);outline-offset:2px}
+
+/* la marée change la palette et le rythme des nappes */
+@supports selector(:has(*)){
+  body:has(#mh:checked){--a:#a9d4ff;--b:#ffd39a;--c:#7ff5ff}
+  body:has(#mh:checked) .aura--1{animation-duration:16s}
+  body:has(#mh:checked) .aura--2{animation-duration:21s}
+  body:has(#mo:checked){--a:#ffb3ec;--b:#9affd8;--c:#ffe066}
+  body:has(#mo:checked) .aura--1{animation-duration:9s}
+  body:has(#mo:checked) .aura--2{animation-duration:12s}
+  body:has(#mo:checked) .aura--3{opacity:.5}
+  body:has(#mo:checked) .tideword{color:rgba(255,179,236,.14)}
+}
+
+/* ---------- actions ---------- */
+.foot{margin-top:auto;padding-top:clamp(16px,2.8vh,30px);display:flex;align-items:flex-end;gap:clamp(16px,3vw,40px);flex-wrap:wrap;border-top:1px solid var(--rule)}
+.foot-meta{display:flex;gap:clamp(12px,2.4vw,30px);flex-wrap:wrap;color:var(--dim)}
+.actions{display:flex;gap:.6rem;margin-left:auto;flex-wrap:wrap}
+.btn{
+  position:relative;isolation:isolate;display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;overflow:hidden;
+  font-family:var(--f-mono);font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;
+  padding:.95em 1.35em;border:1px solid rgba(143,243,210,.55);border-radius:999px;color:var(--chalk);
+  transition:color .25s,border-color .25s,translate .25s cubic-bezier(.2,.9,.2,1);
+}
+.btn::before{
+  content:"";position:absolute;left:50%;top:50%;width:150%;aspect-ratio:1;translate:-50% -50%;
+  background:radial-gradient(circle,var(--a) 0%,rgba(143,243,210,0) 68%);
+  opacity:0;scale:.4;transition:opacity .4s,scale .5s cubic-bezier(.2,.9,.2,1);z-index:-1;
+}
+.btn:hover{color:var(--deep);border-color:var(--a);translate:0 -2px}
+.btn:hover::before{opacity:1;scale:1.15}
+.btn--solid{background:var(--a);color:var(--deep);border-color:var(--a)}
+.btn--solid:hover{color:var(--deep);filter:brightness(1.06)}
+.btn .arw{transition:translate .25s}
+.btn:hover .arw{translate:4px 0}
+
+/* ---------- la vague qui passe à l'ouverture ---------- */
+.sweep{
+  position:absolute;inset:0;z-index:6;pointer-events:none;
+  background:linear-gradient(180deg,#07242f,#04121a 60%);
+  border-radius:0 0 48% 48% / 0 0 14vh 14vh;
+  animation:sweep 1.15s cubic-bezier(.55,0,.28,1) .02s both;
+}
+@keyframes sweep{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-112%,0)}}
+
+/* entrée du texte */
+.h1 .w > span{animation:surface .95s cubic-bezier(.16,.86,.24,1) both;animation-delay:calc(var(--d,0) * 1ms + 260ms)}
+.lead,.marees,.top,.foot{animation:fade-up .7s cubic-bezier(.2,.8,.2,1) .55s both}
+@keyframes surface{from{transform:translate3d(0,112%,0)}to{transform:none}}
+@keyframes fade-up{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
+
+/* piste neutre */
+.runway{height:70svh;border-top:1px solid var(--rule);position:relative;background:linear-gradient(180deg,#04121a,#020b10)}
+
+/* ============================================================
+   SCROLL
+   ============================================================ */
+@supports (animation-timeline:scroll()){
+  .aura--1{animation:swell 24s infinite alternate,drift-a linear both;animation-timeline:auto,scroll(root block)}
+  .aura--2{animation:swell 31s infinite alternate-reverse,drift-b linear both;animation-timeline:auto,scroll(root block)}
+  .tideword{animation:drift-word linear both;animation-timeline:scroll(root block)}
+}
+@keyframes drift-a{from{translate:0 0}to{translate:-6vw 24vh}}
+@keyframes drift-b{from{translate:0 0}to{translate:-9vw -18vh}}
+@keyframes drift-word{from{translate:0 0}to{translate:-12vw -8vh}}
+
+/* ============================================================
+   MOUVEMENT COUPÉ
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  .sweep{display:none}
+  .tideword{filter:none}
+  .aura,.tideword,.h1 .w > span,.lead,.marees,.top,.foot{animation:none !important}
+  .h1 .w > span{transform:none}
+  .trail{display:none}
+}
+@supports selector(:has(*)){
+  body:has(.motion input:not(:checked)) .sweep{display:none}
+  body:has(.motion input:not(:checked)) .aura,
+  body:has(.motion input:not(:checked)) .tideword,
+  body:has(.motion input:not(:checked)) .h1 .w > span,
+  body:has(.motion input:not(:checked)) .lead,
+  body:has(.motion input:not(:checked)) .marees,
+  body:has(.motion input:not(:checked)) .top,
+  body:has(.motion input:not(:checked)) .foot{animation:none !important}
+  body:has(.motion input:not(:checked)) .trail{display:none}
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:980px){
+  .aura{filter:blur(54px)}
+  .aura--3{display:none}
+}
+@media (max-width:720px){
+  .sea{padding-top:30px}
+  .inner{padding:14px 18px 22px}
+  .aura{opacity:.62}
+  .h1{font-size:clamp(2rem,9.4vw,3.4rem);line-height:1.02}
+  .h1 em{font-size:1.16em}
+  .lead{font-size:.88rem}
+  .foot{flex-direction:column;align-items:stretch;gap:16px}
+  .actions{margin-left:0}
+  .btn{flex:1 1 auto;justify-content:center}
+  .foot-meta{flex-direction:column;gap:6px}
+  .marees{width:100%;justify-content:space-between}
+  .marees legend{display:none}
+  .marees label{flex:1;text-align:center;padding:.6em .4em}
+  .runway{height:45svh}
+}
+@media (max-width:420px){
+  .proto{font-size:.55rem;gap:.7rem}
+  .proto .tag{display:none}
+  .top .mono:last-child{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<div class="proto">
+  <span class="tag">E — Marée</span>
+  <a href="/da-hero.html">Galerie</a>
+  <span class="spacer"></span>
+  <label class="motion" for="motion5">
+    <input type="checkbox" id="motion5" checked />
+    <span class="track" aria-hidden="true"></span>
+    Mouvement
+  </label>
+</div>
+
+<main id="contenu">
+  <section class="sea" aria-labelledby="titre">
+    <div class="sky" aria-hidden="true"></div>
+    <div class="aura aura--1" aria-hidden="true"></div>
+    <div class="aura aura--2" aria-hidden="true"></div>
+    <div class="aura aura--3" aria-hidden="true"></div>
+    <p class="tideword" aria-hidden="true">marée</p>
+
+    <div class="inner">
+      <div class="top">
+        <p class="mono eyebrow">Ingénierie logicielle indépendante</p>
+        <p class="mono">E / 08 · matière fluide</p>
+      </div>
+
+      <h1 class="h1" id="titre">
+        <span class="w" style="--d:0"><span>Des systèmes</span></span>
+        <span class="w" style="--d:90"><span>qui tiennent,</span></span>
+        <span class="w" style="--d:190"><span>et qu’on peut <em>reprendre.</em></span></span>
+      </h1>
+
+      <p class="lead">Je conçois, je développe et j’accompagne la mise en production de votre système. Je livre un système documenté, testé sur le périmètre convenu, et je vous laisse les moyens de le reprendre.</p>
+
+      <fieldset class="marees">
+        <legend class="mono">Marée</legend>
+        <input type="radio" name="maree" id="mb" checked />
+        <label for="mb">Basse</label>
+        <input type="radio" name="maree" id="mh" />
+        <label for="mh">Haute</label>
+        <input type="radio" name="maree" id="mo" />
+        <label for="mo">Houle</label>
+      </fieldset>
+
+      <div class="foot">
+        <div class="foot-meta">
+          <p class="mono">Neuf ans de production</p>
+          <p class="mono">Web · API · plateformes</p>
+          <p class="mono">Aucun cookie</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn--solid" href="/contact/">Demander une revue technique <span class="arw" aria-hidden="true">→</span></a>
+          <a class="btn" href="/offres/">Voir les offres</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sweep" aria-hidden="true"></div>
+  </section>
+
+  <section class="runway" aria-hidden="true"></section>
+</main>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <filter id="goo" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="blur" />
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" result="goo" />
+      <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+    </filter>
+    <filter id="warp" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" result="noise">
+        <animate attributeName="baseFrequency" dur="20s" values="0.008 0.014;0.016 0.026;0.008 0.014" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="28" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
+
+<div class="trail" id="trail" aria-hidden="true">
+  <span class="drop"></span><span class="drop"></span><span class="drop"></span>
+  <span class="drop"></span><span class="drop"></span><span class="drop"></span>
+</div>
+
+<script>
+/* Suivi du pointeur, facultatif : sans lui la page est identique.
+   Six gouttes, six vitesses de rattrapage, un seul filtre goo. */
+(() => {
+  const trail = document.getElementById('trail');
+  if (!trail || matchMedia('(hover:none)').matches || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  if (matchMedia('(max-width:760px)').matches) return;
+  const drops = [...trail.children];
+  let tx = innerWidth / 2, ty = innerHeight / 2;
+  const pos = drops.map(() => ({ x: tx, y: ty }));
+  addEventListener('pointermove', e => {
+    tx = e.clientX; ty = e.clientY;
+    trail.classList.add('is-live');
+  }, { passive: true });
+  (function frame() {
+    pos.forEach((p, i) => {
+      const k = 0.34 - i * 0.045;
+      p.x += (tx - p.x) * k;
+      p.y += (ty - p.y) * k;
+      drops[i].style.translate = (p.x - 150) + 'px ' + (p.y - 150) + 'px';
+    });
+    requestAnimationFrame(frame);
+  })();
+})();
+</script>
+</body>
+</html>

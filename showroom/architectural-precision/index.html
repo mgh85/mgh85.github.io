@@ -1,0 +1,835 @@
+<!DOCTYPE html><html lang="fr" data-direction="architectural"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Architectural Precision — Showroom</title><meta name="description" content="Architectural Precision — La précision se voit. Cinq directions artistiques pour le site du studio, un contenu identique. Travail en cours, identité non validée."><meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#F4F1EA"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('sr-motion');
+          if (
+            stored === 'off' ||
+            (!stored && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+          ) {
+            document.documentElement.dataset.motion = 'off';
+          }
+        } catch (error) {
+          /* stockage indisponible : le CSS prefers-reduced-motion prend le relais */
+        }
+        document.documentElement.classList.add('js');
+        if (window.location.search.indexOf('compare=1') !== -1) {
+          document.documentElement.dataset.compare = 'true';
+        }
+      })();
+    </script><link rel="preload" href="/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin><style>html[data-direction='architectural'] {
+  --bg: #f4f1ea;
+  --ink: #16181a;
+  --muted: #5c574e;
+  --accent: #7f5e3a;
+  --accent-2: #d8d2c6;
+  --line: rgba(22, 24, 26, 0.16);
+  --panel: #ece7dc;
+  --f-display: 'Inter Tight', system-ui, sans-serif;
+  --f-text: 'Inter Tight', system-ui, sans-serif;
+  --f-sub: 'Instrument Serif', Georgia, serif;
+  --wrap: 1280px;
+  --gutter: clamp(1.5rem, 6vw, 7rem);
+}
+
+html[data-direction='architectural'] .c-head {
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-brand-name {
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+html[data-direction='architectural'] .c-brand-sub {
+  color: var(--accent);
+}
+
+html[data-direction='architectural'] .c-head-cta {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: transparent;
+}
+
+html[data-direction='architectural'] .c-head-cta:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ---------- Hero ---------- */
+
+html[data-direction='architectural'] .c-hero--arch {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 88svh;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.ca-plan {
+  position: absolute;
+  top: 7vh;
+  right: -1vw;
+  z-index: 1;
+  width: min(46vw, 620px);
+  color: var(--ink);
+  opacity: 0.85;
+  transform: translate3d(0, calc(var(--sy, 0) * 0.025px), 0);
+}
+
+.ca-plan svg {
+  width: 100%;
+  height: auto;
+}
+
+.ca-draw path,
+.ca-draw rect,
+.ca-draw circle {
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+  animation: ca-draw 2.4s var(--ease) forwards;
+}
+
+.ca-draw path:nth-child(2) {
+  animation-delay: 0.25s;
+}
+
+.ca-accent {
+  opacity: 0;
+  animation: ca-fade 1s ease 1.4s forwards;
+}
+
+.ca-labels {
+  opacity: 0;
+  animation: ca-fade 1s ease 1.8s forwards;
+}
+
+.ca-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: end;
+  padding-top: clamp(3.5rem, 9vh, 7rem);
+  padding-bottom: clamp(2.5rem, 7vh, 5rem);
+}
+
+html[data-direction='architectural'] .c-hero-title {
+  font-weight: 300;
+  font-size: clamp(3.2rem, 7.4vw, 7.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+}
+
+.ca-line {
+  display: block;
+  overflow: hidden;
+}
+
+.ca-line > span {
+  display: block;
+  transform: translateY(105%);
+  animation: ca-line 1s var(--ease) forwards;
+  animation-delay: calc(0.1s + var(--i, 0) * 70ms);
+}
+
+.ca-line:nth-child(1) > span {
+  animation-delay: 0.1s;
+}
+
+.ca-line:nth-child(2) > span {
+  animation-delay: 0.18s;
+}
+
+.ca-line:nth-child(3) > span {
+  animation-delay: 0.26s;
+}
+
+.ca-line:nth-child(4) > span {
+  animation-delay: 0.34s;
+}
+
+.ca-line:nth-child(3) > span,
+.ca-line:nth-child(4) > span {
+  font-family: var(--f-sub);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+}
+
+.ca-main .c-kicker {
+  margin-bottom: clamp(1.4rem, 4vh, 2.4rem);
+}
+
+html[data-direction='architectural'] .c-hero-lede {
+  max-width: 46ch;
+  margin-top: clamp(1.4rem, 4vh, 2.2rem);
+  font-size: clamp(1rem, 1.16vw, 1.1rem);
+  line-height: 1.7;
+}
+
+.ca-main .c-actions {
+  margin-top: clamp(1.6rem, 4vh, 2.4rem);
+}
+
+html[data-direction='architectural'] .c-btn {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+html[data-direction='architectural'] .c-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+html[data-direction='architectural'] .c-btn--ghost {
+  background: transparent;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+html[data-direction='architectural'] .c-btn--ghost:hover {
+  background: transparent;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ca-side {
+  padding-left: clamp(1rem, 2.5vw, 2rem);
+  border-left: 1px solid var(--accent);
+}
+
+.ca-folio {
+  margin: 0 0 1.4rem;
+  font: 500 9px/1 var(--f-mono);
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.ca-side .c-hero-meta {
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1.8rem;
+}
+
+.ca-side .c-hero-meta li {
+  font-size: 8px;
+}
+
+.ca-caption {
+  margin: 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 400 9px/1.5 var(--f-mono);
+}
+
+.ca-base {
+  display: flex;
+  justify-content: space-between;
+  width: min(calc(100% - (var(--gutter) * 2)), var(--wrap));
+  margin: 0 auto;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 400 8px/1 var(--f-mono);
+  letter-spacing: 0.08em;
+}
+
+@keyframes ca-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ca-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ca-line {
+  to {
+    transform: none;
+  }
+}
+
+/* ---------- Repères ---------- */
+
+html[data-direction='architectural'] .c-proof {
+  background: var(--bg);
+}
+
+html[data-direction='architectural'] .c-proof-item {
+  padding: clamp(1.2rem, 2.6vw, 2.2rem) clamp(0.8rem, 1.8vw, 1.6rem);
+}
+
+html[data-direction='architectural'] .c-proof-num {
+  font-family: var(--f-display);
+  font-weight: 300;
+  color: var(--ink);
+}
+
+html[data-direction='architectural'] .c-proof-label {
+  color: var(--muted);
+  font: 400 10px/1.5 var(--f-mono);
+  letter-spacing: 0;
+}
+
+/* ---------- Sections ---------- */
+
+html[data-direction='architectural'] .c-section {
+  padding: clamp(5rem, 10vw, 10rem) 0;
+  border-top: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-wrap {
+  position: relative;
+}
+
+html[data-direction='architectural'] .c-rail {
+  position: absolute;
+  top: 0.5rem;
+  left: 0;
+  display: block;
+  font: 400 10px/1 var(--f-mono);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+html[data-direction='architectural'] .c-sec-head {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1.4rem clamp(2rem, 6vw, 6rem);
+  padding-left: clamp(1.8rem, 4vw, 4rem);
+  margin-bottom: clamp(3rem, 6vw, 5.5rem);
+}
+
+html[data-direction='architectural'] .c-sec-title {
+  font-weight: 300;
+  font-size: clamp(2.4rem, 4.6vw, 4.4rem);
+  letter-spacing: -0.05em;
+}
+
+html[data-direction='architectural'] .c-sec-title em {
+  font-family: var(--f-sub);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.06em;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+}
+
+html[data-direction='architectural'] .c-sec-lede {
+  max-width: 42ch;
+  padding-left: clamp(0.8rem, 1.6vw, 1.4rem);
+  border-left: 1px solid var(--accent);
+  font-size: 0.96rem;
+  line-height: 1.7;
+}
+
+html[data-direction='architectural'] .c-eyebrow {
+  color: var(--accent);
+}
+
+/* ---------- Portes ---------- */
+
+html[data-direction='architectural'] .c-doors {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-door {
+  border: 0;
+  border-right: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-door:last-child {
+  border-right: 0;
+}
+
+html[data-direction='architectural'] .c-door-link {
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  padding: 1.5rem clamp(1rem, 2vw, 1.8rem) 2rem 0;
+}
+
+html[data-direction='architectural'] .c-door-num {
+  margin-bottom: 2rem;
+  padding: 0;
+  font: 400 9px/1 var(--f-mono);
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+html[data-direction='architectural'] .c-door-title {
+  font-weight: 400;
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  letter-spacing: -0.04em;
+}
+
+html[data-direction='architectural'] .c-door-text {
+  max-width: 32ch;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+html[data-direction='architectural'] .c-door-list {
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: auto;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  font-size: 8px;
+}
+
+html[data-direction='architectural'] .c-door-go {
+  display: none;
+}
+
+html[data-direction='architectural'] .c-door-link:hover .c-door-title {
+  color: var(--accent);
+}
+
+/* ---------- Expertises ---------- */
+
+html[data-direction='architectural'] .c-exp-list {
+  border-top: 1px solid var(--ink);
+}
+
+html[data-direction='architectural'] .c-exp-item {
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-exp-num {
+  font: 400 9px/1.5 var(--f-mono);
+  letter-spacing: 0.08em;
+}
+
+html[data-direction='architectural'] .c-exp-item h3 {
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+html[data-direction='architectural'] .c-chips li {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+html[data-direction='architectural'] .c-chips li::after {
+  content: ' ·';
+  color: var(--accent);
+}
+
+html[data-direction='architectural'] .c-chips li:last-child::after {
+  content: '';
+}
+
+html[data-direction='architectural'] .c-stack {
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--ink);
+}
+
+/* ---------- Travaux ---------- */
+
+html[data-direction='architectural'] .c-work-grid {
+  gap: clamp(1.2rem, 2.5vw, 2.4rem);
+  border: 0;
+  background: transparent;
+}
+
+html[data-direction='architectural'] .c-work {
+  padding: 0 1.2rem 1.4rem 0;
+  border: 0;
+  border-top: 1px solid var(--ink);
+  background: transparent;
+}
+
+html[data-direction='architectural'] .c-work::before {
+  content: '';
+  display: block;
+  height: 110px;
+  margin: 1.2rem 0 1.4rem;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(var(--line), var(--line)) 0 33% / 100% 1px no-repeat,
+    linear-gradient(var(--line), var(--line)) 0 66% / 100% 1px no-repeat,
+    linear-gradient(var(--line), var(--line)) 32% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--line), var(--line)) 68% 0 / 1px 100% no-repeat;
+}
+
+html[data-direction='architectural'] .c-work:nth-child(2)::before {
+  background-position: 0 50%, 0 25%, 22% 0, 78% 0;
+}
+
+html[data-direction='architectural'] .c-work:nth-child(3)::before {
+  background-position: 0 25%, 0 75%, 45% 0, 55% 0;
+}
+
+html[data-direction='architectural'] .c-work-top {
+  margin-bottom: 1rem;
+}
+
+html[data-direction='architectural'] .c-work-title {
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+
+html[data-direction='architectural'] .c-work-text {
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+html[data-direction='architectural'] .c-work-link {
+  border-top: 1px solid var(--line);
+  font-size: 8px;
+}
+
+html[data-direction='architectural'] .c-format-list {
+  gap: 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+}
+
+html[data-direction='architectural'] .c-work--format {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 0 2rem;
+  padding: 1.2rem 0;
+  border-top: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-work--format::before {
+  display: none;
+}
+
+html[data-direction='architectural'] .c-work--format .c-work-top {
+  grid-column: 1 / -1;
+  margin-bottom: 0.6rem;
+}
+
+html[data-direction='architectural'] .c-work--format .c-work-title {
+  margin: 0;
+}
+
+html[data-direction='architectural'] .c-work--format .c-work-text {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  margin: 0;
+}
+
+html[data-direction='architectural'] .c-work--format .c-work-link {
+  grid-column: 1;
+  align-self: end;
+  justify-self: start;
+  margin-top: 0.8rem;
+  padding-top: 0;
+  border: 0;
+}
+
+/* ---------- Laboratoire ---------- */
+
+html[data-direction='architectural'] .c-lab-axes {
+  border-top: 1px solid var(--ink);
+}
+
+html[data-direction='architectural'] .c-lab-axis {
+  border-bottom: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-lab-rules {
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-lab-rules strong {
+  font-family: var(--f-display);
+  font-weight: 400;
+}
+
+html[data-direction='architectural'] .c-lab-experiments a span:first-child {
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Méthode ---------- */
+
+html[data-direction='architectural'] .c-steps {
+  counter-reset: step;
+  border-top: 1px solid var(--ink);
+}
+
+html[data-direction='architectural'] .c-step {
+  position: relative;
+  padding: 4.4rem 1.4rem 0 0;
+}
+
+html[data-direction='architectural'] .c-step::before {
+  counter-increment: step;
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  font-family: var(--f-sub);
+  font-style: italic;
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--accent);
+}
+
+html[data-direction='architectural'] .c-step-num {
+  position: absolute;
+  top: 1.2rem;
+  right: 1rem;
+  margin: 0;
+  font-size: 8px;
+}
+
+html[data-direction='architectural'] .c-step-title {
+  font-weight: 400;
+}
+
+html[data-direction='architectural'] .c-quote {
+  max-width: 48ch;
+  border-top: 1px solid var(--ink);
+  font-family: var(--f-sub);
+  font-style: italic;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  line-height: 1.3;
+}
+
+/* ---------- Offres ---------- */
+
+html[data-direction='architectural'] .c-offers {
+  gap: clamp(1.2rem, 2.5vw, 2.4rem);
+  border: 0;
+  background: transparent;
+}
+
+html[data-direction='architectural'] .c-offer {
+  padding: 0 1.2rem 1.4rem 0;
+  border-top: 1px solid var(--ink);
+  background: transparent;
+}
+
+html[data-direction='architectural'] .c-offer-name {
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+html[data-direction='architectural'] .c-offer-price {
+  font-family: var(--f-sub);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+html[data-direction='architectural'] .c-offer-target {
+  border-top-color: var(--line);
+  color: var(--muted);
+}
+
+/* ---------- Contact ---------- */
+
+html[data-direction='architectural'] .c-questions {
+  border-top: 1px solid var(--ink);
+}
+
+html[data-direction='architectural'] .c-questions li {
+  border-bottom: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-contact-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+html[data-direction='architectural'] .c-contact-card .c-btn {
+  background: transparent;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+html[data-direction='architectural'] .c-contact-card .c-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ---------- Footer ---------- */
+
+html[data-direction='architectural'] .c-foot {
+  border-top: 1px solid var(--ink);
+}
+
+html[data-direction='architectural'] .c-foot-name {
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+html[data-direction='architectural'] .sr-cursor {
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 0;
+  background: none;
+  mix-blend-mode: normal;
+}
+
+html[data-direction='architectural'] .sr-cursor::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: 50%;
+  width: 1px;
+  background: var(--ink);
+}
+
+html[data-direction='architectural'] .sr-cursor::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  right: -10px;
+  height: 1px;
+  background: var(--ink);
+}
+
+html[data-direction='architectural'] .sr-cursor.is-link {
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+}
+
+html[data-direction='architectural'] .sr-cursor__label {
+  display: block;
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  color: var(--accent);
+  font: 400 8px/1 var(--f-mono);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+@media (max-width: 1080px) {
+  .ca-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ca-side {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    align-items: baseline;
+    padding: 1.2rem 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .ca-folio,
+  .ca-side .c-hero-meta {
+    margin: 0;
+  }
+
+  html[data-direction='architectural'] .c-doors {
+    grid-template-columns: 1fr;
+  }
+
+  html[data-direction='architectural'] .c-door {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  html[data-direction='architectural'] .c-door-link {
+    min-height: 0;
+    padding-bottom: 1.6rem;
+  }
+
+  html[data-direction='architectural'] .c-door-list {
+    margin-top: 1.2rem;
+  }
+
+  .ca-plan {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(100%, 520px);
+    margin-left: auto;
+    margin-top: -2rem;
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 700px) {
+  html[data-direction='architectural'] .c-rail {
+    position: static;
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  html[data-direction='architectural'] .c-sec-head {
+    padding-left: 1.2rem;
+  }
+
+  html[data-direction='architectural'] .c-work-grid,
+  html[data-direction='architectural'] .c-offers {
+    grid-template-columns: 1fr;
+  }
+
+  html[data-direction='architectural'] .c-work--format {
+    grid-template-columns: 1fr;
+  }
+
+  html[data-direction='architectural'] .c-work--format .c-work-text {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .ca-plan {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ca-draw path,
+  .ca-draw rect,
+  .ca-draw circle,
+  .ca-line > span {
+    animation: none;
+    stroke-dashoffset: 0;
+    transform: none;
+  }
+
+  .ca-accent,
+  .ca-labels {
+    opacity: 1;
+    animation: none;
+  }
+}
+</style><link rel="stylesheet" href="/_astro/_direction_.BDoha_xS.css"></head> <body data-page="concept" data-slug="architectural-precision"> <a class="sr-skip" href="#contenu">Aller au contenu</a>  <header class="c-head" data-head> <a class="c-brand" href="/showroom/" aria-label="Studio d’ingénierie — retour au showroom"> <span class="c-brand-name">Studio d&#39;ingénierie</span> <span class="c-brand-sub">Showroom · identité non validée</span> </a> <nav class="c-nav" id="c-nav" aria-label="Sections de la page"> <a href="#portes">Portes</a><a href="#expertises">Expertises</a><a href="#travaux">Travaux</a><a href="#laboratoire">Laboratoire</a><a href="#methode">Méthode</a><a href="#offres">Offres</a><a href="#contact">Contact</a> </nav> <a class="c-head-cta" href="/contact/">Décrire un projet</a> <button class="c-menu" type="button" aria-expanded="false" aria-controls="c-nav" data-menu> <span class="c-menu-label">Menu</span> <span class="c-menu-icon" aria-hidden="true"><i></i><i></i></span> </button> </header> <main id="contenu">  <section class="c-hero c-hero--arch" id="hero" aria-labelledby="hero-title"> <div class="ca-plan" aria-hidden="true"> <svg viewBox="0 0 720 900" fill="none" xmlns="http://www.w3.org/2000/svg"> <g class="ca-draw" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"> <rect x="52" y="52" width="616" height="796"></rect> <path d="M52 260h250v210H52M302 52v208M302 260h366M302 470v378M52 680h250M302 610h366"></path> <rect x="96" y="96" width="162" height="120"></rect> <path d="M96 156h162M177 96v120"></path> <path d="M340 96h290v120H340zM340 300h290v210H340zM96 300h162v210H96z" opacity=".4"></path> <circle cx="610" cy="790" r="5"></circle> </g> <g class="ca-accent" stroke="var(--accent)" stroke-width="1.5"> <path d="M52 80h616M52 820h616"></path> <path d="M360 470v-60"></path> </g> <g class="ca-labels" fill="currentColor" font-family="var(--f-mono)" font-size="9" letter-spacing="1"> <text x="60" y="46">PLAN 01</text> <text x="60" y="884">ÉCHELLE 1:100</text> <text x="566" y="884">NORD ↑</text> </g> </svg> </div> <div class="c-wrap ca-grid"> <div class="ca-main"> <p class="c-kicker" data-copy>Ingénierie logicielle indépendante</p> <h1 class="c-hero-title" id="hero-title" aria-label="Des systèmes qui tiennent, et qu’on peut reprendre."> <span class="ca-line"> <span data-copy>Des systèmes</span> </span><span class="ca-line"> <span data-copy>qui tiennent,</span> </span><span class="ca-line"> <span data-copy>et qu’on peut</span> </span><span class="ca-line"> <span data-copy>reprendre.</span> </span> </h1> <p class="c-hero-lede" data-copy>Je conçois, je développe et j’accompagne la mise en production de votre système : plateforme ou site, application métier, backend et API. Je livre un système documenté, testé sur le périmètre convenu, et je vous laisse les moyens de le reprendre. Les technologies avancées et la R&amp;D s’activent sur un cas d’usage, jamais en vitrine.</p> <div class="c-actions"> <a class="c-btn" href="/contact/"> <span data-copy>Décrire un projet</span> <span aria-hidden="true">→</span> </a> <a class="c-btn c-btn--ghost" href="/offres/" data-copy>Voir les offres</a> </div> </div> <aside class="ca-side"> <p class="ca-folio" aria-hidden="true">02 — 05</p> <ul class="c-hero-meta"> <li data-copy>9 ans de production</li><li data-copy>1 interlocuteur</li><li data-copy>0 cookie</li> </ul> <p class="ca-caption" aria-hidden="true">Plan d’architecture — schéma de principe</p> </aside> </div> </section>    <section class="c-proof" aria-label="Repères"> <div class="c-wrap"> <div class="c-proof-grid"> <div class="c-proof-item" data-reveal style="--i:0"> <span class="c-proof-num">9</span> <span class="c-proof-label" data-copy>années de développement et de mise en production</span> </div><div class="c-proof-item" data-reveal style="--i:1"> <span class="c-proof-num">1</span> <span class="c-proof-label" data-copy>interlocuteur, du schéma d’architecture à la production</span> </div><div class="c-proof-item" data-reveal style="--i:2"> <span class="c-proof-num">4</span> <span class="c-proof-label" data-copy>étapes écrites, du cadrage à la passation</span> </div><div class="c-proof-item" data-reveal style="--i:3"> <span class="c-proof-num">0</span> <span class="c-proof-label" data-copy>cookie, mesure d’audience ou script tiers</span> </div><div class="c-proof-item" data-reveal style="--i:4"> <span class="c-proof-num">30</span> <span class="c-proof-label" data-copy>jours de correction des défauts bloquants après livraison</span> </div> </div> </div> </section> <section id="portes" class="c-section" data-section="portes"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">01</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">01</span> <span class="c-sec-label">Les trois portes</span> </p> <h2 class="c-sec-title" data-copy>Trois façons d’entrer, <em>selon l’état de votre système.</em></h2> <p class="c-sec-lede" data-copy>Un catalogue lisible, pas un inventaire de technologies. Les autres expertises existent et se vendent sur demande.</p> </header> <div class="c-sec-body">  <ol class="c-doors"> <li class="c-door" data-reveal style="--i:0"> <a class="c-door-link" href="/construire/"> <span class="c-door-num" aria-hidden="true">01</span> <span class="c-door-body"> <span class="c-door-title" data-copy>Construire</span> <span class="c-door-text" data-copy>Plateformes, sites et applications métier, backend, API et intégrations. Du schéma d’architecture à la mise en production.</span> <span class="c-door-list"> <span data-copy>Plateforme, site ou application métier</span><span data-copy>Module livré au forfait</span><span data-copy>API et intégration tierce</span> </span> </span> <span class="c-door-go" aria-hidden="true">→</span> </a> </li><li class="c-door" data-reveal style="--i:1"> <a class="c-door-link" href="/consolider/"> <span class="c-door-num" aria-hidden="true">02</span> <span class="c-door-body"> <span class="c-door-title" data-copy>Consolider</span> <span class="c-door-text" data-copy>Revue, diagnostic, reprise. Le livrable est un avis écrit, pas une refonte vendue d’avance.</span> <span class="c-door-list"> <span data-copy>Revue technique ciblée — 1 jour</span><span data-copy>Diagnostic technique — 2 jours</span><span data-copy>Reprise d’un projet bloqué — après diagnostic</span> </span> </span> <span class="c-door-go" aria-hidden="true">→</span> </a> </li><li class="c-door" data-reveal style="--i:2"> <a class="c-door-link" href="/augmenter/"> <span class="c-door-num" aria-hidden="true">03</span> <span class="c-door-body"> <span class="c-door-title" data-copy>Augmenter</span> <span class="c-door-text" data-copy>Automatisation et IA bornées : un cas d’usage, des garde-fous, une mesure, un critère d’arrêt.</span> <span class="c-door-list"> <span data-copy>Faisabilité d’un cas d’usage</span><span data-copy>Automatisation d’un processus</span><span data-copy>Système en production, sous conditions</span> </span> </span> <span class="c-door-go" aria-hidden="true">→</span> </a> </li> </ol>  </div> </div> </section> <section id="expertises" class="c-section" data-section="expertises"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">02</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">02</span> <span class="c-sec-label">Expertises</span> </p> <h2 class="c-sec-title" data-copy>Cinq familles, <em>une même exigence de preuve.</em></h2> <p class="c-sec-lede" data-copy>Ce que je sais construire, et ce que je ne promets pas. Les technologies avancées ne sont pas un catalogue : elles s’activent sur un cas d’usage.</p> </header> <div class="c-sec-body">  <div class="c-exp"> <ul class="c-exp-list"> <li class="c-exp-item" data-reveal style="--i:0"> <span class="c-exp-num" aria-hidden="true">01</span> <div> <h3 data-copy>Plateformes, sites et applications métier</h3> <p data-copy>Sites publics, plateformes, applications métier et modules. Du schéma d’architecture à la mise en production, passation comprise.</p> <ul class="c-chips"> <li data-copy>Site ou interface</li><li data-copy>Application métier</li><li data-copy>Plateforme ou module</li> </ul> </div> </li><li class="c-exp-item" data-reveal style="--i:1"> <span class="c-exp-num" aria-hidden="true">02</span> <div> <h3 data-copy>Backend, API, intégration</h3> <p data-copy>Un connecteur qui fonctionne, documenté et testé : ERP, CRM, paiement, SSO.</p> <ul class="c-chips"> <li data-copy>API</li><li data-copy>Intégration tierce</li><li data-copy>Découplage</li> </ul> </div> </li><li class="c-exp-item" data-reveal style="--i:2"> <span class="c-exp-num" aria-hidden="true">03</span> <div> <h3 data-copy>Architecture et conseil</h3> <p data-copy>Revue, diagnostic, trajectoire. Le livrable est un avis écrit, pas une refonte vendue d’avance.</p> <ul class="c-chips"> <li data-copy>Revue ciblée</li><li data-copy>Diagnostic</li><li data-copy>Architecture cible</li> </ul> </div> </li><li class="c-exp-item" data-reveal style="--i:3"> <span class="c-exp-num" aria-hidden="true">04</span> <div> <h3 data-copy>IA et automatisation</h3> <p data-copy>Un cas d’usage identifié, des garde-fous, une mesure de qualité et une possibilité d’arrêt.</p> <ul class="c-chips"> <li data-copy>Faisabilité</li><li data-copy>Automatisation bornée</li><li data-copy>Système en production</li> </ul> </div> </li><li class="c-exp-item" data-reveal style="--i:4"> <span class="c-exp-num" aria-hidden="true">05</span> <div> <h3 data-copy>Technologies avancées et R&amp;D</h3> <p data-copy>Web3, IoT et robotique, VR/AR. Veille et prototypes internes ; missions bornées sur demande, jamais en vitrine.</p> <ul class="c-chips"> <li data-copy>Web3</li><li data-copy>IoT / robotique</li><li data-copy>VR / AR</li><li data-copy>R&amp;D interne</li> </ul> </div> </li> </ul> <aside class="c-stack"> <p class="c-eyebrow" data-copy>Technologies</p> <ul class="c-chips c-chips--stack"> <li data-copy>Web</li><li data-copy>API</li><li data-copy>Plateformes</li><li data-copy>Cloud — conteneurs, CI/CD, observabilité</li><li data-copy>Systèmes distribués</li><li data-copy>IA</li><li data-copy>Web3</li><li data-copy>IoT / robotique</li><li data-copy>VR / AR</li> </ul> <p class="c-note" data-copy>Expertises, pas certifications. Aucun partenariat ni label n’est affiché.</p> </aside> </div>  </div> </div> </section> <section id="travaux" class="c-section" data-section="travaux"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">03</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">03</span> <span class="c-sec-label">Travaux et démonstrateurs</span> </p> <h2 class="c-sec-title" data-copy>Des pièces réelles, <em>aucune référence inventée.</em></h2> <p class="c-sec-lede" data-copy>Trois travaux internes et trois formats de mission. Aucun logo client, aucun chiffre de résultat : ce qui n’existe pas n’est pas montré.</p> </header> <div class="c-sec-body">  <ul class="c-work-grid"> <li class="c-work" data-reveal style="--i:0"> <div class="c-work-top"> <span class="c-tag" data-copy>Interne — démonstrateur</span> <span class="c-work-meta" data-copy>33 pages · CSS, SVG, canvas</span> </div> <h3 class="c-work-title" data-copy>DA Lab, 33 directions</h3> <p class="c-work-text" data-copy>Trente-trois prototypes de hero, un même contenu, aucune dépendance. Une archive de recherche visuelle et technique.</p> <a class="c-work-link" href="/da-hero.html"> <span data-copy>Ouvrir le DA Lab</span> <span aria-hidden="true">→</span> </a> </li><li class="c-work" data-reveal style="--i:1"> <div class="c-work-top"> <span class="c-tag" data-copy>Interne — outil</span> <span class="c-work-meta" data-copy>Sélection · comparaison</span> </div> <h3 class="c-work-title" data-copy>Galerie de sélection</h3> <p class="c-work-text" data-copy>Recherche, favoris, comparaison et montage à la demande : deux documents vivants au lieu de trente-trois captures.</p> <a class="c-work-link" href="/da-hero.html"> <span data-copy>Voir la galerie</span> <span aria-hidden="true">→</span> </a> </li><li class="c-work" data-reveal style="--i:2"> <div class="c-work-top"> <span class="c-tag" data-copy>Interne — showroom</span> <span class="c-work-meta" data-copy>5 directions · 1 modèle</span> </div> <h3 class="c-work-title" data-copy>Cinq identités, un contenu</h3> <p class="c-work-text" data-copy>Cinq mini-sites navigables sur une seule base de contenu et de composants. Le prototype que vous parcourez.</p> <a class="c-work-link" href="/showroom/"> <span data-copy>Parcourir</span> <span aria-hidden="true">→</span> </a> </li> </ul> <div class="c-formats"> <p class="c-eyebrow" data-copy>Formats de mission</p> <ul class="c-format-list"> <li class="c-work c-work--format" data-reveal style="--i:0"> <div class="c-work-top"> <span class="c-tag" data-copy>Format de mission — non client</span> <span class="c-work-meta" data-copy>1 jour · 900 €</span> </div> <h3 class="c-work-title" data-copy>Revue technique ciblée</h3> <p class="c-work-text" data-copy>Un jour, trois pages : constat, trois risques, trois décisions. Restitution de 45 minutes.</p> <a class="c-work-link" href="/offres/"> <span data-copy>Voir l’offre</span> <span aria-hidden="true">→</span> </a> </li><li class="c-work c-work--format" data-reveal style="--i:1"> <div class="c-work-top"> <span class="c-tag" data-copy>Format de mission — non client</span> <span class="c-work-meta" data-copy>2 jours · 1 900 €</span> </div> <h3 class="c-work-title" data-copy>Diagnostic technique</h3> <p class="c-work-text" data-copy>Deux jours, six à dix pages : état des lieux, risques, décisions, chiffrage des suites.</p> <a class="c-work-link" href="/offres/"> <span data-copy>Voir l’offre</span> <span aria-hidden="true">→</span> </a> </li><li class="c-work c-work--format" data-reveal style="--i:2"> <div class="c-work-top"> <span class="c-tag" data-copy>Format de mission — non client</span> <span class="c-work-meta" data-copy>Après diagnostic · sur devis</span> </div> <h3 class="c-work-title" data-copy>Reprise d’un projet bloqué</h3> <p class="c-work-text" data-copy>Après un diagnostic : trois risques, trois décisions, un ordre de marche. Aucun forfait de reprise n’est annoncé avant d’avoir lu le code.</p> <a class="c-work-link" href="/consolider/"> <span data-copy>Voir la porte Consolider</span> <span aria-hidden="true">→</span> </a> </li> </ul> <p class="c-note c-note--price" data-copy>Prix indicatifs, hypothèses de travail de novembre 2026. Aucun prix affiché n’est un engagement : le devis signé fait foi.</p> </div> <p class="c-note" data-copy>Aucune référence client n’est disponible à ce stade. Les travaux internes sont montrés pour ce qu’ils sont : des démonstrateurs.</p>  </div> </div> </section> <section id="laboratoire" class="c-section" data-section="laboratoire"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">04</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">04</span> <span class="c-sec-label">Laboratoire</span> </p> <h2 class="c-sec-title" data-copy>Explorer <em>sans promettre un produit.</em></h2> <p class="c-sec-lede" data-copy>Un temps borné, une note de clôture, des limites écrites. Le laboratoire nourrit la pratique ; il ne vend pas un prototype qui ne passerait jamais en production.</p> </header> <div class="c-sec-body">  <div class="c-lab"> <ul class="c-lab-axes"> <li class="c-lab-axis" data-reveal style="--i:0"> <span class="c-lab-axis-num" aria-hidden="true">01</span> <div class="c-lab-axis-body"> <div class="c-lab-axis-head"> <h3 data-copy>Web3 et systèmes décentralisés</h3> <span class="c-status" data-copy>veille</span> </div> <p data-copy>Veille et cadrage technique : modèles de confiance, signature, stockage.</p> </div> </li><li class="c-lab-axis" data-reveal style="--i:1"> <span class="c-lab-axis-num" aria-hidden="true">02</span> <div class="c-lab-axis-body"> <div class="c-lab-axis-head"> <h3 data-copy>IoT, robotique, domotique</h3> <span class="c-status" data-copy>sur demande</span> </div> <p data-copy>Protocoles, capteurs, contraintes matérielles. Sur demande, avec un matériel identifié.</p> </div> </li><li class="c-lab-axis" data-reveal style="--i:2"> <span class="c-lab-axis-num" aria-hidden="true">03</span> <div class="c-lab-axis-body"> <div class="c-lab-axis-head"> <h3 data-copy>VR / AR</h3> <span class="c-status" data-copy>veille</span> </div> <p data-copy>Interfaces immersives et contraintes de performance. Aucun démonstrateur public à ce jour.</p> </div> </li><li class="c-lab-axis" data-reveal style="--i:3"> <span class="c-lab-axis-num" aria-hidden="true">04</span> <div class="c-lab-axis-body"> <div class="c-lab-axis-head"> <h3 data-copy>IA appliquée</h3> <span class="c-status" data-copy>exploration</span> </div> <p data-copy>LLM, automatisation, évaluation : un cas d’usage, des garde-fous, une mesure.</p> </div> </li> </ul> <aside class="c-lab-rules"> <p class="c-eyebrow" data-copy>Règles</p> <ol> <li> <strong data-copy>Temps borné</strong> <span data-copy>Une exploration a une date de fin écrite avant de commencer.</span> </li><li> <strong data-copy>Note de clôture</strong> <span data-copy>Ce qui a marché, ce qui n’a pas marché, ce qui reste ouvert.</span> </li><li> <strong data-copy>Limites écrites</strong> <span data-copy>Aucune promesse de production. Le passage en projet est une décision séparée.</span> </li> </ol> </aside> </div> <div class="c-lab-now"> <div> <p class="c-eyebrow" data-copy>Expériences en cours</p> <ul class="c-lab-experiments"> <li> <a href="/da-hero.html"> <span data-copy>DA Lab</span> <span class="c-status" data-copy>interne · archive</span> </a> <p data-copy>33 directions artistiques, un contenu, aucune dépendance.</p> </li><li> <a href="/da-hero.html"> <span data-copy>Galerie de sélection</span> <span class="c-status" data-copy>interne · outil</span> </a> <p data-copy>Recherche, favoris, comparaison, montage à la demande.</p> </li><li> <a href="/showroom/"> <span data-copy>Ce showroom</span> <span class="c-status" data-copy>interne · en cours</span> </a> <p data-copy>Cinq identités sur un modèle de contenu unique.</p> </li> </ul> </div> <div class="c-lab-side"> <p class="c-note" data-copy>Aucune publication de recherche ni aucun partenariat à ce jour.</p> <a class="c-btn c-btn--ghost" href="/da-hero.html">
+Ouvrir le DA Lab <span aria-hidden="true">→</span> </a> </div> </div>  </div> </div> </section> <section id="methode" class="c-section" data-section="methode"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">05</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">05</span> <span class="c-sec-label">La méthode</span> </p> <h2 class="c-sec-title" data-copy>Quatre étapes, <em>aucune zone d’ombre</em> sur le périmètre.</h2> <p class="c-sec-lede" data-copy>La cause la plus fréquente de conflit sur un projet technique n’est pas la technique : c’est un périmètre flou. Il se règle avant la première ligne de code.</p> </header> <div class="c-sec-body">  <ol class="c-steps"> <li class="c-step" data-reveal style="--i:0"> <span class="c-step-num" aria-hidden="true">
+Étape 01 </span> <h3 class="c-step-title" data-copy>Qualification</h3> <p class="c-step-text" data-copy>Vingt minutes, six questions. Le problème, son coût, le décideur, le budget, l’échéance, ce qui a déjà été tenté.</p> </li><li class="c-step" data-reveal style="--i:1"> <span class="c-step-num" aria-hidden="true">
+Étape 02 </span> <h3 class="c-step-title" data-copy>Périmètre écrit</h3> <p class="c-step-text" data-copy>Ce qui est inclus, ce qui ne l’est pas, deux à quatre critères de succès mesurables, le tarif de tout ajout.</p> </li><li class="c-step" data-reveal style="--i:2"> <span class="c-step-num" aria-hidden="true">
+Étape 03 </span> <h3 class="c-step-title" data-copy>Jalons vérifiables</h3> <p class="c-step-text" data-copy>Chaque étape se démontre. Un ajout passe par un avenant, jamais par un glissement silencieux.</p> </li><li class="c-step" data-reveal style="--i:3"> <span class="c-step-num" aria-hidden="true">
+Étape 04 </span> <h3 class="c-step-title" data-copy>Passation</h3> <p class="c-step-text" data-copy>Code, documentation, accès et deux heures de transfert. Le système doit pouvoir vivre sans moi.</p> </li> </ol> <p class="c-quote" data-copy>Chaque étape a un artefact. Une étape sans artefact n’est pas franchie.</p> <div class="c-refus"> <p class="c-eyebrow" data-copy>Ce que je ne promets pas</p> <ul class="c-refus-list"> <li data-copy>Pas de vente de jours en régie longue.</li><li data-copy>Pas de prototype qui ne passe jamais en production.</li><li data-copy>Pas de « transformation IA » sans cas d’usage identifié.</li><li data-copy>Pas de livraison sans documentation ni passation.</li><li data-copy>Pas de disponibilité 24/7 ni de maintenance illimitée promises pour obtenir un contrat.</li> </ul> </div>  </div> </div> </section> <section id="offres" class="c-section" data-section="offres"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">06</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">06</span> <span class="c-sec-label">Les offres prioritaires</span> </p> <h2 class="c-sec-title" data-copy>Ce qui se vend <em>avant d’avoir une référence.</em></h2> <p class="c-sec-lede" data-copy>Périmètre borné, livrable écrit, prix connu à l’avance. Ces trois formats servent aussi de porte d’entrée aux missions plus longues.</p> </header> <div class="c-sec-body">  <div class="c-offers"> <article class="c-offer" data-reveal style="--i:0"> <p class="c-offer-num" data-copy>Offre 01</p> <p class="c-offer-door" data-copy>Porte 02 — Consolider</p> <h3 class="c-offer-name" data-copy>Revue technique ciblée</h3> <p class="c-offer-price" data-copy>900 €</p> <p class="c-offer-duration" data-copy>1 jour</p> <p class="c-offer-deliverable" data-copy>3 pages : constat, 3 risques, 3 décisions ; restitution de 45 minutes.</p> <p class="c-offer-limits" data-copy>Pas d’audit complet, ni de sécurité offensive, ni d’avis judiciaire dans ce format.</p> <p class="c-offer-target" data-copy>Un problème circonscrit, une décision à prendre</p> <a class="c-offer-link" href="/contact/"> <span data-copy>Demander une revue</span> <span aria-hidden="true">→</span> </a> </article><article class="c-offer" data-reveal style="--i:1"> <p class="c-offer-num" data-copy>Offre 02</p> <p class="c-offer-door" data-copy>Porte 02 — Consolider</p> <h3 class="c-offer-name" data-copy>Diagnostic technique</h3> <p class="c-offer-price" data-copy>1 900 €</p> <p class="c-offer-duration" data-copy>2 jours</p> <p class="c-offer-deliverable" data-copy>6 à 10 pages : état des lieux, 3 risques, 3 décisions, chiffrage des suites ; restitution de 90 minutes.</p> <p class="c-offer-limits" data-copy>Aucune refonte n’est décidée avant d’avoir lu le code.</p> <p class="c-offer-target" data-copy>Un problème plus large, ou un budget à construire</p> <a class="c-offer-link" href="/contact/"> <span data-copy>Demander un diagnostic</span> <span aria-hidden="true">→</span> </a> </article><article class="c-offer" data-reveal style="--i:2"> <p class="c-offer-num" data-copy>Offre 03</p> <p class="c-offer-door" data-copy>Capacité — hors des trois portes</p> <h3 class="c-offer-name" data-copy>Renfort encadré</h3> <p class="c-offer-price" data-copy>520–600 €/j</p> <p class="c-offer-duration" data-copy>3 à 10 jours par mois</p> <p class="c-offer-deliverable" data-copy>Objectif écrit, compte rendu hebdomadaire, documentation de ce qui est livré.</p> <p class="c-offer-limits" data-copy>Pas une régie : 3 jours minimum, 10 jours par mois et par client, sortie proposée après trois mois consécutifs.</p> <p class="c-offer-target" data-copy>Agence ou studio qui sous-traite une partie technique</p> <a class="c-offer-link" href="/contact/"> <span data-copy>Demander un renfort</span> <span aria-hidden="true">→</span> </a> </article> </div> <p class="c-note c-note--price" data-copy>Prix indicatifs, hypothèses de travail de novembre 2026. Aucun prix affiché n’est un engagement : le devis signé fait foi.</p><p class="c-note"> <span data-copy>Construire et Augmenter ne passent pas par une offre affichée : plateforme, site, module ou API d’un côté ; faisabilité et automatisation de l’autre se chiffrent après qualification.</span>  <a class="c-inline-link" href="/offres/" data-copy>Voir le catalogue complet</a> </p>  </div> </div> </section> <section id="contact" class="c-section" data-section="contact"> <div class="c-wrap"> <span class="c-rail" aria-hidden="true">07</span> <header class="c-sec-head"> <p class="c-eyebrow" data-copy> <span class="c-sec-num">07</span> <span class="c-sec-label">Le contact</span> </p> <h2 class="c-sec-title" data-copy>Un message utile tient <em>en six réponses.</em></h2> <p class="c-sec-lede" data-copy>Pas de formulaire, pas de séquence automatique, pas de documentation à télécharger. Un message, et un appel de vingt minutes si le sujet le mérite.</p> </header> <div class="c-sec-body">  <div class="c-contact"> <ol class="c-questions"> <li data-reveal style="--i:0"> <span class="c-q-num" aria-hidden="true">01</span> <p data-copy>Quel est le problème, en une phrase, et depuis quand ?</p> </li><li data-reveal style="--i:1"> <span class="c-q-num" aria-hidden="true">02</span> <p data-copy>Qu’est-ce que cela coûte aujourd’hui — heures, incidents, ventes perdues ?</p> </li><li data-reveal style="--i:2"> <span class="c-q-num" aria-hidden="true">03</span> <p data-copy>Qui décide, et qui signe ?</p> </li><li data-reveal style="--i:3"> <span class="c-q-num" aria-hidden="true">04</span> <p data-copy>Quel budget est déjà prévu, même approximativement ?</p> </li><li data-reveal style="--i:4"> <span class="c-q-num" aria-hidden="true">05</span> <p data-copy>Quelle est la date butoir réelle ?</p> </li><li data-reveal style="--i:5"> <span class="c-q-num" aria-hidden="true">06</span> <p data-copy>Qu’avez-vous déjà essayé, et pourquoi cela n’a pas marché ?</p> </li> </ol> <aside class="c-contact-card" data-reveal> <p class="c-eyebrow" data-copy>Écrire</p> <p class="c-contact-text" data-copy>Un message, six réponses, un appel de vingt minutes si le sujet le mérite.</p> <a class="c-btn" href="/contact/"> <span data-copy>Ouvrir la page contact</span> <span aria-hidden="true">→</span> </a> <p class="c-note" data-copy>Aucun devis n’est envoyé sans cet échange.</p> </aside> </div>  </div> </div> </section> </main> <footer class="c-foot"> <div class="c-wrap c-foot-grid"> <div class="c-foot-identity"> <p class="c-foot-name">Studio d&#39;ingénierie</p> <p class="c-foot-formulation">Ingénieur indépendant — un seul interlocuteur, du schéma d&#39;architecture à la mise en production.</p> <p class="c-foot-note">Direction artistique — proposition non validée. Aucun nom de marque n’est arrêté.</p> </div> <nav class="c-foot-nav" aria-label="Liens du studio"> <a href="/showroom/">Les cinq directions</a> <a href="/contact/">Écrire</a> <a href="/mentions-legales/">Mentions légales</a> </nav> <div class="c-foot-bottom"> <p class="c-foot-small">Aucun cookie, aucune mesure d’audience, aucun script tiers.</p> <a class="c-top" href="#hero">Haut de page <span aria-hidden="true">↑</span></a> </div> </div> </footer>  <aside class="sr-bar" aria-label="Navigation du showroom"> <a class="sr-bar-home" href="/showroom/">Showroom</a>  <span class="sr-bar-name"> <span class="sr-bar-num">02</span> <span class="sr-bar-title">ARCHITECTURAL PRECISION</span> </span> <span class="sr-bar-sep" aria-hidden="true"></span> <a class="sr-bar-arrow" href="/showroom/bold-creative/" aria-label="Direction précédente : Bold Creative">
+←
+</a><a class="sr-bar-arrow" href="/showroom/digital-frontier/" aria-label="Direction suivante : Digital Frontier">
+→
+</a><nav class="sr-bar-dirs" aria-label="Choisir une direction"> <a href="/showroom/bold-creative/" aria-label="01 — Bold Creative" title="01 — Bold Creative"> 01 </a><a href="/showroom/architectural-precision/" aria-current="page" aria-label="02 — Architectural Precision" title="02 — Architectural Precision"> 02 </a><a href="/showroom/digital-frontier/" aria-label="03 — Digital Frontier" title="03 — Digital Frontier"> 03 </a><a href="/showroom/editorial-culture/" aria-label="04 — Editorial Culture" title="04 — Editorial Culture"> 04 </a><a href="/showroom/future-systems/" aria-label="05 — Future Systems" title="05 — Future Systems"> 05 </a> </nav> <a class="sr-bar-link" href="/showroom/" title="Grille (G)">Grille</a> <a class="sr-bar-link" href="/showroom/?pick=architectural-precision#comparer" title="Comparer (C)">Comparer</a>  <span class="sr-bar-spacer"></span> <button type="button" class="sr-bar-motion" data-motion-toggle aria-pressed="true" title="Mouvement (M)">
+Mouvement
+</button> <a class="sr-bar-link" href="/" title="Retour au site">Site</a> </aside> <div class="sr-cursor" aria-hidden="true"> <span class="sr-cursor__label"></span> </div> <script type="application/json" id="sr-data">{"directions":[{"slug":"bold-creative","id":"bold","num":"01","name":"BOLD CREATIVE","title":"Bold Creative","thesis":"Le système est un geste.","signature":"Affiche vivante, typographie cinétique, couleur qui claque.","engine":"DOM + CSS","risk":"La lisibilité peut payer le spectacle.","palette":["#0B0B0B","#E8FF3A","#2C46FF","#FF4D2E","#F6F1E6"]},{"slug":"architectural-precision","id":"architectural","num":"02","name":"ARCHITECTURAL PRECISION","title":"Architectural Precision","thesis":"La précision se voit.","signature":"Un plan, des mesures, du silence. Le luxe de ce qui est juste.","engine":"SVG + CSS","risk":"Trop de silence peut sembler distant.","palette":["#F4F1EA","#16181A","#8A6A45","#D8D2C6"]},{"slug":"digital-frontier","id":"frontier","num":"03","name":"DIGITAL FRONTIER","title":"Digital Frontier","thesis":"Le code comme paysage.","signature":"Un champ de données qui répond au geste et à la profondeur.","engine":"Canvas 2D","risk":"Le canvas coûte du CPU : il doit savoir s’arrêter.","palette":["#05070C","#6C5CE7","#34E7E4","#FF2E88","#C9D1D9"]},{"slug":"editorial-culture","id":"editorial","num":"04","name":"EDITORIAL CULTURE","title":"Editorial Culture","thesis":"Une revue, pas un site.","signature":"Des chapitres, des marges, une voix. La technique se raconte.","engine":"Typographie + CSS","risk":"La densité peut ralentir la lecture mobile.","palette":["#F1EBDD","#14110D","#C8452B","#C9A227"]},{"slug":"future-systems","id":"future","num":"05","name":"FUTURE SYSTEMS","title":"Future Systems","thesis":"Le système en salle de contrôle.","signature":"Une infrastructure qui se regarde comme un film.","engine":"SVG + CSS","risk":"Le décor peut écraser le message.","palette":["#0A0C10","#FFB020","#D7E3EA","#6EF2B0"]}],"current":"architectural-precision","direction":"architectural"}</script> <script type="module" src="/_astro/ShowroomLayout.astro_astro_type_script_index_0_lang.Brp1UyHu.js"></script> </body> </html>

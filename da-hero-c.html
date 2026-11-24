@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Direction C — La pile</title>
+<meta name="color-scheme" content="light" />
+<link rel="preload" href="/fonts/barlow-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin />
+<style>
+/* ============================================================
+   DIRECTION C — « LA PILE »
+   Le système est une pile de couches physiques. Le scroll fait
+   avancer la caméra dans la pile (dolly), pas glisser des
+   décalages : les plans se recouvrent vraiment.
+   Aplats uniquement, aucun filtre, cinq plans au maximum.
+   ============================================================ */
+
+@font-face{font-family:'Barlow Condensed';font-style:normal;font-weight:700;font-display:swap;src:url('/fonts/barlow-condensed-700-latin.woff2') format('woff2')}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url('/fonts/instrument-serif-italic-latin.woff2') format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+
+:root{
+  --cream:#f3ede3;
+  --cream-2:#e6ddcd;
+  --night:#17233f;
+  --verm:#e2542c;
+  --acid:#e8d44d;
+  --ink:#12100e;
+  --f-cond:'Barlow Condensed','Helvetica Neue',Arial,sans-serif;
+  --f-serif:'Instrument Serif',Georgia,serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --f-sans:'Inter Tight','Helvetica Neue',Arial,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,p{margin:0}
+
+.mono{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;line-height:1.4}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--verm);outline-offset:3px;border-radius:2px}
+.skip{position:fixed;left:14px;top:-70px;z-index:999;background:var(--ink);color:var(--cream);padding:.75em 1.1em;font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:top .18s ease}
+.skip:focus{top:40px}
+
+/* ---------- barre de prototype ---------- */
+.proto{
+  position:fixed;inset:0 0 auto 0;z-index:100;height:30px;
+  display:flex;align-items:center;gap:1.1rem;padding:0 clamp(14px,3vw,28px);
+  background:rgba(243,237,227,.94);border-bottom:1px solid rgba(18,16,14,.14);
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#5a5449;
+}
+.proto .tag{color:var(--verm)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(18,16,14,.25);padding-bottom:1px}
+.proto a:hover{border-bottom-color:var(--verm);color:var(--verm)}
+.proto .spacer{margin-left:auto}
+.motion{display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;user-select:none}
+.motion input{position:absolute;opacity:0;width:1px;height:1px}
+.motion .track{width:26px;height:12px;border:1px solid rgba(18,16,14,.4);border-radius:20px;position:relative;transition:background .2s}
+.motion .track::after{content:"";position:absolute;top:1px;left:1px;width:8px;height:8px;border-radius:50%;background:var(--ink);transition:translate .2s}
+.motion input:checked + .track{background:rgba(226,84,44,.18);border-color:var(--verm)}
+.motion input:checked + .track::after{translate:14px 0;background:var(--verm)}
+.motion input:focus-visible + .track{outline:2px solid var(--verm);outline-offset:3px}
+
+/* ============================================================
+   LA SCÈNE
+   ============================================================ */
+.pile{
+  position:relative;min-height:100svh;overflow:clip;
+  perspective:1200px;perspective-origin:50% 45%;
+  padding-top:30px;
+}
+.world{position:absolute;inset:30px 0 0 0;transform-style:preserve-3d}
+
+.plate{position:absolute}
+
+/* --- plan 01 : la table --- */
+.l1{
+  inset:-26% -24%;transform:translate3d(0,0,-460px);
+  background:
+    radial-gradient(120% 90% at 20% 0%,#faf6ef,transparent 60%),
+    linear-gradient(160deg,#f6f0e5,#ece4d6);
+  background-image:
+    radial-gradient(circle at 1px 1px,rgba(18,16,14,.16) 1px,transparent 0),
+    linear-gradient(160deg,#f7f1e7,#ebe2d3);
+  background-size:26px 26px,100% 100%;
+}
+.l1 .cote{position:absolute;left:clamp(18px,4vw,56px);bottom:9%;color:#7a7263}
+
+/* --- plan 02 : le bloc de logique --- */
+.l2{
+  left:46%;right:5%;top:7%;bottom:14%;transform:translate3d(0,0,-200px);
+  background:var(--night);
+  box-shadow:0 60px 80px -60px rgba(18,16,14,.9);
+}
+.l2 .cote{position:absolute;left:0;top:-1.9em;color:var(--night);white-space:nowrap}
+.l2 .chip{position:absolute;right:clamp(10px,1.4vw,18px);top:clamp(10px,1.4vw,18px);width:14px;height:14px;background:var(--acid)}
+.l2 .vertical{position:absolute;right:clamp(10px,1.4vw,18px);bottom:clamp(10px,1.4vw,18px);writing-mode:vertical-rl;color:rgba(243,237,227,.55)}
+
+/* --- plan 03 : le titre --- */
+.l3{left:clamp(18px,4.4vw,64px);top:17%;width:min(58%,820px);transform:translate3d(0,0,-30px);background:var(--cream);padding:clamp(14px,1.8vw,24px) clamp(16px,2.2vw,30px) clamp(10px,1.3vw,16px);box-shadow:0 34px 46px -38px rgba(18,16,14,.55)}
+.l3 .cote{position:absolute;left:0;top:-1.85em;color:#6f6758;white-space:nowrap}
+.h1{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;font-size:clamp(2.5rem,8.6vw,7.4rem);line-height:.82;letter-spacing:-.006em;color:var(--ink)}
+.ln{display:block;overflow:clip;padding-bottom:.04em;margin-bottom:-.04em}
+.ln > span{display:block}
+.ln--serif{font-family:var(--f-serif);font-style:italic;text-transform:none;font-size:.36em;line-height:1.06;letter-spacing:-.005em;margin-top:.14em;padding-bottom:.1em;overflow:visible}
+.ln--serif em{font-style:italic;color:var(--verm)}
+
+/* --- plan 04 : la bande --- */
+.l4{
+  left:18%;right:30%;top:60%;transform:translate3d(0,0,110px);
+  background:var(--verm);color:var(--ink);
+  padding:clamp(16px,2.2vw,30px) clamp(18px,4vw,56px) clamp(16px,2.2vw,26px) clamp(18px,4vw,56px);
+  rotate:-.9deg;
+  box-shadow:0 50px 60px -40px rgba(18,16,14,.65);
+}
+.l4 .kicker{color:rgba(18,16,14,.72)}
+.l4 .promise{margin:.7rem 0 1rem;max-width:52ch;font-size:clamp(.88rem,1.02vw,1rem);line-height:1.5;text-wrap:pretty}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;
+  font-family:var(--f-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.85em 1.15em;border:1px solid var(--ink);background:var(--ink);color:var(--cream);
+  transition:translate .2s cubic-bezier(.2,.7,0,1),box-shadow .2s;
+}
+.btn .arw{transition:translate .2s}
+.btn:hover{translate:0 -3px;box-shadow:0 10px 16px -10px rgba(18,16,14,.9)}
+.btn:hover .arw{translate:4px 0}
+.btn--ghost{background:transparent;color:var(--ink);border-color:rgba(18,16,14,.55)}
+.btn--ghost:hover{background:rgba(18,16,14,.08);border-color:var(--ink);box-shadow:none}
+
+/* --- plan 05 : le cadre de premier plan --- */
+.l5{
+  right:-2%;top:-10%;bottom:-10%;width:22%;transform:translate3d(0,0,330px);
+  background:linear-gradient(90deg,rgba(230,221,205,.2),var(--cream) 6%,#f7f2e8 60%,#ece4d5);
+  border-left:1px solid rgba(18,16,14,.12);
+  box-shadow:-30px 0 50px -30px rgba(18,16,14,.45);
+}
+.l5 .edge{position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--verm)}
+.l5 .label{position:absolute;left:50%;top:50%;translate:-50% -50%;writing-mode:vertical-rl;color:#8b8371}
+
+/* ---------- sélecteur de couche ---------- */
+.picker{
+  position:absolute;right:clamp(12px,2.2vw,30px);bottom:clamp(14px,2.6vh,26px);z-index:40;
+  display:flex;gap:4px;padding:5px;margin:0;
+  background:rgba(243,237,227,.94);border:1px solid rgba(18,16,14,.18);
+  box-shadow:0 18px 30px -22px rgba(18,16,14,.6);
+}
+.picker legend{padding:0}
+.picker input{position:absolute;opacity:0;width:1px;height:1px}
+.picker label{
+  min-width:34px;padding:6px 4px;text-align:center;cursor:pointer;
+  font-family:var(--f-mono);font-size:.6rem;letter-spacing:.08em;color:#5a5449;
+  border:1px solid transparent;transition:background .16s,color .16s,border-color .16s;
+}
+.picker label:hover{background:rgba(18,16,14,.06)}
+.picker input:checked + label{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.picker input:focus-visible + label{outline:2px solid var(--verm);outline-offset:2px}
+
+/* mise en avant d'une couche — CSS pur, sans JS */
+@supports selector(:has(*)){
+  body:has(#v1:checked) .l1,
+  body:has(#v2:checked) .l2,
+  body:has(#v3:checked) .l3,
+  body:has(#v4:checked) .l4,
+  body:has(#v5:checked) .l5{outline:2px solid var(--verm);outline-offset:-3px;translate:0 0 34px}
+}
+
+/* ---------- piste neutre ---------- */
+.runway{height:70svh;border-top:1px solid rgba(18,16,14,.14);background:var(--cream)}
+
+/* ============================================================
+   ENTRÉE
+   ============================================================ */
+.ln > span{animation:rise .6s cubic-bezier(.2,.72,0,1) both;animation-delay:calc(var(--d,0) * 1ms + 60ms)}
+@keyframes rise{from{transform:translate3d(0,104%,0)}to{transform:none}}
+.l2{animation:enter-far .62s cubic-bezier(.2,.72,0,1) .12s both}
+.l4{animation:enter-band .5s cubic-bezier(.2,.72,0,1) .24s both}
+.l5{animation:enter-frame .58s cubic-bezier(.2,.72,0,1) .18s both}
+.l1 .cote{animation:fade .5s ease .5s both}
+@keyframes enter-far{from{opacity:0;translate:0 22px 0}to{opacity:1;translate:0 0 0}}
+@keyframes enter-band{from{opacity:0;translate:0 26px 0}to{opacity:1;translate:0 0 0}}
+@keyframes enter-frame{from{opacity:0;translate:0 -34px 0}to{opacity:1;translate:0 0 0}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* ============================================================
+   SCROLL — le dolly
+   ============================================================ */
+@supports (animation-timeline:scroll()){
+  .l1{animation:dolly-1 linear both;animation-timeline:scroll(root block)}
+  .l2{animation:dolly-2 linear both;animation-timeline:scroll(root block)}
+  .l3{animation:dolly-3 linear both;animation-timeline:scroll(root block)}
+  .l4{animation:dolly-4 linear both;animation-timeline:scroll(root block)}
+  .l5{animation:dolly-5 linear both;animation-timeline:scroll(root block)}
+}
+@keyframes dolly-1{from{transform:translate3d(0,0,-460px)}to{transform:translate3d(0,-3vh,-180px)}}
+@keyframes dolly-2{from{transform:translate3d(0,0,-200px)}to{transform:translate3d(0,-2vh,40px)}}
+@keyframes dolly-3{from{transform:translate3d(0,0,-30px)}to{transform:translate3d(0,-3vh,150px)}}
+@keyframes dolly-4{from{transform:translate3d(0,0,110px)}to{transform:translate3d(0,6vh,360px)}}
+@keyframes dolly-5{from{transform:translate3d(0,0,330px);opacity:1}70%{opacity:.25}to{transform:translate3d(0,10vh,560px);opacity:0}}
+
+/* ============================================================
+   MOUVEMENT COUPÉ
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  .l1,.l2,.l3,.l4,.l5,.ln > span,.l1 .cote{animation:none !important}
+}
+@supports selector(:has(*)){
+  body:has(.motion input:not(:checked)) .ln > span,
+  body:has(.motion input:not(:checked)) .l1 .cote,
+  body:has(.motion input:not(:checked)) .l2,
+  body:has(.motion input:not(:checked)) .l4,
+  body:has(.motion input:not(:checked)) .l5,
+  body:has(.motion input:not(:checked)) .l1,
+  body:has(.motion input:not(:checked)) .l3{animation:none !important}
+}
+
+/* ============================================================
+   RESPONSIVE — deux plans, à plat
+   ============================================================ */
+@media (max-width:900px){
+  .pile{perspective:none;padding:calc(30px + 16px) clamp(16px,5vw,32px) 28px;min-height:100svh}
+  .world{position:relative;inset:auto;transform-style:flat;display:flex;flex-direction:column;gap:clamp(18px,3vh,30px)}
+  .plate{position:relative;inset:auto;transform:none !important;width:auto;animation:none !important}
+  .l1,.l2,.l5{display:none}
+  .l3{width:100%;top:auto}
+  .l3 .cote{position:relative;top:auto;display:block;margin-bottom:.7rem}
+  .h1{font-size:clamp(2.6rem,13.5vw,5rem)}
+  .l4{right:auto;rotate:0;padding:18px 20px 20px}
+  .l4 .promise{font-size:.92rem}
+  .picker{display:none}
+  .actions .btn{flex:1 1 auto;justify-content:center}
+  .runway{height:50svh}
+}
+@media (max-width:420px){
+  .proto{font-size:.55rem;gap:.7rem}
+  .proto .tag{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<div class="proto">
+  <span class="tag">C — La pile</span>
+  <a href="/da-hero.html">Comparer les trois</a>
+  <span class="spacer"></span>
+  <label class="motion" for="motion3">
+    <input type="checkbox" id="motion3" checked />
+    <span class="track" aria-hidden="true"></span>
+    Mouvement
+  </label>
+</div>
+
+<main id="contenu">
+  <section class="pile" aria-labelledby="titre">
+    <div class="world">
+      <div class="plate l1" aria-hidden="true">
+        <span class="mono cote">couche 01 — table</span>
+      </div>
+
+      <div class="plate l2" aria-hidden="true">
+        <span class="mono cote">couche 02 — logique</span>
+        <span class="chip"></span>
+        <span class="mono vertical">schéma · périmètre · garde-fous</span>
+      </div>
+
+      <div class="plate l3">
+        <span class="mono cote">couche 03 — surface</span>
+        <h1 class="h1" id="titre">
+          <span class="ln" style="--d:0"><span>Des systèmes</span></span>
+          <span class="ln" style="--d:80"><span>qui tiennent,</span></span>
+          <span class="ln ln--serif" style="--d:190"><span>et qu’on peut <em>reprendre.</em></span></span>
+        </h1>
+      </div>
+
+      <div class="plate l4">
+        <p class="mono kicker">Ingénierie logicielle indépendante</p>
+        <p class="promise">Je conçois, je développe et j’accompagne la mise en production de votre système. Je livre un système documenté, testé sur le périmètre convenu, et je vous laisse les moyens de le reprendre.</p>
+        <div class="actions">
+          <a class="btn" href="/contact/">Demander une revue technique <span class="arw" aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href="/offres/">Voir les offres</a>
+        </div>
+      </div>
+
+      <div class="plate l5" aria-hidden="true">
+        <span class="edge"></span>
+        <span class="mono label">cadre 05 — le regard</span>
+      </div>
+    </div>
+
+    <fieldset class="picker">
+      <legend class="sr">Mettre une couche en avant</legend>
+      <input type="radio" name="couche" id="vtout" checked />
+      <label for="vtout">Tout</label>
+      <input type="radio" name="couche" id="v1" />
+      <label for="v1">01</label>
+      <input type="radio" name="couche" id="v2" />
+      <label for="v2">02</label>
+      <input type="radio" name="couche" id="v3" />
+      <label for="v3">03</label>
+      <input type="radio" name="couche" id="v4" />
+      <label for="v4">04</label>
+      <input type="radio" name="couche" id="v5" />
+      <label for="v5">05</label>
+    </fieldset>
+  </section>
+
+  <section class="runway" aria-hidden="true"></section>
+</main>
+</body>
+</html>

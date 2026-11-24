@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>S — La une · DA Lab</title>
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url('/fonts/instrument-serif-italic-latin.woff2') format('woff2')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+:root{
+  --paper:#f5f1e6;--ink:#151310;--ink2:#5d574c;--red:#b8341f;
+  --rule:rgba(21,19,16,.2);--rule2:rgba(21,19,16,.1);
+  --serif:'Instrument Serif',Georgia,serif;--sans:'Inter Tight',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+h1,h2,h3,p,figure,dl,dd,ol{margin:0}
+ol{padding:0;list-style:none}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+
+.proto{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:11px clamp(14px,2.4vw,30px);font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(21,19,16,.5);mix-blend-mode:multiply}
+.proto .tag{color:var(--red)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(21,19,16,.28);padding-bottom:1px}
+.proto a:hover{color:var(--red);border-color:var(--red)}
+.proto .motion{margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer}
+.proto .motion input{position:absolute;opacity:0;width:1px;height:1px}
+.proto .motion i{display:block;width:30px;height:15px;border:1px solid rgba(21,19,16,.45);border-radius:9px;position:relative}
+.proto .motion i::after{content:"";position:absolute;inset:2px auto 2px 2px;width:9px;border-radius:50%;background:var(--red);transition:translate .18s ease}
+.proto .motion input:checked + i::after{translate:15px 0}
+
+.sheet{position:relative;min-height:100svh;display:flex;flex-direction:column;
+  gap:clamp(12px,2vh,22px);
+  padding:clamp(44px,6vh,58px) clamp(16px,4vw,54px) clamp(18px,2.6vh,26px);
+  overflow:hidden}
+
+/* ------- manchette ------- */
+.mast{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:end;gap:16px;
+  border-bottom:3px solid var(--ink);padding-bottom:8px}
+.mast .meta{font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink2);line-height:1.7;max-width:22ch}
+.mast .meta.right{justify-self:end;text-align:right}
+.mast .meta b{color:var(--red);font-weight:400}
+.logo{font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(2.55rem,7.2vw,6rem);line-height:.8;letter-spacing:-.045em;white-space:nowrap;
+  animation:drop .9s cubic-bezier(.2,.8,.25,1) both}
+.logo em{font-style:italic;color:var(--red)}
+
+/* ------- double page ------- */
+.spread{flex:1;min-height:0;display:grid;grid-template-columns:118px minmax(0,1fr) 198px;
+  gap:clamp(14px,2.6vw,38px);padding-top:clamp(8px,1.8vh,18px)}
+
+.index{border-right:1px solid var(--rule);padding-right:clamp(10px,1.6vw,20px);display:flex;flex-direction:column;gap:0}
+.index .hd{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:9px}
+.index li{border-top:1px solid var(--rule2);padding:8px 0;display:grid;grid-template-columns:1fr auto;gap:6px;align-items:baseline}
+.index li:first-of-type{border-top:0}
+.index .n{font-family:var(--mono);font-size:.5rem;color:var(--red);letter-spacing:.1em}
+.index .t{font-size:.73rem;line-height:1.2;letter-spacing:-.01em;transition:color .15s,translate .2s}
+.index li:hover .t{color:var(--red);translate:2px 0}
+.index .pg{font-family:var(--mono);font-size:.48rem;color:var(--ink2)}
+.index .foot{margin-top:auto;font-family:var(--mono);font-size:.47rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink2);line-height:1.8;padding-top:10px}
+
+.lead{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.kicker{font-family:var(--mono);font-size:.55rem;letter-spacing:.19em;text-transform:uppercase;color:var(--red);
+  display:flex;align-items:center;gap:.65rem;animation:rise .8s .1s cubic-bezier(.2,.8,.25,1) both}
+.kicker::before{content:"";width:22px;height:1px;background:var(--red)}
+.lead h2{margin-top:.7rem;font-size:clamp(1.85rem,4.15vw,3.55rem);line-height:.96;letter-spacing:-.042em;
+  font-weight:700;max-width:19ch;text-wrap:balance;animation:rise .9s .18s cubic-bezier(.2,.8,.25,1) both}
+.lead h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--red);
+  letter-spacing:-.02em;display:inline-block;position:relative;padding-bottom:.02em}
+.lead h2 em::after{content:"";position:absolute;left:0;right:0;bottom:.06em;height:1px;background:var(--red);
+  transform:scaleX(0);transform-origin:0 50%;transition:transform .5s cubic-bezier(.2,.8,.25,1)}
+.lead h2:hover em::after{transform:scaleX(1)}
+.deck{margin-top:1.1rem;max-width:52ch;font-size:clamp(.84rem,1.05vw,.98rem);line-height:1.62;color:var(--ink2);
+  text-wrap:pretty;animation:rise .9s .28s cubic-bezier(.2,.8,.25,1) both}
+.deck b{color:var(--ink);font-weight:600}
+.byline{margin-top:1.05rem;padding-top:9px;border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);
+  display:flex;gap:1.4rem;flex-wrap:wrap;animation:rise .9s .36s cubic-bezier(.2,.8,.25,1) both}
+.cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.1rem;animation:rise .9s .44s cubic-bezier(.2,.8,.25,1) both}
+.btn{display:inline-flex;align-items:center;gap:.8rem;text-decoration:none;font-family:var(--mono);
+  font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:.8em 1em;
+  border:1px solid var(--ink);transition:background .16s,color .16s}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn--red{background:var(--red);border-color:var(--red);color:var(--paper)}
+.btn--red:hover{background:#932614;border-color:#932614}
+.btn span{transition:translate .18s}
+.btn:hover span{translate:3px 0}
+
+.side{border-left:1px solid var(--rule);padding-left:clamp(10px,1.8vw,22px);display:flex;flex-direction:column;
+  justify-content:center;gap:14px;animation:rise .9s .5s cubic-bezier(.2,.8,.25,1) both}
+.side .hd{font-family:var(--mono);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.side dl{display:grid;gap:9px}
+.side dl div{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:baseline;
+  border-top:1px solid var(--rule2);padding-top:7px}
+.side dt{font-family:var(--mono);font-size:.47rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.side dd{font-size:.74rem;line-height:1.25;letter-spacing:-.01em}
+.side .quote{font-family:var(--serif);font-style:italic;font-size:1.02rem;line-height:1.28;color:var(--ink);
+  border-top:1px solid var(--ink);padding-top:9px}
+.side .quote span{display:block;margin-top:.4rem;font-family:var(--mono);font-style:normal;font-size:.46rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+
+/* ------- planche ------- */
+.plate{position:relative;height:clamp(92px,14.5vh,148px);background:var(--red);color:var(--paper);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:16px;
+  padding:clamp(10px,1.4vw,16px) clamp(12px,1.8vw,20px);overflow:hidden;
+  animation:rise .9s .58s cubic-bezier(.2,.8,.25,1) both}
+.plate .dots{position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(245,241,230,.55) .9px,transparent 1.2px);
+  background-size:5px 5px;opacity:.55;mix-blend-mode:screen}
+.plate .shine{position:absolute;inset:-60%;pointer-events:none;
+  background:radial-gradient(circle at var(--mx,28%) var(--my,50%),rgba(255,255,255,.34),transparent 42%);
+  mix-blend-mode:screen;transition:background .2s linear}
+.plate .cap{position:relative;max-width:52ch;font-family:var(--mono);font-size:.52rem;letter-spacing:.13em;
+  text-transform:uppercase;line-height:1.7}
+.plate .cap b{display:block;font-family:var(--sans);font-weight:600;font-size:.86rem;letter-spacing:-.01em;
+  text-transform:none;margin-bottom:.3rem}
+.plate .num{position:relative;font-family:var(--serif);font-style:italic;font-size:clamp(3.4rem,8vw,6.8rem);
+  line-height:.62;letter-spacing:-.07em;color:rgba(245,241,230,.92)}
+.plate .num sup{font-family:var(--mono);font-style:normal;font-size:.1em;letter-spacing:.2em;vertical-align:super;
+  margin-left:.5em;color:rgba(245,241,230,.7)}
+
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes drop{from{opacity:0;transform:translateY(-10px);letter-spacing:.02em}}
+
+@media (max-width:1040px){
+  .spread{grid-template-columns:minmax(0,1fr) 186px}
+  .index{display:none}
+  .mast .meta{font-size:.48rem}
+}
+@media (max-width:780px){
+  .sheet{padding-top:52px}
+  .mast{grid-template-columns:1fr auto;gap:10px}
+  .mast .meta.left{display:none}
+  .logo{justify-self:start;font-size:clamp(2.4rem,10vw,3.6rem)}
+  .spread{grid-template-columns:1fr;gap:18px}
+  .side{border-left:0;border-top:1px solid var(--rule);padding-left:0;padding-top:12px;
+    flex-direction:row;justify-content:space-between;align-items:flex-start;gap:18px}
+  .side dl{grid-template-columns:1fr 1fr;flex:1}
+  .side .quote{display:none}
+  .lead h2{max-width:none}
+  .deck{max-width:none}
+  .plate{height:auto;min-height:96px}
+  .plate .cap b{font-size:.78rem}
+}
+@media (max-width:480px){
+  .mast .meta.right{font-size:.43rem}
+  .logo{font-size:2.15rem}
+  .lead h2{font-size:1.72rem}
+  .byline{gap:.9rem}
+  .plate .num{display:none}
+  .side dl{grid-template-columns:1fr}
+}
+body.still *{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#contenu">Aller au contenu</a>
+<div class="proto">
+  <span class="tag">S — La une</span>
+  <a href="/da-hero.html">Galerie</a>
+  <label class="motion"><input type="checkbox" checked /><i></i>Mouvement</label>
+</div>
+
+<main class="sheet" id="contenu">
+  <header class="mast">
+    <p class="meta">Revue de construction logicielle<br />Édition <b>09</b> · automne 2026</p>
+    <h1 class="logo">Le <em>Système</em></h1>
+    <p class="meta right">Dossier · <b>9 ans</b><br />Paris · 14 € · 148 pages</p>
+  </header>
+
+  <div class="spread">
+    <ol class="index" aria-label="Sommaire">
+      <li class="hd">Sommaire</li>
+      <li><span class="t">La dette, rendue visible</span><span class="n">01</span></li>
+      <li><span class="t">Écrire le périmètre</span><span class="n">02</span></li>
+      <li><span class="t">La passation incluse</span><span class="n">03</span></li>
+      <li><span class="t">Trois façons de tenir</span><span class="n">04</span></li>
+      <li><span class="t">Ce qu’on refuse</span><span class="n">05</span></li>
+      <li class="foot">DA Lab<br />Prototype 19 / 33<br />Éditorial</li>
+    </ol>
+
+    <article class="lead">
+      <p class="kicker">Dossier — ingénierie indépendante</p>
+      <h2>Des systèmes qui tiennent, <em>et qu’on peut reprendre.</em></h2>
+      <p class="deck">Neuf ans de production, une même exigence : <b>écrire le périmètre avant de coder</b>, livrer la documentation avec le logiciel, passer le relais sans que le système dépende de celui qui l’a écrit. Ce numéro ne montre pas des promesses. Il montre trois preuves — la coupe, la matière, le temps.</p>
+      <p class="byline"><span>Par l’atelier</span><span>6 min de lecture</span><span>23.11.2026</span></p>
+      <div class="cta">
+        <a class="btn btn--red" href="/offres/">Lire le dossier <span aria-hidden="true">→</span></a>
+        <a class="btn" href="/contact/">Demander une revue</a>
+      </div>
+    </article>
+
+    <aside class="side" aria-label="Repères">
+      <p class="hd">En chiffres</p>
+      <dl>
+        <div><dt>Production</dt><dd>9 ans, 41 livraisons</dd></div>
+        <div><dt>Périmètre</dt><dd>écrit, testé, signé</dd></div>
+        <div><dt>Passation</dt><dd>incluse, documentée</dd></div>
+        <div><dt>Piles</dt><dd>web, API, plateformes</dd></div>
+      </dl>
+      <p class="quote">« Un système qu’on ne peut pas reprendre n’est pas livré : il est prêté. »<span>Note d’atelier, 2024</span></p>
+    </aside>
+  </div>
+
+  <figure class="plate">
+    <span class="dots" aria-hidden="true"></span>
+    <span class="shine" aria-hidden="true"></span>
+    <figcaption class="cap"><b>Fig. 1 — La dette, rendue visible.</b>Toutes les décisions de ce numéro tiennent dans une seule question : que se passe-t-il le jour où nous ne sommes plus là ?</figcaption>
+    <p class="num" aria-hidden="true">09<sup>éd.</sup></p>
+  </figure>
+</main>
+
+<script>
+(function(){
+  var sheet=document.querySelector('.sheet'),plate=document.querySelector('.plate'),
+      motion=document.querySelector('.motion input');
+  sheet.addEventListener('pointermove',function(e){
+    var r=plate.getBoundingClientRect();
+    plate.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+    plate.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+  },{passive:true});
+  motion.addEventListener('change',function(){
+    document.body.classList.toggle('still',!motion.checked);
+  });
+})();
+</script>
+</body>
+</html>

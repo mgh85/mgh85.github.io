@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>L — Tirage · DA Lab</title>
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;src:url('/fonts/space-grotesk-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+:root{
+  --paper:#f3ead7;--pink:#ff3d6e;--blue:#1436d3;--ink:#14120f;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --sans:'Space Grotesk','Helvetica Neue',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+h1,p{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+
+/* la feuille : grain, trame, repères */
+.sheet{position:relative;min-height:100svh;overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(20,54,211,.05) 0 1px,transparent 1.6px) 0 0/6px 6px,
+    radial-gradient(circle at 50% 50%,rgba(255,61,110,.06) 0 1px,transparent 1.6px) 3px 3px/6px 6px,
+    var(--paper)}
+.sheet::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E")}
+
+.proto{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:12px clamp(14px,2.2vw,28px);font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(20,18,15,.55)}
+.proto .tag{color:var(--blue)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(20,18,15,.28);padding-bottom:1px}
+.proto a:hover{color:var(--pink)}
+.proto .motion{margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer}
+.proto .motion input{position:absolute;opacity:0;width:1px;height:1px}
+.proto .motion i{display:block;width:30px;height:15px;border:1px solid rgba(20,18,15,.4);border-radius:9px;position:relative}
+.proto .motion i::after{content:"";position:absolute;inset:2px auto 2px 2px;width:9px;border-radius:50%;background:var(--pink);transition:translate .18s ease}
+.proto .motion input:checked + i::after{translate:15px 0}
+
+.plate{position:relative;z-index:3;min-height:100svh;display:flex;flex-direction:column;
+  padding:clamp(74px,9vh,104px) clamp(18px,4vw,60px) clamp(24px,4vh,44px)}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;text-transform:uppercase}
+.head .left{color:var(--blue)}
+.head .right{text-align:right;color:rgba(20,18,15,.55);line-height:1.9}
+
+.title{margin-top:auto;max-width:none;padding-bottom:clamp(8px,1.6vh,16px)}
+.title h1{display:flex;flex-direction:column;gap:.02em;font-weight:700;
+  font-size:clamp(2rem,5.1vw,4.1rem);line-height:.9;letter-spacing:-.045em;text-transform:uppercase}
+.title .k{font-family:var(--mono);font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--pink);margin-bottom:.9rem}
+/* chaque ligne porte son propre désalignement : deux encres, un passage */
+.ln{position:relative;display:block;width:fit-content}
+.ln::before,.ln::after{content:attr(data-t);position:absolute;inset:0;pointer-events:none}
+/* décalage proportionnel à la taille du texte : 3 px fixes
+   devenaient un accident d'impression sur un écran de 390 */
+.ln::before{color:var(--blue);translate:.035em .026em;mix-blend-mode:multiply;opacity:.9}
+.ln::after{color:var(--pink);translate:-.035em -.03em;mix-blend-mode:multiply;opacity:.9}
+.ln.accent{color:var(--blue)}
+
+.sub{margin-top:clamp(14px,2.4vh,24px);display:grid;gap:clamp(14px,2.4vw,34px);
+  grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:end}
+.sub .lead{font-size:clamp(.86rem,1.06vw,.98rem);line-height:1.55;max-width:44ch;text-wrap:pretty}
+.sub .lead b{font-weight:600}
+.spec{font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;line-height:2;
+  border-top:2px solid var(--ink);padding-top:8px;color:rgba(20,18,15,.72)}
+.spec b{color:var(--pink);font-weight:500}
+
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(18px,3vh,30px)}
+.btn{display:inline-flex;align-items:center;gap:.8rem;text-decoration:none;font-family:var(--mono);
+  font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;padding:.82em 1.1em;
+  border:2px solid var(--ink);color:var(--ink);background:transparent;
+  transition:background .16s,color .16s,translate .16s}
+.btn:hover{background:var(--ink);color:var(--paper);translate:-1px -1px}
+.btn--ink{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn--ink:hover{background:var(--pink);border-color:var(--pink);color:#fff}
+
+.foot{margin-top:auto;padding-top:14px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  border-top:1px solid rgba(20,18,15,.25);font-family:var(--mono);font-size:.54rem;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(20,18,15,.55)}
+
+/* repères d'imprimeur */
+.reg{position:absolute;width:26px;height:26px;z-index:4;pointer-events:none;opacity:.75}
+.reg::before,.reg::after{content:"";position:absolute;background:var(--ink)}
+.reg::before{inset:12px 0;height:1px}
+.reg::after{inset:0 12px;width:1px}
+.reg.tl{left:14px;top:64px}.reg.tr{right:14px;top:64px}
+.reg.bl{left:14px;bottom:14px}.reg.br{right:14px;bottom:14px}
+
+/* entrée : la feuille se pose, les encres se calent */
+@keyframes settle{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.plate>*{animation:settle .7s cubic-bezier(.2,.8,.25,1) both}
+.plate .title{animation-delay:.12s}
+.plate .sub{animation-delay:.24s}
+.plate .cta{animation-delay:.34s}
+
+@media (max-width:760px){
+  .plate{padding-inline:16px}
+  .sub{grid-template-columns:1fr}
+  .title h1{font-size:clamp(1.9rem,9.8vw,2.9rem)}
+  /* sur un petit corps, deux encres à 90 % se lisent comme un flou */
+  .ln::before,.ln::after{opacity:.5}
+  .ln::before{translate:.022em .016em}
+  .ln::after{translate:-.022em -.02em}
+  .reg{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#contenu">Aller au contenu</a>
+<div class="proto">
+  <span class="tag">L — Tirage</span>
+  <a href="/da-hero.html">Galerie</a>
+  <label class="motion"><input type="checkbox" checked /><i></i>Mouvement</label>
+</div>
+
+<main class="sheet" id="contenu">
+  <span class="reg tl" aria-hidden="true"></span><span class="reg tr" aria-hidden="true"></span>
+  <span class="reg bl" aria-hidden="true"></span><span class="reg br" aria-hidden="true"></span>
+
+  <div class="plate">
+    <div class="head">
+      <p class="left">Studio · tirage nº 08<br />Deux encres, un passage</p>
+      <p class="right">23.11.2026<br />120 exemplaires<br />Papier 120 g</p>
+    </div>
+
+    <div class="title">
+      <p class="k">Ingénierie logicielle indépendante</p>
+      <h1>
+        <span class="ln" data-t="Des systèmes">Des systèmes</span>
+        <span class="ln" data-t="qui tiennent,">qui tiennent,</span>
+        <span class="ln" data-t="et qu’on peut">et qu’on peut</span>
+        <span class="ln accent" data-t="reprendre.">reprendre.</span>
+      </h1>
+    </div>
+
+    <div class="sub">
+      <p class="lead">Un système imprimé à deux passages : la structure en bleu, la matière en rose. <b>Le décalage n’est pas un défaut</b> — c’est ce qui rend la feuille vivante.</p>
+      <p class="spec">
+        Périmètre <b>écrit</b><br />
+        Documentation <b>livrée</b><br />
+        Tests <b>sur le périmètre</b><br />
+        Passation <b>incluse</b>
+      </p>
+    </div>
+
+    <div class="cta">
+      <a class="btn btn--ink" href="/contact/">Demander une revue technique <span aria-hidden="true">→</span></a>
+      <a class="btn" href="/offres/">Voir les offres</a>
+    </div>
+
+    <p class="foot"><span>9 ans de production</span><span>Web · API · plateformes</span><span>Aucun cookie, aucune mesure</span></p>
+  </div>
+</main>
+</body>
+</html>

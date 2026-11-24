@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>V — Mobile · DA Lab</title>
+<meta name="color-scheme" content="light" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<style>
+@font-face{font-family:'Inter Tight';font-style:normal;font-weight:100 900;font-display:swap;src:url('/fonts/inter-tight-latin.woff2') format('woff2-variations')}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:100 800;font-display:swap;src:url('/fonts/jetbrains-mono-latin.woff2') format('woff2-variations')}
+:root{
+  --wall:#e8e0d0;--wall2:#ded5c3;--ink:#1a1712;--ink2:#6b6252;--rust:#b7522f;--ochre:#c99a3f;
+  --sans:'Inter Tight',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--wall);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+h1,p,figure{margin:0}
+a{color:inherit}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+:focus-visible{outline:2px solid var(--rust);outline-offset:3px}
+
+.proto{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:16px;
+  padding:11px clamp(14px,2.4vw,30px);font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;
+  text-transform:uppercase;color:rgba(26,23,18,.45)}
+.proto .tag{color:var(--rust)}
+.proto a{text-decoration:none;border-bottom:1px solid rgba(26,23,18,.25);padding-bottom:1px}
+.proto a:hover{color:var(--rust);border-color:var(--rust)}
+.proto .motion{margin-left:auto;display:flex;align-items:center;gap:9px;cursor:pointer}
+.proto .motion input{position:absolute;opacity:0;width:1px;height:1px}
+.proto .motion i{display:block;width:30px;height:15px;border:1px solid rgba(26,23,18,.4);border-radius:9px;position:relative}
+.proto .motion i::after{content:"";position:absolute;inset:2px auto 2px 2px;width:9px;border-radius:50%;background:var(--rust);transition:translate .18s ease}
+.proto .motion input:checked + i::after{translate:15px 0}
+
+.hall{position:relative;min-height:100svh;overflow:hidden;isolation:isolate;
+  background:
+    radial-gradient(70% 64% at 74% 18%,#f6efe0 0%,rgba(246,239,224,0) 62%),
+    linear-gradient(175deg,#efe8d9,#e3dac8 62%,#d9cfba 100%)}
+.hall::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(90deg,transparent 0 148px,rgba(26,23,18,.03) 148px 149px)}
+/* ombre portée du plafond */
+.hall::after{content:"";position:absolute;left:0;right:0;top:0;height:16vh;pointer-events:none;
+  background:linear-gradient(180deg,rgba(26,23,18,.16),transparent)}
+
+.rig{position:absolute;z-index:2;inset:clamp(52px,7vh,74px) 2vw auto 32%;
+  width:min(66vw,900px);height:min(74vh,660px);margin:0 auto;
+  filter:drop-shadow(14px 30px 16px rgba(40,30,16,.16));will-change:transform;
+  animation:install 1.5s cubic-bezier(.2,.8,.25,1) both}
+.rig svg{width:100%;height:100%;overflow:visible;display:block}
+.arm{transform-box:view-box;animation:sway 14s ease-in-out infinite alternate}
+.arm2{animation-duration:19s;animation-delay:-4s}
+.arm3{animation-duration:11s;animation-delay:-2s}
+.arm4{animation-duration:16s;animation-delay:-7s}
+@keyframes sway{from{rotate:-1.5deg}to{rotate:1.7deg}}
+@keyframes install{from{opacity:0;translate:0 -18px}}
+
+.copy{position:absolute;z-index:4;left:clamp(16px,4vw,54px);bottom:clamp(24px,5vh,50px);width:min(30rem,38vw)}
+.copy .k{font-family:var(--mono);font-size:.53rem;letter-spacing:.19em;text-transform:uppercase;color:var(--rust)}
+.copy h1{margin-top:.6rem;font-size:clamp(2.15rem,4.6vw,4rem);line-height:.94;letter-spacing:-.045em;font-weight:700}
+.copy h1 em{display:block;font-style:normal;color:var(--rust)}
+.copy .lead{margin-top:.85rem;max-width:42ch;font-size:clamp(.82rem,1vw,.94rem);line-height:1.6;color:#5b5345;text-wrap:pretty}
+.copy .quote{margin-top:.9rem;padding-top:8px;border-top:1px solid rgba(26,23,18,.2);
+  font-family:var(--mono);font-size:.5rem;letter-spacing:.13em;text-transform:uppercase;color:#7c7261}
+.cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+.btn{display:inline-flex;align-items:center;gap:.75rem;text-decoration:none;font-family:var(--mono);
+  font-size:.54rem;letter-spacing:.15em;text-transform:uppercase;padding:.78em 1em;
+  border:1px solid rgba(26,23,18,.45);transition:background .16s,color .16s,border-color .16s}
+.btn:hover{background:var(--ink);color:var(--wall);border-color:var(--ink)}
+.btn--rust{background:var(--rust);border-color:var(--rust);color:#fff4e9}
+.btn--rust:hover{background:#93401f;border-color:#93401f}
+.btn span{transition:translate .18s}
+.btn:hover span{translate:3px 0}
+
+.cartel{position:absolute;z-index:4;right:clamp(16px,3.4vw,44px);bottom:clamp(24px,5vh,50px);
+  width:min(15.5rem,23vw);font-family:var(--mono);font-size:.5rem;line-height:1.75;letter-spacing:.04em;color:#635a4a;
+  border-top:1px solid rgba(26,23,18,.3);padding-top:9px}
+.cartel b{display:block;font-family:var(--sans);font-size:.8rem;font-weight:600;letter-spacing:-.01em;color:var(--ink);
+  line-height:1.3;margin-bottom:4px}
+.cartel .num{display:flex;justify-content:space-between;margin-top:7px;color:#8a8070;font-size:.45rem;
+  letter-spacing:.14em;text-transform:uppercase}
+
+@media (max-width:1000px){
+  .rig{inset:clamp(54px,7vh,72px) 0 auto 26%;width:74vw;height:64vh}
+  .copy{width:min(28rem,46vw)}
+  .cartel{display:none}
+}
+@media (max-width:760px){
+  .rig{inset:56px 0 auto 0;width:100vw;height:52vh}
+  .copy{left:16px;right:16px;bottom:16px;width:auto}
+  .copy h1{font-size:clamp(2rem,8.6vw,2.7rem)}
+  .copy .lead{max-width:none;font-size:.81rem}
+  .copy .quote{display:none}
+  .hall::after{height:10vh}
+}
+@media (max-width:420px){
+  .rig{height:46vh}
+  .copy h1{font-size:1.95rem}
+  .cta .btn{font-size:.49rem;padding:.7em .82em}
+}
+body.still *{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<a class="sr" href="#contenu">Aller au contenu</a>
+<div class="proto">
+  <span class="tag">V — Mobile</span>
+  <a href="/da-hero.html">Galerie</a>
+  <label class="motion"><input type="checkbox" checked /><i></i>Mouvement</label>
+</div>
+
+<main class="hall" id="contenu">
+  <div class="rig" id="rig" aria-hidden="true">
+    <svg viewBox="0 0 860 640" role="presentation">
+      <defs>
+        <linearGradient id="gInk" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#2a2620"/><stop offset="1" stop-color="#100e0b"/>
+        </linearGradient>
+        <linearGradient id="gRust" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#c96440"/><stop offset="1" stop-color="#a84627"/>
+        </linearGradient>
+        <linearGradient id="gOchre" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#d9ad55"/><stop offset="1" stop-color="#b8862f"/>
+        </linearGradient>
+      </defs>
+
+      <g stroke="#221e18" stroke-width="1.1" fill="none">
+        <path d="M430 -20 V56" />
+        <path d="M430 56 L286 116" />
+        <path d="M430 56 L590 106" />
+        <path d="M430 56 L436 246" />
+      </g>
+
+      <g class="arm arm1" style="transform-origin:430px 56px">
+        <g stroke="#221e18" stroke-width="1" fill="none">
+          <path d="M286 116 L300 168" />
+          <path d="M286 116 L238 206" />
+        </g>
+        <ellipse cx="300" cy="214" rx="54" ry="47" fill="url(#gInk)" />
+        <circle cx="240" cy="262" r="17" fill="url(#gRust)" />
+        <circle cx="240" cy="262" r="5" fill="#f2e8d4" opacity=".55" />
+      </g>
+
+      <g class="arm arm2" style="transform-origin:430px 56px">
+        <g stroke="#221e18" stroke-width="1" fill="none">
+          <path d="M590 106 L612 152" />
+          <path d="M590 106 L666 188" />
+        </g>
+        <circle cx="614" cy="192" r="41" fill="url(#gRust)" />
+        <path d="M666 188 m-24 0 a24 24 0 1 0 48 0 a24 24 0 1 0 -48 0" fill="none" stroke="url(#gOchre)" stroke-width="9" />
+      </g>
+
+      <g class="arm arm3" style="transform-origin:436px 246px">
+        <g stroke="#221e18" stroke-width="1" fill="none">
+          <path d="M436 246 L348 306" />
+          <path d="M436 246 L536 330" />
+          <path d="M436 246 L436 356" />
+        </g>
+        <rect x="318" y="306" width="58" height="34" rx="17" fill="url(#gOchre)" />
+        <circle cx="540" cy="368" r="36" fill="url(#gInk)" />
+        <path d="M436 356 l26 40 -52 0 z" fill="url(#gRust)" />
+      </g>
+
+      <g class="arm arm4" style="transform-origin:300px 214px">
+        <g stroke="#221e18" stroke-width=".9" fill="none"><path d="M300 261 L300 320" /></g>
+        <circle cx="300" cy="338" r="18" fill="none" stroke="#221e18" stroke-width="1.6" />
+      </g>
+    </svg>
+  </div>
+
+  <section class="copy">
+    <p class="k">Sculpture cinétique — pièce 07</p>
+    <h1>Tenir, <em>c’est un équilibre.</em></h1>
+    <p class="lead">Chaque pièce tire sur un fil, chaque fil compense les autres. Rien n’est rigide, tout reste debout. Un système livré tient exactement comme ça : par des tensions choisies, pas par un socle.</p>
+    <p class="quote">Laiton, tôle laquée · 180 × 240 cm · pièce unique</p>
+    <div class="cta">
+      <a class="btn btn--rust" href="/contact/">Demander une revue <span aria-hidden="true">→</span></a>
+      <a class="btn" href="/offres/">Voir les offres</a>
+    </div>
+  </section>
+
+  <figure class="cartel">
+    <b>Mobile n° 07 (tensions), 2026</b>
+    Laiton, tôle laquée, fil d’acier<br />180 × 240 × 120 cm
+    <p class="num"><span>Salle 02</span><span>Pièce 07</span></p>
+  </figure>
+</main>
+
+<script>
+(function(){
+  var rig=document.getElementById('rig'),hall=document.getElementById('contenu'),
+      motion=document.querySelector('.motion input'),
+      reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tx=0,ty=0,raf=0;
+  function apply(){
+    raf=0;
+    rig.style.transform='rotate('+(tx*2.1).toFixed(2)+'deg) translate('+(tx*10).toFixed(1)+'px,'+(ty*6).toFixed(1)+'px)';
+  }
+  hall.addEventListener('pointermove',function(e){
+    if(reduce)return;
+    tx=(e.clientX/window.innerWidth-.5)*2;
+    ty=(e.clientY/window.innerHeight-.5)*2;
+    if(!raf)raf=requestAnimationFrame(apply);
+  },{passive:true});
+  hall.addEventListener('pointerleave',function(){rig.style.transform='none';});
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){cancelAnimationFrame(raf);raf=0;}
+  });
+  motion.addEventListener('change',function(){
+    document.body.classList.toggle('still',!motion.checked);
+    if(!motion.checked)rig.style.transform='none';
+  });
+})();
+</script>
+</body>
+</html>
