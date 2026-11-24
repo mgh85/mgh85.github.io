@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://studio-site.freebuff.page/sitemap.xml
+Sitemap: https://mgh85.github.io/sitemap.xml
